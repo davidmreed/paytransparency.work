@@ -23,8 +23,10 @@ interface WhoDisclosure {
 interface WhenDisclosure {
     inPosting: boolean;
     inInterview: boolean;
-    onRequest: boolean;
+    onApplicantRequest: boolean;
     onExistingEmployeeRequest: boolean;
+    onHire: boolean;
+    onOffer: boolean;
 }
 
 interface WhatDisclosure {
@@ -49,8 +51,10 @@ let data: Record<string, LocalityData> = {
         when: {
             inPosting: true,
             inInterview: false,
-            onRequest: false,
-            onExistingEmployeeRequest: false
+            onApplicantRequest: false,
+            onExistingEmployeeRequest: false,
+            onHire: false,
+            onOffer: false
         },
         what: {
             salary: true,
@@ -65,9 +69,11 @@ let data: Record<string, LocalityData> = {
         stateCode: 'CA',
         when: {
             inPosting: true,
-            onRequest: true,
+            onApplicantRequest: false,
             onExistingEmployeeRequest: true,
-            inInterview: false
+            inInterview: false,
+            onHire: false,
+            onOffer: false
         },
         who: {
             minEmployees: 15,
@@ -101,7 +107,9 @@ let data: Record<string, LocalityData> = {
             inPosting: true,
             inInterview: false,
             onExistingEmployeeRequest: false,
-            onRequest: false
+            onApplicantRequest: false,
+            onHire: false,
+            onOffer: false
         },
         what: {
             salary: true,
@@ -112,6 +120,57 @@ let data: Record<string, LocalityData> = {
         legalUrl: 'https://app.leg.wa.gov/RCW/default.aspx?cite=49.58.110',
         reportViolationUrl: 'https://lni.wa.gov/workers-rights/workplace-complaints/index',
         reportViolationProcess: 'by filing a complaint online with the Washington Department of Labor & Industries'
+    },
+    'connecticut': {
+        state: 'Connecticut',
+        stateCode: 'CT',
+        who: {
+            officeInLocale: true,
+            employeeInLocale: false,
+            canHireInLocale: false
+        },
+        what: {
+            salary: true,
+            benefits: false
+        },
+        when: {
+            inPosting: false,
+            inInterview: false,
+            onApplicantRequest: true,
+            onExistingEmployeeRequest: true,
+            onHire: true,
+            onOffer: true,
+        },
+        legalUrl: 'https://cga.ct.gov/2021/act/pa/pdf/2021PA-00030-R00HB-06380-PA.pdf',
+        referenceUrl: "https://portal.ct.gov/dolui/salary-range-disclosure-law-faqs",
+        referenceSource: 'Connecticut Department of Labor',
+        reportViolationProcess: 'by filing a complaint with the Labor Commissioner',
+    },
+    'new-york-city': {
+        state: 'New York',
+        stateCode: 'NY',
+        city: 'New York City',
+        who: {
+            minEmployees: 4,
+            employeeInLocale: true,
+            canHireInLocale: true
+        },
+        what: { 
+            salary: true,
+            benefits: false
+        },
+        when: {
+            inPosting: true,
+            inInterview: false,
+            onApplicantRequest: false,
+            onExistingEmployeeRequest: false,
+            onHire: false,
+            onOffer: false
+        },
+        referenceSource: 'New York Commission on Human Rights',
+        referenceUrl: 'https://www.nyc.gov/site/cchr/media/pay-transparency.page',
+        reportViolationUrl: 'https://www.nyc.gov/site/cchr/about/report-discrimination.page',
+        penalty: 'up to $250,000 if employer does not come into compliance, or for second offenses'
     }
 };
 
