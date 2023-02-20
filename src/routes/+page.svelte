@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { data, type LocalityData } from '$lib/data';
-
+	import { data } from '$lib/data';
 	let locales = Object.keys(data).map((d) => ({ locale: d, ...data[d] }));
 </script>
 
