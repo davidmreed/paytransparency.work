@@ -3,7 +3,11 @@
 	let locales = Object.keys(data).map((d) => ({ locale: d, ...data[d] }));
 </script>
 
-<h1>Discover Pay Transparency Rights</h1>
+<svelte:head>
+	<title>Discover Pay Transparency Laws</title>
+</svelte:head>
+
+<h1>Discover Pay Transparency Laws</h1>
 <ul>
 	{#each locales as locale (locale.locale)}
 		<li><a href={`/locations/${locale.locale}`}>{locale.state}</a></li>

@@ -7,20 +7,23 @@
 	let svgPath = `/svgs/${data.stateCode}.svg`;
 </script>
 
+<svelte:head>
+	<title>Pay Transparency in {locale}</title>
+</svelte:head>
 <h1>
 	<img alt={locale} src={svgPath} class="float-right" />
 	Pay Transparency in {locale}
 </h1>
 <p class="pb-2">
-	{locale}'s pay transparency law applies when the employer:
+	{locale}'s pay transparency law applies when:
 </p>
 <ul class="pb-2 indent">
 	{#if data.who.minEmployees}
-		<li><strong>has {data.who.minEmployees} employees or more</strong></li>
+		<li>the employer <strong>has {data.who.minEmployees} employees or more</strong></li>
 	{/if}
-	{#if data.who.officeInLocale}<li><strong>has an office in {locale}</strong></li>{/if}
+	{#if data.who.officeInLocale}<li>the employer <strong>has an office in {locale}</strong></li>{/if}
 	{#if data.who.employeeInLocale}
-		<li><strong>has employees in {locale}</strong></li>{/if}
+		<li>the employer <strong>has employees in {locale}</strong></li>{/if}
 	{#if data.who.canHireInLocale}
 		<li>the role <strong>can be hired in {locale}</strong> (including remote)</li>{/if}
 </ul>
@@ -72,14 +75,14 @@
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 24 24"
 				fill="currentColor"
-				class="w-6 h-6"
+				class="w-6 h-6 mr-1"
 			>
 				<path
 					fill-rule="evenodd"
 					d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
 					clip-rule="evenodd"
 				/>
-			</svg><strong>in the job posting</strong>
+			</svg>in the <strong>job posting</strong>
 		</li>
 	{/if}
 	{#if data.when.inInterview}
@@ -88,14 +91,14 @@
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 24 24"
 				fill="currentColor"
-				class="w-6 h-6"
+				class="w-6 h-6 mr-1"
 			>
 				<path
 					fill-rule="evenodd"
 					d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
 					clip-rule="evenodd"
 				/>
-			</svg><strong>at the interview</strong>
+			</svg>at the <strong>interview</strong>
 		</li>
 	{/if}
 	{#if data.when.onRequest}<li>
@@ -103,34 +106,34 @@
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 24 24"
 				fill="currentColor"
-				class="w-6 h-6"
+				class="w-6 h-6 mr-1"
 			>
 				<path
 					fill-rule="evenodd"
 					d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
 					clip-rule="evenodd"
 				/>
-			</svg><strong>on request from applicant</strong>
+			</svg>on <strong>request from applicant</strong>
 		</li>{/if}
 	{#if data.when.onExistingEmployeeRequest}<li>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 24 24"
 				fill="currentColor"
-				class="w-6 h-6"
+				class="w-6 h-6 mr-1"
 			>
 				<path
 					fill-rule="evenodd"
 					d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
 					clip-rule="evenodd"
 				/>
-			</svg><strong>on request from a current employee</strong>
+			</svg>on <strong>request from a current employee</strong>
 		</li>{/if}
 </ul>
 <hr class="color-gray-900 p-1" />
 <p class="pb-2">
-	Learn more at <a href={data.referenceUrl}>{data.referenceSource}</a>
-	{#if data.legalUrl} or review the <a href={data.legalUrl}>legislation</a>{/if}.
+	Learn more at <a href={data.referenceUrl}>{data.referenceSource}</a>{#if data.legalUrl}
+		or review the <a href={data.legalUrl}>legislation</a>{/if}.
 </p>
 {#if data.reportViolationProcess || data.reportViolationUrl}
 	<p class="pb-2">
