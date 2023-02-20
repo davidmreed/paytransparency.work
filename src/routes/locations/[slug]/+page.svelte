@@ -21,7 +21,7 @@
 	{#if data.who.minEmployees}
 		<li>the employer <strong>has {data.who.minEmployees} employees or more</strong></li>
 	{/if}
-	{#if data.who.officeInLocale}<li>the employer <strong>has an office in {locale}</strong></li>{/if}
+	{#if data.who.officeInLocale}<li>the employer <strong>has offices in {locale}</strong></li>{/if}
 	{#if data.who.employeeInLocale}
 		<li>the employer <strong>has at least one employee in {locale}</strong></li>{/if}
 	{#if data.who.canHireInLocale}
