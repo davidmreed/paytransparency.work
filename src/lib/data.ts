@@ -85,9 +85,35 @@ let data: Record<string, LocalityData> = {
         penalty: 'between $100 and $10,000 per violation',
         reportViolationProcess: 'by filing a complaint in writing with the California Labor Commissioner',
         reportViolationUrl: 'https://www.dir.ca.gov/dlse/howtofileretaliationcomplaint.htm'
+    },
+    'washington': {
+        // Note: Washington also requires that "Upon request of an employee offered an internal transfer to a new position or promotion, the employer must provide the wage scale or salary range for the employee's new position"
+        // Guidance from Washington: https://www.lni.wa.gov/workers-rights/_docs/ese1.pdf
+        state: 'Washington',
+        stateCode: 'WA',
+        who: {
+            minEmployees: 15,
+            employeeInLocale: true,
+            canHireInLocale: true,
+            officeInLocale: false
+        },
+        when: {
+            inPosting: true,
+            inInterview: false,
+            onExistingEmployeeRequest: false,
+            onRequest: false
+        },
+        what: {
+            salary: true,
+            benefits: true
+        },
+        referenceUrl: 'https://lni.wa.gov/workers-rights/wages/equal-pay-opportunities-act/#job-postings',
+        referenceSource: 'Washington Department of Labor & Industries',
+        legalUrl: 'https://app.leg.wa.gov/RCW/default.aspx?cite=49.58.110',
+        reportViolationUrl: 'https://lni.wa.gov/workers-rights/workplace-complaints/index',
+        reportViolationProcess: 'by filing a complaint online with the Washington Department of Labor & Industries'
     }
 };
-
 
 export {
     data,
