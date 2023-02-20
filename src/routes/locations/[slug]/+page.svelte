@@ -3,7 +3,7 @@
 
 	export let data: LocalityData;
 
-	let locale = data.city ? `${data.city}, ${data.state}` : data.state;
+	let locale = data.city ? `${data.city}, ${data.stateCode}` : data.state;
 	let svgPath = `/svgs/${data.stateCode}.svg`;
 </script>
 
