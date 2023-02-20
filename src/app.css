@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+    svg {
+        @apply inline;
+    }
+
+    html {
+        @apply bg-gray-800;
+    }
+
+    h1 {
+        @apply text-xl font-sans font-black;
+    }
+
+    a {
+        @apply text-gray-900 underline underline-offset-4
+    }
+
+}
