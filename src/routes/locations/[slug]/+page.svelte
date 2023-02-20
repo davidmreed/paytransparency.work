@@ -46,7 +46,7 @@
 					clip-rule="evenodd"
 				/>
 			</svg>
-			the <strong>salary range</strong>
+			the <strong>pay range</strong>
 		</li>
 	{/if}
 	{#if data.what.benefits}
