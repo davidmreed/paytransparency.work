@@ -19,4 +19,8 @@
     a {
         @apply text-gray-900 underline underline-offset-4
     }
+
+    p {
+        @apply pb-2
+    }
 }

@@ -5,8 +5,8 @@
 <header>
 	<div class="flex flex-row justify-center items-center">
 		<div class="bg-gray-600 mb-4 text-white text-center mt-4 w-1/2">
-			<aside class="font-light text-s italic">
-				This site does not provide legal advice and is not reviewed by an attorney.<br /> Please consult
+			<aside class="font-light text-s italic p-2">
+				This site does not provide legal advice and is not reviewed by an attorney. Please consult
 				your attorney and reference current legislation.
 			</aside>
 		</div>

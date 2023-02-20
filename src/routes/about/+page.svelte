@@ -2,6 +2,7 @@
 	<title>Discover Pay Transparency Laws | About</title>
 </svelte:head>
 
+<h1>Pay Transparency</h1>
 <p>This site is maintained by David Reed.</p>
 <p>
 	Built with <a href="https://kit.svelte.dev">SvelteKit</a>,
