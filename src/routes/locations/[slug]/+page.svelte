@@ -23,7 +23,7 @@
 	{/if}
 	{#if data.who.officeInLocale}<li>the employer <strong>has an office in {locale}</strong></li>{/if}
 	{#if data.who.employeeInLocale}
-		<li>the employer <strong>has employees in {locale}</strong></li>{/if}
+		<li>the employer <strong>has at least one employee in {locale}</strong></li>{/if}
 	{#if data.who.canHireInLocale}
 		<li>the role <strong>can be hired in {locale}</strong> (including remote)</li>{/if}
 </ul>
