@@ -10,6 +10,6 @@
 <h1>Discover Pay Transparency Laws</h1>
 <ul>
 	{#each locales as locale (locale.locale)}
-		<li><a href={`/locations/${locale.locale}`}>{locale.state}</a></li>
+		<li><a href={`/locations/${locale.locale}`}>{#if locale.city}{locale.city},{/if}{locale.state}</a></li>
 	{/each}
 </ul>
