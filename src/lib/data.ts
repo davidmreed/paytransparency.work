@@ -73,7 +73,7 @@ let data: Record<string, LocalityData> = {
             minEmployees: 15,
             canHireInLocale: true,
             officeInLocale: false,
-            employeeInLocale: false
+            employeeInLocale: true
         },
         what: {
             salary: true,
@@ -83,7 +83,8 @@ let data: Record<string, LocalityData> = {
         referenceSource: 'California Department of Industrial Relations',
         legalUrl: 'https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220SB1162',
         penalty: 'between $100 and $10,000 per violation',
-        reportViolationProcess: 'by filing a complaint in writing with the California Labor Commissioner'
+        reportViolationProcess: 'by filing a complaint in writing with the California Labor Commissioner',
+        reportViolationUrl: 'https://www.dir.ca.gov/dlse/howtofileretaliationcomplaint.htm'
     }
 };
 
