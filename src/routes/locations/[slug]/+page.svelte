@@ -27,7 +27,7 @@
 	{#if data.who.canHireInLocale}
 		<li>the role <strong>can be hired in {locale}</strong> (including remote)</li>{/if}
 </ul>
-<p>The employer must disclose ...</p>
+<p>The employer must disclose:</p>
 <ul class="pb-2 indent">
 	{#if data.what.salary}
 		<li>
@@ -67,7 +67,7 @@
 		</li>
 	{/if}
 </ul>
-<p>Disclosure must happen...</p>
+<p>Disclosure must happen:</p>
 <ul class="pb-2 indent">
 	{#if data.when.inPosting}
 		<li>
