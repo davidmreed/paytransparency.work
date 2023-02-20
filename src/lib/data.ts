@@ -59,6 +59,8 @@ let data: Record<string, LocalityData> = {
         penalty: 'between $500 and $10,000 per violation'
     },
     'california': {
+        // Note: the California disclosure requirements upon request
+        // do not require that the 15-employee minimum is met.
         state: 'California',
         stateCode: 'CA',
         when: {
@@ -80,7 +82,8 @@ let data: Record<string, LocalityData> = {
         referenceUrl: 'https://www.dir.ca.gov/dlse/california_equal_pay_act.htm',
         referenceSource: 'California Department of Industrial Relations',
         legalUrl: 'https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220SB1162',
-        penalty: 'between $100 and $10,000 per violation'
+        penalty: 'between $100 and $10,000 per violation',
+        reportViolationProcess: 'by filing a complaint in writing with the California Labor Commissioner'
     }
 };
 

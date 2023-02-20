@@ -132,8 +132,8 @@
 </ul>
 <hr class="color-gray-900 p-1" />
 <p class="pb-2">
-	Learn more at <a href={data.referenceUrl}>{data.referenceSource}</a>{#if data.legalUrl}
-		or review the <a href={data.legalUrl}>legislation</a>{/if}.
+	Learn more at <a href={data.referenceUrl}>{data.referenceSource}</a>.
+	{#if data.legalUrl}Review the <a href={data.legalUrl}>legislation</a>.{/if}
 </p>
 {#if data.reportViolationProcess || data.reportViolationUrl}
 	<p class="pb-2">
