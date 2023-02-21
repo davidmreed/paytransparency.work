@@ -11,8 +11,8 @@
 	<title>Pay Transparency in {locale}</title>
 </svelte:head>
 <h1>
-	<img alt={locale} src={svgPath} class="float-right" />
 	Pay Transparency in {locale}
+	<img alt={locale} src={svgPath} class="float-right" />
 </h1>
 <p>
 	{locale}'s <strong>{data.strength}</strong> pay transparency law applies when:
