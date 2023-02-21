@@ -27,7 +27,7 @@
 	and Washington, which require multi-state employers to disclose in many situations &mdash; even if
 	you don't live there.
 </p>
-<div class="flex flex-row flex-wrap justify-center">
+<div class="flex flex-col sm:flex-row flex-wrap justify-center">
 	{#each locales as locale (locale.locale)}
 		<div class="p-6 grow justify-center text-center">
 			<a href={`/locations/${locale.locale}`}>
