@@ -16,3 +16,13 @@ PayTransparency.work is built by <a href="https://ktema.org">David Reed</a> usin
 	<a href="https://github.com/davidmreed/paytransparency.work/blob/main/LICENSE">MIT License</a>.
 	Want to improve the site, or add more transparency data? Open a Pull Request on GitHub!
 </p>
+
+## Working on the Application
+
+To work on PayTransparency.work, follow these steps.
+
+1. Ensure that you have `git` and `npm` installed on your computer.
+1. Clone the Git repo.
+1. Run `npm install` in the repo to install dependencies.
+1. Run `npm run dev` to start the hot-reloading dev environment.
+1. Run `npm run build` to build the static files. This is important to validate that changes don't impact SvelteKit's ability to statically render the entire site.
