@@ -33,7 +33,7 @@
 			<a href={`/locations/${locale.locale}`}>
 				<img alt={locale.locale} src={`svgs/${locale.stateCode}.svg`} class="mx-auto" />
 
-				{#if locale.city}{locale.city}, {/if}{locale.state}</a
+				{#if locale.city}{locale.city}, {locale.stateCode}{:else}{locale.state}{/if}</a
 			>
 		</div>
 	{/each}
