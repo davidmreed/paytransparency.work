@@ -23,7 +23,7 @@
 	<div class="flex flex-row justify-center items-center">
 		<div class="bg-gray-600 mb-4 text-center mt-4 w-1/2">
 			<nav class="p-2">
-				<a class="text-white" href="/">More Pay Transparency Laws</a> |
+				<a class="text-white" href="/">Home</a> |
 				<a class="text-white" href="/about">About</a>
 			</nav>
 		</div>

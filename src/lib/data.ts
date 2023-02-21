@@ -149,13 +149,14 @@ let data: Record<string, LocalityData> = {
     'new-york-city': {
         state: 'New York',
         stateCode: 'NY',
-        city: 'New York City',
+        city: 'New York',
         who: {
             minEmployees: 4,
             employeeInLocale: true,
-            canHireInLocale: true
+            canHireInLocale: true,
+            officeInLocale: false
         },
-        what: { 
+        what: {
             salary: true,
             benefits: false
         },
