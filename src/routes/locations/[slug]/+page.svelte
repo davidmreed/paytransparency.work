@@ -15,15 +15,27 @@
 	Pay Transparency in {locale}
 </h1>
 <p>
-	{locale}'s pay transparency law applies when:
+	{locale}'s <strong>{data.strength}</strong> pay transparency law applies when:
 </p>
 <ul class="pb-2 indent">
 	{#if data.who.minEmployees}
 		<li>the employer <strong>has {data.who.minEmployees} employees or more</strong></li>
 	{/if}
-	{#if data.who.officeInLocale}<li>the employer <strong>has offices in {locale}</strong></li>{/if}
-	{#if data.who.employeeInLocale}
-		<li>the employer <strong>has at least one employee in {locale}</strong></li>{/if}
+	{#if data.who.minEmployeesInLocale}
+		<li>
+			the employer <strong
+				>has {data.who.minEmployeesInLocale} employee{#if data.who.minEmployeesInLocale > 1}s{/if} or
+				more</strong
+			>
+			in {locale}
+		</li>
+	{/if}
+	{#if data.who.officeInLocale}<li>
+			the employer <strong>has a presence in {locale}</strong>
+			<br /><span class="italic text-xs"
+				>Note that this criterion is often poorly defined by the locale.</span
+			>
+		</li>{/if}
 	{#if data.who.canHireInLocale}
 		<li>the role <strong>can be hired in {locale}</strong> (including remote)</li>{/if}
 </ul>
@@ -85,7 +97,7 @@
 			</svg>in the <strong>job posting</strong>
 		</li>
 	{/if}
-	{#if data.when.inInterview}
+	{#if data.when.afterInterview}
 		<li>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -98,7 +110,7 @@
 					d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
 					clip-rule="evenodd"
 				/>
-			</svg>at the <strong>interview</strong>
+			</svg>after the <strong>first interview</strong>
 		</li>
 	{/if}
 	{#if data.when.onApplicantRequest}<li>
@@ -158,9 +170,14 @@
 			</svg>on <strong>request from a current employee</strong>
 		</li>{/if}
 </ul>
+{#if data.when.requestRequired}
+	<p>... but the applicant must explicitly request disclosure</p>
+{/if}
 <hr class="color-gray-900 p-1" />
 <p>
-	Learn more at <a href={data.referenceUrl}>{data.referenceSource}</a>.
+	{#if data.referenceUrl && data.referenceSource}Learn more at <a href={data.referenceUrl}
+			>{data.referenceSource}</a
+		>.{/if}
 	{#if data.legalUrl}Review the <a href={data.legalUrl}>legislation</a>.{/if}
 </p>
 {#if data.reportViolationProcess || data.reportViolationUrl}
@@ -188,6 +205,10 @@
 		The penalty for violations is {data.penalty}.
 	</p>
 {/if}
+<p class="text-xs italic text-center pt-2">
+	This summary may not capture all nuances of the legislation. Review guidance from {locale}
+	to confirm compliance.
+</p>
 
 <style lang="postcss">
 	.indent {
