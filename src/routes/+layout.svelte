@@ -26,7 +26,8 @@
 		<div class="bg-gray-600 mb-4 text-center mt-4 w-1/2">
 			<nav class="p-2">
 				<a class="text-white" href="/">Home</a> |
-				<a class="text-white" href="/about">About</a>
+				<a class="text-white" href="/about">About</a> |
+				<a class="text-white" href="https://github.com/davidmreed/paytransparency.work">GitHub</a>
 			</nav>
 		</div>
 	</div>
