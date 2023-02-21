@@ -10,11 +10,6 @@ const config = {
 	kit: {
 		adapter: adapter()
 	},
-
-	prerender: {
-		entries: //Object.keys(data).map(l => `/locations/${l}`)
-			["/locations/colorado", "/locations/california"]
-	}
 };
 
 export default config;
