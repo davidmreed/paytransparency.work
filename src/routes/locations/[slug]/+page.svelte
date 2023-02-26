@@ -209,9 +209,3 @@
 	This summary may not capture all nuances of the legislation. Review guidance from {locale}
 	to confirm compliance.
 </p>
-
-<style lang="postcss">
-	.indent {
-		@apply pl-6;
-	}
-</style>

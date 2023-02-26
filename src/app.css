@@ -16,11 +16,19 @@
         @apply text-2xl pb-6 font-sans font-black;
     }
 
+    h2 {
+        @apply text-xl pb-6 font-sans font-black;
+    }
+
     a {
         @apply text-gray-900 underline underline-offset-4
     }
 
     p {
         @apply pb-2
+    }
+
+    .indent {
+        @apply pl-6;
     }
 }

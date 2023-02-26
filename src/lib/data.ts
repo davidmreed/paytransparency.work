@@ -63,7 +63,8 @@ let data: Record<string, LocalityData> = {
             salary: true,
             benefits: true
         },
-        penalty: 'between $500 and $10,000 per violation'
+        penalty: 'between $500 and $10,000 per violation',
+        legalUrl: 'https://leg.colorado.gov/sites/default/files/2019a_085_signed.pdf'
     },
     'california': {
         // Note: the California disclosure requirements upon request
@@ -303,7 +304,13 @@ let data: Record<string, LocalityData> = {
     }
 };
 
+function getFormattedLocale(d: LocalityData): string {
+    return d.city ? `${d.city}, ${d.stateCode}` : d.state;
+}
+
 export {
     data,
-    type LocalityData
+    getFormattedLocale,
+    type LocalityData,
+    type WhatDisclosure
 };
