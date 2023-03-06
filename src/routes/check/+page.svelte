@@ -1,5 +1,28 @@
 <script lang="ts">
+	import { z } from 'zod';
+	import { goto } from '$app/navigation';
 	import { data, getFormattedLocale, type LocalityData, type WhatDisclosure } from '$lib/data';
+
+	enum Situation {
+		Interested,
+		Application,
+		Interview,
+		Offer,
+		Hire,
+		Employed
+	}
+
+	const Params = z.object({
+		situation: z.nativeEnum(Situation),
+		userLocation: z.string(),
+		companyLocation: z.string(),
+		employeeInLocation: z.boolean(),
+		totalEmployees: z.number()
+	});
+
+	let pageParams;
+
+	$: pageParams = Params.safeParse($page.url.searchParams);
 
 	const US_REMOTE_LOCALE = 'us';
 	const OTHER_LOCALE = 'other';
@@ -16,15 +39,6 @@
 
 	const isOrInsideLocale = (a: LocalityData, b: LocalityData) =>
 		(a.state === b.state && a.city === b.city) || (a.state === b.state && !b.city);
-
-	enum Situation {
-		Interested,
-		Application,
-		Interview,
-		Offer,
-		Hire,
-		Employed
-	}
 
 	interface Match {
 		localeId: string;
@@ -66,7 +80,7 @@
 		return sits.sort();
 	};
 
-	$: {
+	function findRights() {
 		// Matching against rules is tricky because so many locales come into play.
 
 		// Take, for example, a company based in California, which is hiring a US Remote role.
@@ -182,9 +196,10 @@
 			<label class="block" for="situation"
 				>What's your situation?
 				<select
-					bind:value={situation}
+					bind:value={$page.url.searchParams['situation']}
 					id="situation"
 					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
+					on:change={goto(`?situation=${situation}`)}
 				>
 					<option value={Situation.Interested}>I'm interested in an open role</option>
 					<option value={Situation.Application}>I have applied for an open role</option>
@@ -260,6 +275,7 @@
 				</select>
 			</label>
 		</div>
+		<input type="submit" on:click|preventDefault={handleFind} title="Find Rights" />
 	</form>
 
 	<h2 class="pb-0">Your Disclosure Rights</h2>
@@ -269,9 +285,9 @@
 			taking action, or retain an attorney in your area.
 		</aside>
 
-		<div class="flex flex-row flex-wrap justify-center">
+		<div class="grid grid-cols-2">
 			{#each matches as match}
-				<div class="p-6 grow justify-left text-left">
+				<div class="p-6 justify-left text-left">
 					<p>
 						<a href={`/locations/${match.localeId}`}>
 							<img
