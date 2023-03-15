@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { z } from 'zod';
-	import { goto } from '$app/navigation';
 	import { data, getFormattedLocale, type LocalityData, type WhatDisclosure } from '$lib/data';
+	import { createQueryStore } from '$lib/URLParamStore';
+	import { z } from 'zod';
 
 	enum Situation {
 		Interested,
@@ -13,16 +13,19 @@
 	}
 
 	const Params = z.object({
-		situation: z.nativeEnum(Situation),
-		userLocation: z.string(),
-		companyLocation: z.string(),
-		employeeInLocation: z.boolean(),
-		totalEmployees: z.number()
+		situation: z.number().default(Situation.Interested),
+		userLocation: z.string().default(''),
+		companyLocation: z.string().default(''),
+		employeeInLocation: z.boolean().default(false),
+		totalEmployees: z.number().default(0),
+		roleLocation: z
+			.string()
+			.default('')
+			.transform((s) => s.split(',')),
+		showResults: z.boolean().default(false)
 	});
 
-	let pageParams;
-
-	$: pageParams = Params.safeParse($page.url.searchParams);
+	let pageParams = createQueryStore(Params);
 
 	const US_REMOTE_LOCALE = 'us';
 	const OTHER_LOCALE = 'other';
@@ -49,12 +52,6 @@
 	}
 
 	let matches: Match[] = [];
-	let situation: Situation = Situation.Interested;
-	let location: string = '';
-	let companyLocation: string = '';
-	let roleLocation: string[] = [];
-	let employeeInLocation = false;
-	let totalEmployees: number;
 
 	const shimDisclosurePoints = (d: LocalityData): Situation[] => {
 		let sits = [];
@@ -80,7 +77,11 @@
 		return sits.sort();
 	};
 
-	function findRights() {
+	function handleFind() {
+		$pageParams.showResults = true;
+	}
+
+	$: {
 		// Matching against rules is tricky because so many locales come into play.
 
 		// Take, for example, a company based in California, which is hiring a US Remote role.
@@ -108,29 +109,34 @@
 		matches = [];
 		// TODO: handle "employed" disclosure point differently.
 
-		if (location && companyLocation && roleLocation.length && totalEmployees) {
-			const companyLocale = data[companyLocation];
-			const userLocale = data[location];
+		if (
+			$pageParams.userLocation &&
+			$pageParams.roleLocation.length &&
+			$pageParams.companyLocation &&
+			$pageParams.totalEmployees
+		) {
+			const companyLocale = data[$pageParams.companyLocation];
+			const userLocale = data[$pageParams.userLocation];
 
 			for (const l of Object.keys(data)) {
 				const thisLocale = data[l];
 				const disclosureSituations = shimDisclosurePoints(thisLocale);
 
 				// Would this locality's disclosure rule apply to the user's situation?
-				const situationMatch = situation >= disclosureSituations[0];
+				const situationMatch = $pageParams.situation >= disclosureSituations[0];
 				// Is this locality either the user's location or the company's?
 				// (A geographic match makes the fit easier to evaluate).
 				const geographicMatch =
 					isOrInsideLocale(companyLocale, thisLocale) ||
 					(isOrInsideLocale(userLocale, thisLocale) &&
 						(thisLocale.who.minEmployeesInLocale || 0 <= 1) &&
-						employeeInLocation);
+						$pageParams.employeeInLocation);
 				// Do we have a match on the total number of employees?
 				const employeeCountMatch =
-					!thisLocale.who.minEmployees || thisLocale.who.minEmployees <= totalEmployees;
+					!thisLocale.who.minEmployees || thisLocale.who.minEmployees <= $pageParams.totalEmployees;
 				// Is this actually a hireable locale?
 				const isEligibleHireLocale =
-					roleLocation.filter(
+					$pageParams.roleLocation.filter(
 						(eachLocale) =>
 							eachLocale === US_REMOTE_LOCALE ||
 							(eachLocale !== OTHER_LOCALE && isOrInsideLocale(thisLocale, data[eachLocale]))
@@ -191,95 +197,94 @@
 
 <main>
 	<h1>Discover Pay Transparency Rights for Your Situation</h1>
-	<form class="pb-4">
-		<div class="grid grid-cols-1 gap-6">
-			<label class="block" for="situation"
-				>What's your situation?
-				<select
-					bind:value={$page.url.searchParams['situation']}
-					id="situation"
-					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
-					on:change={goto(`?situation=${situation}`)}
-				>
-					<option value={Situation.Interested}>I'm interested in an open role</option>
-					<option value={Situation.Application}>I have applied for an open role</option>
-					<option value={Situation.Interview}>I have had an interview for an open role</option>
-					<option value={Situation.Offer}>I have received an offer</option>
-					<option value={Situation.Hire}>I have just been hired</option>
-					<option value={Situation.Employed}>I am currently employed</option>
-				</select>
-			</label>
+	{#if !$pageParams.showResults}
+		<form class="pb-4">
+			<div class="grid grid-cols-1 gap-6">
+				<label class="block" for="situation"
+					>What's your situation?
+					<select
+						bind:value={$pageParams.situation}
+						id="situation"
+						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
+					>
+						<option value={Situation.Interested}>I'm interested in an open role</option>
+						<option value={Situation.Application}>I have applied for an open role</option>
+						<option value={Situation.Interview}>I have had an interview for an open role</option>
+						<option value={Situation.Offer}>I have received an offer</option>
+						<option value={Situation.Hire}>I have just been hired</option>
+						<option value={Situation.Employed}>I am currently employed</option>
+					</select>
+				</label>
 
-			<label class="block" for="location"
-				>Where are you located?
-				<select
-					bind:value={location}
-					id="location"
-					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
-				>
-					{#each myLocationOptions as locale (locale[0])}
-						<option value={locale[0]}>{locale[1]}</option>
-					{/each}
-				</select>
-			</label>
+				<label class="block" for="location"
+					>Where are you located?
+					<select
+						bind:value={$pageParams.userLocation}
+						id="location"
+						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
+					>
+						{#each myLocationOptions as locale (locale[0])}
+							<option value={locale[0]}>{locale[1]}</option>
+						{/each}
+					</select>
+				</label>
 
-			<label class="inline" for="employeeInLocation">
-				<input
-					type="checkbox"
-					bind:checked={employeeInLocation}
-					class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
-				/>
-				Does the employer already have any employees in your location?
-			</label>
+				<label class="inline" for="employeeInLocation">
+					<input
+						type="checkbox"
+						bind:checked={$pageParams.employeeInLocation}
+						class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
+					/>
+					Does the employer already have any employees in your location?
+				</label>
 
-			<label class="block" for="companyLocation"
-				>Where is the employer located?
-				<aside class="italic text-xs">If you don't know, choose "Somewhere else".</aside>
-				<select
-					bind:value={companyLocation}
-					id="companyLocation"
-					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
-				>
-					{#each myLocationOptions as locale (locale[0])}
-						<option value={locale[0]}>{locale[1]}</option>
-					{/each}
-				</select>
-			</label>
-			<label class="block" for="totalEmployees">
-				How many total employees does the employer have?
-				<aside class="text-xs italic">
-					This is typically only relevant under 15 total employees.
-				</aside>
-				<input
-					class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
-					type="number"
-					bind:value={totalEmployees}
-				/>
-			</label>
-			<label class="block" for="roleLocation"
-				>Where is the role eligible for hire?
-				<aside class="text-xs italic">
-					Choose as many as apply. On Linux and Windows, hold <kbd>CONTROL</kbd> to select rows. On
-					Mac, use <kbd>COMMAND</kbd>.
-				</aside>
-				<select
-					multiple
-					bind:value={roleLocation}
-					id="roleLocation"
-					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
-				>
-					<select value="">All US (Remote)</select>
-					{#each roleLocationOptions as locale (locale[0])}
-						<option value={locale[0]}>{locale[1]}</option>
-					{/each}
-				</select>
-			</label>
-		</div>
-		<input type="submit" on:click|preventDefault={handleFind} title="Find Rights" />
-	</form>
-
-	<h2 class="pb-0">Your Disclosure Rights</h2>
-	{#if matches}
+				<label class="block" for="companyLocation"
+					>Where is the employer located?
+					<aside class="italic text-xs">If you don't know, choose "Somewhere else".</aside>
+					<select
+						bind:value={$pageParams.companyLocation}
+						id="companyLocation"
+						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
+					>
+						{#each myLocationOptions as locale (locale[0])}
+							<option value={locale[0]}>{locale[1]}</option>
+						{/each}
+					</select>
+				</label>
+				<label class="block" for="totalEmployees">
+					How many total employees does the employer have?
+					<aside class="text-xs italic">
+						This is typically only relevant under 15 total employees.
+					</aside>
+					<input
+						class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
+						type="number"
+						bind:value={$pageParams.totalEmployees}
+					/>
+				</label>
+				<label class="block" for="roleLocation"
+					>Where is the role eligible for hire?
+					<aside class="text-xs italic">
+						Choose as many as apply. On Linux and Windows, hold <kbd>CONTROL</kbd> to select rows.
+						On Mac, use <kbd>COMMAND</kbd>.
+					</aside>
+					<select
+						multiple
+						bind:value={$pageParams.roleLocation}
+						id="roleLocation"
+						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
+					>
+						<select value="">All US (Remote)</select>
+						{#each roleLocationOptions as locale (locale[0])}
+							<option value={locale[0]}>{locale[1]}</option>
+						{/each}
+					</select>
+				</label>
+			</div>
+			<input type="submit" on:click|preventDefault={handleFind} title="Find Rights" />
+		</form>
+	{:else}
+		<h2 class="pb-0">Your Disclosure Rights</h2>
 		<aside class="italic text-xs pb-6">
 			This analysis is based on a summary of laws by a non-attorney. Review laws in detail before
 			taking action, or retain an attorney in your area.
@@ -346,7 +351,5 @@
 				</div>
 			{/each}
 		</div>
-	{:else}
-		Enter more information about your situation above to show applicable laws.
 	{/if}
 </main>

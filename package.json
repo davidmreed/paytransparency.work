@@ -1,5 +1,5 @@
 {
-	"name": "sharethepayband",
+	"name": "paytransparency.work",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
@@ -36,6 +36,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"remix-params-helper": "^0.4.10",
 		"zod": "^3.21.0"
 	}
 }
