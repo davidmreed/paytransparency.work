@@ -13,15 +13,34 @@
 	}
 
 	const Params = z.object({
-		situation: z.number().default(Situation.Interested),
-		userLocation: z.string().default(''),
-		companyLocation: z.string().default(''),
+		situation: z
+			.number()
+			.min(Situation.Interested)
+			.max(Situation.Employed)
+			.default(Situation.Interested),
+		userLocation: z
+			.string()
+			.default('')
+			.refine((s) => Object.keys(data).includes(s) || s === '' || s === OTHER_LOCALE),
+		companyLocation: z
+			.string()
+			.default('')
+			.refine((s) => Object.keys(data).includes(s) || s === '' || s === OTHER_LOCALE),
 		employeeInLocation: z.boolean().default(false),
 		totalEmployees: z.number().default(0),
 		roleLocation: z
 			.string()
 			.default('')
-			.transform((s) => s.split(',')),
+			.transform((s) => s.split(','))
+			.refine((s) =>
+				s.every(
+					(l) =>
+						Object.keys(data).includes(l) ||
+						l === '' ||
+						l === OTHER_LOCALE ||
+						l === US_REMOTE_LOCALE
+				)
+			),
 		showResults: z.boolean().default(false)
 	});
 

@@ -15,6 +15,9 @@ export function createQueryStore<T>(paramType: ZodType<T>) {
                 let parsedResult = getParams(p.url.searchParams, paramType);
                 if (parsedResult.success) {
                     h(parsedResult.data);
+                } else {
+                    h(paramType.parse({}))
+                    goto('?', { keepFocus: true, replaceState: false, noScroll: true });
                 }
             });
         },
