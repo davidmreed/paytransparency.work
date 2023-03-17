@@ -17,15 +17,21 @@ export function createQueryStore<T>(paramType: ZodType<T>) {
                     h(parsedResult.data);
                 } else {
                     h(paramType.parse({}))
-                    goto('?', { keepFocus: true, replaceState: false, noScroll: true });
+                    goto('?', { keepFocus: true, replaceState: true, noScroll: false });
                 }
             });
         },
         set: (v: T) => {
-            const queryParams = QueryParams.parse(v);
-            const urlSearchParams = new URLSearchParams(queryParams);
-            const g = `?${urlSearchParams.toString()}`;
-            goto(g, { keepFocus: true, replaceState: false, noScroll: true });
+            const g = `?${asQueryString(v)}`;
+            goto(g, { keepFocus: true, replaceState: true, noScroll: true });
         }
     };
+}
+
+export function asURLSearchParams(p): URLSearchParams {
+    return new URLSearchParams(QueryParams.parse(p));
+}
+
+export function asQueryString(p): string {
+    return new URLSearchParams(QueryParams.parse(p)).toString();
 }

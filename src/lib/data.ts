@@ -283,7 +283,7 @@ let data: Record<string, LocalityData> = {
         },
         legalUrl: 'https://cityofjerseycity.civicweb.net/document/68348/'
     },
-    'toledo-ohio': {
+    'ohio-toledo': {
         state: 'Ohio',
         stateCode: 'OH',
         city: 'Toledo',
