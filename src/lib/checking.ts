@@ -43,7 +43,6 @@ export const Params = z.object({
                     l === US_REMOTE_LOCALE
             )
         ),
-    showResults: z.boolean().default(false)
 });
 
 export const isOrInsideLocale = (a: LocalityData, b: LocalityData) =>

@@ -3,8 +3,10 @@
 	import { asQueryString, createQueryStore } from '$lib/URLParamStore';
 	import { Params, Situation, US_REMOTE_LOCALE, OTHER_LOCALE } from '$lib/checking';
 	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
+	import { writable } from 'svelte/store';
 
-	let pageParams = createQueryStore(Params);
+	let pageParams = browser ? createQueryStore(Params) : writable(Params.parse({}));
 
 	const locationOptions = Object.keys(data)
 		.sort()

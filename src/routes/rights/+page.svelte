@@ -10,9 +10,10 @@
 		shimDisclosurePoints,
 		isOrInsideLocale
 	} from '$lib/checking';
-	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
+	import { writable } from 'svelte/store';
 
-	let pageParams = createQueryStore(Params);
+	let pageParams = browser ? createQueryStore(Params) : writable(Params.parse({}));
 
 	let matches: Match[];
 
@@ -45,6 +46,7 @@
 		// TODO: handle "employed" disclosure point differently.
 
 		if (
+			$pageParams &&
 			$pageParams.userLocation &&
 			$pageParams.roleLocation.length &&
 			$pageParams.companyLocation &&
