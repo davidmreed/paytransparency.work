@@ -6,50 +6,52 @@
 	import SituationDescription from '$lib/SituationDescription.svelte';
 	import StateIcon from '$lib/StateIcon.svelte';
 
-	export let locale: Locale;
+	export let data: { locale: Locale };
 </script>
 
 <svelte:head>
-	<title>Pay Transparency in {locale.name}</title>
+	<title>Pay Transparency in {data.locale.name}</title>
 </svelte:head>
 <h1>
-	Pay Transparency in {locale.name}
-	<span class="float-right"><StateIcon {locale} /></span>
+	Pay Transparency in {data.locale.name}
+	<span class="float-right"><StateIcon locale={data.locale} /></span>
 </h1>
 <p>
-	{locale}'s <strong>{locale.strength}</strong> pay transparency law applies when:
+	{data.locale.name}'s <strong>{data.locale.strength}</strong> pay transparency law applies when:
 </p>
 <ul class="pb-2 indent">
-	{#if locale.who.minEmployees}
-		<li>the employer <strong>has {locale.who.minEmployees} employees or more</strong>;</li>
+	{#if data.locale.who.minEmployees}
+		<li>the employer <strong>has {data.locale.who.minEmployees} employees or more</strong>;</li>
 	{/if}
-	{#if locale.who.minEmployeesInLocale}
+	{#if data.locale.who.minEmployeesInLocale}
 		<li>
 			the employer <strong
-				>has {locale.who.minEmployeesInLocale} employee{#if locale.who.minEmployeesInLocale > 1}s{/if}
+				>has {data.locale.who.minEmployeesInLocale} employee{#if data.locale.who.minEmployeesInLocale > 1}s{/if}
 				or more</strong
 			>
-			in {locale};
+			in {data.locale.name};
 		</li>
 	{/if}
-	{#if locale.who.officeInLocale}<li>
-			the employer <strong>has a presence in {locale};</strong>
+	{#if data.locale.who.officeInLocale}<li>
+			the employer <strong>has a presence in {data.locale.name};</strong>
 			<br /><span class="italic text-xs"
 				>Note that this criterion is often poorly defined by the locale.</span
 			>
 		</li>{/if}
-	{#if locale.who.canHireInLocale}
-		<li>the role <strong>can be hired in {locale}</strong> (including remote);</li>{/if}
+	{#if data.locale.who.canHireInLocale}
+		<li>
+			the role <strong>can be hired in {data.locale.name}</strong> (including remote);
+		</li>{/if}
 </ul>
 <p>The employer must disclose:</p>
 <ul class="pb-2 indent">
-	{#if locale.what.salary}
+	{#if data.locale.what.salary}
 		<li>
 			<GreenCheckIcon />
 			the <strong>pay range</strong>
 		</li>
 	{/if}
-	{#if locale.what.benefits}
+	{#if data.locale.what.benefits}
 		<li>
 			<RedPlusIcon />
 			the <strong>benefits</strong>
@@ -58,34 +60,35 @@
 </ul>
 <p>Disclosure must happen:</p>
 <ul class="pb-2 indent">
-	{#each locale.when as situation (situation.situation)}
+	{#each data.locale.when as situation (situation.situation)}
 		<li><SituationDescription {situation} /></li>
 	{/each}
 </ul>
 <hr class="color-gray-900 p-1" />
 <p>
-	{#if locale.referenceUrl && locale.referenceSource}Learn more at <a href={locale.referenceUrl}
-			>{locale.referenceSource}</a
+	{#if data.locale.referenceUrl && data.locale.referenceSource}Learn more at <a
+			href={data.locale.referenceUrl}>{data.locale.referenceSource}</a
 		>.{/if}
-	{#if locale.legalUrl}Review the <a href={locale.legalUrl}>legislation</a>.{/if}
+	{#if data.locale.legalUrl}Review the <a href={data.locale.legalUrl}>legislation</a>.{/if}
 </p>
-{#if locale.reportViolationProcess || locale.reportViolationUrl}
+{#if data.locale.reportViolationProcess || data.locale.reportViolationUrl}
 	<p>
 		<BullhornIcon />
 		Report a violation
-		{#if locale.reportViolationUrl}
-			<a href={locale.reportViolationUrl}>{locale.reportViolationProcess || 'here'}</a>.
-		{:else if locale.reportViolationProcess}
-			{locale.reportViolationProcess}.
+		{#if data.locale.reportViolationUrl}
+			<a href={data.locale.reportViolationUrl}>{data.locale.reportViolationProcess || 'here'}</a>.
+		{:else if data.locale.reportViolationProcess}
+			{data.locale.reportViolationProcess}.
 		{/if}
 	</p>
 {/if}
-{#if locale.penalty}
+{#if data.locale.penalty}
 	<p>
-		The penalty for violations is {locale.penalty}.
+		The penalty for violations is {data.locale.penalty}.
 	</p>
 {/if}
 <p class="text-xs italic text-center pt-2">
-	This summary may not capture all nuances of the legislation. Review guidance from {locale}
+	This summary may not capture all nuances of the legislation. Review guidance from {data.locale
+		.name}
 	to confirm compliance.
 </p>
