@@ -1,22 +1,16 @@
 <script lang="ts">
-	import { data, getFormattedLocale } from '$lib/data';
+	import { US_REMOTE_LOCALE, OTHER_LOCALE, locales, allLocales, Situation } from '$lib/data';
 	import { asQueryString, createQueryStore } from '$lib/URLParamStore';
-	import {
-		Params,
-		Situation,
-		US_REMOTE_LOCALE,
-		OTHER_LOCALE,
-		isOrInsideLocale
-	} from '$lib/checking';
+	import { Params } from '$lib/checking';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
 	import { writable } from 'svelte/store';
 
 	let pageParams = browser ? createQueryStore(Params) : writable(Params.parse({}));
 
-	const locationOptions = Object.keys(data)
+	const locationOptions = Object.keys(locales)
 		.sort()
-		.map((l) => [l, getFormattedLocale(data[l])]);
+		.map((l) => [l, locales[l].name]);
 	const myLocationOptions = [
 		['', '--Select--'],
 		[OTHER_LOCALE, 'Somewhere else']
@@ -33,8 +27,10 @@
 	let canSelectEmployeeInLocation = true;
 
 	$: {
-		if ($pageParams.companyLocation && $pageParams.userLocation) {
-			if (isOrInsideLocale(data[$pageParams.companyLocation], data[$pageParams.userLocation])) {
+		let companyLocale = allLocales[$pageParams.companyLocation];
+		let userLocale = allLocales[$pageParams.userLocation];
+		if (companyLocale && userLocale) {
+			if (userLocale.isOrContains(companyLocale)) {
 				$pageParams.employeeInLocation = true;
 				canSelectEmployeeInLocation = false;
 			} else {
@@ -55,9 +51,9 @@
 <main>
 	<h1>Discover Your Pay Transparency Rights</h1>
 	<p>
-		PayTransparency.work knows about transparency laws in {Object.keys(data).length} jurisdictions. Some
-		laws may provide you with rights even if you do not live in their jurisdiction. Let's find out what
-		rights you have!
+		PayTransparency.work knows about transparency laws in {Object.keys(locales).length} jurisdictions.
+		Some laws may provide you with rights even if you do not live in their jurisdiction. Let's find out
+		what rights you have!
 	</p>
 	<hr class="color-gray-900 p-1" />
 

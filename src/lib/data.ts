@@ -8,20 +8,91 @@ export enum Situation {
     Employed
 }
 
-interface LocalityData {
-    state: string;
-    stateCode: string;
+interface AbstractLocale {
+    name: string;
+    id: string;
+
+    isOrContains(other: AbstractLocale): boolean;
+}
+
+export const US_REMOTE_LOCALE = 'us';
+export const OTHER_LOCALE = 'other';
+
+
+export class UnknownLocale implements AbstractLocale {
+    get name() {
+        return 'Somewhere else';
+    }
+
+    get id() {
+        return OTHER_LOCALE;
+    }
+
+    isOrContains(other: AbstractLocale): boolean {
+        return false;
+    }
+
+}
+
+export class AllUSLocale implements AbstractLocale {
+    get name() {
+        return 'All US (Remote)';
+    }
+
+    get id() {
+        return US_REMOTE_LOCALE;
+    }
+
+    isOrContains(other: AbstractLocale): boolean {
+        return other.id !== OTHER_LOCALE;
+    }
+}
+
+
+export class Locale implements AbstractLocale {
+    state!: string;
+    stateCode!: string;
     city?: string;
-    strength: Strength;
+    strength!: Strength;
     referenceSource?: string;
     referenceUrl?: string;
     legalUrl?: string;
     reportViolationUrl?: string;
     reportViolationProcess?: string;
-    who: WhoDisclosure;
-    when: { situation: Situation, requestRequired?: boolean }[];
-    what: WhatDisclosure,
+    who!: WhoDisclosure;
+    when!: { situation: Situation; requestRequired?: boolean; }[];
+    what!: WhatDisclosure;
     penalty?: string;
+
+    constructor(params: {
+        state: string,
+        stateCode: string,
+        city?: string,
+        strength: Strength,
+        referenceSource?: string,
+        referenceUrl?: string,
+        legalUrl?: string,
+        reportViolationUrl?: string,
+        reportViolationProcess?: string,
+        who: WhoDisclosure,
+        when: { situation: Situation, requestRequired?: boolean }[],
+        what: WhatDisclosure,
+        penalty?: string,
+    }) {
+        Object.assign(this, params);
+    }
+
+    get id() {
+        return (this.city ? `${this.state.toLocaleLowerCase()}-${this.city.toLocaleLowerCase()}` : this.state.toLocaleLowerCase()).replaceAll(/\s+/g, "-");
+    }
+
+    get name() {
+        return this.city ? `${this.city}, ${this.stateCode}` : this.state;
+    }
+
+    isOrContains(other: Locale) {
+        return (this.state === other.state && this.city === other.city) || (this.state === other.state && !this.city);
+    }
 }
 
 interface WhoDisclosure {
@@ -43,8 +114,8 @@ enum Strength {
 }
 
 
-let data: Record<string, LocalityData> = {
-    'colorado': {
+const locales: Record<string, Locale> = [
+    new Locale({
         state: 'Colorado',
         stateCode: 'CO',
         strength: Strength.Strong,
@@ -65,8 +136,8 @@ let data: Record<string, LocalityData> = {
         },
         penalty: 'between $500 and $10,000 per violation',
         legalUrl: 'https://leg.colorado.gov/sites/default/files/2019a_085_signed.pdf'
-    },
-    'california': {
+    }),
+    new Locale({
         // Note: the California disclosure requirements upon request
         // do not require that the 15-employee minimum is met.
         state: 'California',
@@ -90,8 +161,8 @@ let data: Record<string, LocalityData> = {
         penalty: 'between $100 and $10,000 per violation',
         reportViolationProcess: 'by filing a complaint in writing with the California Labor Commissioner',
         reportViolationUrl: 'https://www.dir.ca.gov/dlse/howtofileretaliationcomplaint.htm'
-    },
-    'washington': {
+    }),
+    new Locale({
         // Note: Washington also requires that "Upon request of an employee offered an internal transfer to a new position or promotion, the employer must provide the wage scale or salary range for the employee's new position"
         // Guidance from Washington: https://www.lni.wa.gov/workers-rights/_docs/ese1.pdf
         state: 'Washington',
@@ -114,8 +185,8 @@ let data: Record<string, LocalityData> = {
         legalUrl: 'https://app.leg.wa.gov/RCW/default.aspx?cite=49.58.110',
         reportViolationUrl: 'https://lni.wa.gov/workers-rights/workplace-complaints/index',
         reportViolationProcess: 'by filing a complaint online with the Washington Department of Labor & Industries'
-    },
-    'connecticut': {
+    }),
+    new Locale({
         state: 'Connecticut',
         stateCode: 'CT',
         strength: Strength.Moderate,
@@ -135,8 +206,8 @@ let data: Record<string, LocalityData> = {
         referenceUrl: "https://portal.ct.gov/dolui/salary-range-disclosure-law-faqs",
         referenceSource: 'Connecticut Department of Labor',
         reportViolationProcess: 'by filing a complaint with the Labor Commissioner',
-    },
-    'new-york-city': {
+    }),
+    new Locale({
         state: 'New York',
         stateCode: 'NY',
         city: 'New York',
@@ -156,8 +227,8 @@ let data: Record<string, LocalityData> = {
         referenceUrl: 'https://www.nyc.gov/site/cchr/media/pay-transparency.page',
         reportViolationUrl: 'https://www.nyc.gov/site/cchr/about/report-discrimination.page',
         penalty: 'up to $250,000 if employer does not come into compliance, or for second offenses'
-    },
-    'rhode-island': {
+    }),
+    new Locale({
         state: 'Rhode Island',
         stateCode: 'RI',
         strength: Strength.Moderate,
@@ -174,8 +245,8 @@ let data: Record<string, LocalityData> = {
             { situation: Situation.Employed }
         ],
         legalUrl: 'http://webserver.rilin.state.ri.us/Statutes/TITLE28/28-6/INDEX.htm',
-    },
-    'nevada': {
+    }),
+    new Locale({
         state: 'Nevada',
         stateCode: 'NV',
         strength: Strength.Weak,
@@ -191,8 +262,8 @@ let data: Record<string, LocalityData> = {
         },
         legalUrl: 'https://www.leg.state.nv.us/App/NELIS/REL/81st2021/Bill/7896/Text',
         penalty: 'up to $5,000 per violation',
-    },
-    'ohio-cincinnati': {
+    }),
+    new Locale({
         state: 'Ohio',
         stateCode: 'OH',
         city: 'Cincinnati',
@@ -209,8 +280,8 @@ let data: Record<string, LocalityData> = {
         ],
         legalUrl: 'https://www.cincinnati-oh.gov/cityofcincinnati/equity-in-cincinnati/city-of-cincinnati-s-salary-equity-ordinance/',
         penalty: 'a private cause of action; no enforcement is done by the city'
-    },
-    'maryland': {
+    }),
+    new Locale({
         state: 'Maryland',
         stateCode: 'MD',
         strength: Strength.Weak,
@@ -228,8 +299,8 @@ let data: Record<string, LocalityData> = {
         legalUrl: 'https://legiscan.com/MD/bill/HB123/2020',
         penalty: 'a letter compelling compliance (first violation); up to $300 per applicant (second violation); $600 per applicant (further violations)',
         reportViolationProcess: 'by submitting a complaint to the Department of Labor'
-    },
-    'new-york-westchester-county': {
+    }),
+    new Locale({
         state: 'New York',
         stateCode: 'NY',
         city: 'Westchester County',
@@ -245,8 +316,8 @@ let data: Record<string, LocalityData> = {
             { situation: Situation.Interested }
         ],
         legalUrl: 'https://westchestercountyny.legistar.com/View.ashx?M=F&amp;ID=10917730&amp;GUID=6BB79D87-02B9-48F0-995D-FA1E9940A0E4'
-    },
-    'new-york-ithaca': {
+    }),
+    new Locale({
         state: 'New York',
         stateCode: 'NY',
         city: 'Ithaca',
@@ -264,8 +335,8 @@ let data: Record<string, LocalityData> = {
         legalUrl: 'https://www.cityofithaca.org/AgendaCenter/ViewFile/Agenda/_05042022-2491',
         referenceSource: 'City of Ithaca',
         referenceUrl: 'https://www.cityofithaca.org/faq.aspx?TID=50'
-    },
-    'new-jersey-jersey-city': {
+    }),
+    new Locale({
         state: 'New Jersey',
         stateCode: 'NJ',
         city: 'Jersey City',
@@ -281,8 +352,8 @@ let data: Record<string, LocalityData> = {
             { situation: Situation.Interested }
         ],
         legalUrl: 'https://cityofjerseycity.civicweb.net/document/68348/'
-    },
-    'ohio-toledo': {
+    }),
+    new Locale({
         state: 'Ohio',
         stateCode: 'OH',
         city: 'Toledo',
@@ -299,16 +370,16 @@ let data: Record<string, LocalityData> = {
         },
         legalUrl: 'https://codelibrary.amlegal.com/codes/toledo/latest/toledo_oh/0-0-0-159338',
         reportViolationProcess: 'a private cause of action; no enforcement is done by the city'
-    }
+    })
+].reduce((map, locale) => { map[locale.id] = locale; return map; }, {} as Record<string, Locale>);
+
+export const allLocales: Record<string, AbstractLocale> = {
+    [OTHER_LOCALE]: new UnknownLocale(),
+    [US_REMOTE_LOCALE]: new AllUSLocale(),
+    ...locales
 };
 
-function getFormattedLocale(d: LocalityData): string {
-    return d.city ? `${d.city}, ${d.stateCode}` : d.state;
-}
-
 export {
-    data,
-    getFormattedLocale,
-    type LocalityData,
+    locales,
     type WhatDisclosure
 };

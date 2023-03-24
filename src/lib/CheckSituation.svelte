@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { OTHER_LOCALE, type Params, US_REMOTE_LOCALE } from '$lib/checking';
-	import Situation from './Situation.svelte';
+	import type { Params } from '$lib/checking';
+
+	import SituationDescription from './SituationDescription.svelte';
 	import type { z } from 'zod';
-	import { data, getFormattedLocale } from '$lib/data';
+	import { locales, OTHER_LOCALE, US_REMOTE_LOCALE } from '$lib/data';
 
 	export let params: z.infer<typeof Params>;
 
@@ -12,15 +13,15 @@
 		} else if (l === OTHER_LOCALE) {
 			return 'other locations';
 		} else {
-			return getFormattedLocale(data[l]);
+			return locales[l].name;
 		}
 	}
 </script>
 
 <p class="mr-4 ml-4 text-s italic">
-	You are located in {data[params.userLocation].state}. You're
-	<Situation situation={{ situation: params.situation, requestRequired: false }} />
-	in a role with a company based in {data[params.companyLocation]
+	You are located in {locales[params.userLocation].state}. You're
+	<SituationDescription situation={{ situation: params.situation, requestRequired: false }} />
+	in a role with a company based in {locales[params.companyLocation]
 		.state}{#if params.employeeInLocation}, which already has employees in your location{/if}. The
 	company has at least {params.totalEmployees} employee{#if params.totalEmployees !== 1}s{/if}. The
 	role can hire in {#each params.roleLocation as roleLocation, i (roleLocation)}

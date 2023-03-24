@@ -1,20 +1,14 @@
 <script lang="ts">
-	import { data, getFormattedLocale } from '$lib/data';
+	import { locales, allLocales, Situation } from '$lib/data';
 	import { createQueryStore } from '$lib/URLParamStore';
-	import {
-		Params,
-		type Match,
-		US_REMOTE_LOCALE,
-		OTHER_LOCALE,
-		isOrInsideLocale,
-		Situation
-	} from '$lib/checking';
+	import { Params, type Match } from '$lib/checking';
 	import CheckSituation from '$lib/CheckSituation.svelte';
 	import GreenCheckIcon from '$lib/GreenCheckIcon.svelte';
 	import RedPlusIcon from '$lib/RedPlusIcon.svelte';
 	import { browser } from '$app/environment';
 	import { writable } from 'svelte/store';
 	import StateIcon from '$lib/StateIcon.svelte';
+	import { sortByBoolean, sortByCriteria } from '$lib/sorting';
 
 	let pageParams = browser ? createQueryStore(Params) : writable(Params.parse({}));
 
@@ -55,48 +49,50 @@
 		// TODO: if user is in a city, check their state laws
 		// as a user location too.
 		if (validParams) {
-			const companyLocale = data[$pageParams.companyLocation];
-			const userLocale = data[$pageParams.userLocation];
+			// Company locales are the actual location of the company plus any locales that contain that locale.
+			const companyLocales = Object.values(locales).filter((l) =>
+				l.isOrContains(locales[$pageParams.companyLocation])
+			);
+			// Same rubric for users.
+			const userLocales = Object.values(locales).filter((l) =>
+				l.isOrContains(locales[$pageParams.userLocation])
+			);
 
-			for (const l of Object.keys(data)) {
-				const thisLocale = data[l];
+			for (const thisLocale of Object.values(locales)) {
 				const disclosureSituations = thisLocale.when.map((s) => s.situation).sort();
 
 				// Is this actually a hireable locale?
 				const isEligibleHireLocale =
-					$pageParams.roleLocation.filter(
-						(eachLocale) =>
-							eachLocale === US_REMOTE_LOCALE ||
-							(eachLocale !== OTHER_LOCALE && isOrInsideLocale(thisLocale, data[eachLocale]))
+					$pageParams.roleLocation.filter((eachLocale) =>
+						allLocales[eachLocale].isOrContains(thisLocale)
 					).length > 0;
 				if (!isEligibleHireLocale) continue;
 
-				// Would this locality's "when" rules apply to the user's situation?
+				// Would this locale's "when" rules apply to the user's situation?
 				const situationMatch =
 					($pageParams.situation === Situation.Employed &&
 						disclosureSituations.includes(Situation.Employed)) ||
 					($pageParams.situation !== Situation.Employed &&
 						$pageParams.situation >= disclosureSituations[0]);
 
-				// Would this locality's "who" rules apply to the user's situation?
+				// Would this locale's "who" rules apply to the user's situation?
 				const employeeCountMatch =
 					!thisLocale.who.minEmployees || thisLocale.who.minEmployees <= $pageParams.totalEmployees;
-				const officeInLocaleMatch = 1;
+				const officeInLocaleMatch = 1; // TODO
 
 				// TODO: don't include the user's own locale if locale-employee minimum not met.
 				if (situationMatch && employeeCountMatch) {
-					// Is this locality either the user's location or the company's?
+					// Is this locality the same as or inside either the user's location or the company's?
 					// (A geographic match makes the fit easier to evaluate).
 					const geographicMatch =
-						isOrInsideLocale(companyLocale, thisLocale) ||
-						(isOrInsideLocale(userLocale, thisLocale) &&
+						companyLocales.map((c) => c.isOrContains(thisLocale)).some((f) => f) ||
+						(userLocales.map((u) => u.isOrContains(thisLocale)).some((f) => f) &&
 							(thisLocale.who.minEmployeesInLocale || 0 <= 1) &&
 							$pageParams.employeeInLocation);
 					const minEmployees = geographicMatch ? 0 : thisLocale.who.minEmployeesInLocale || 0;
 
 					matches.push({
-						localeId: l,
-						localeData: data[l],
+						locale: thisLocale,
 						what: thisLocale.what,
 						minEmployeesInLocale: minEmployees,
 						earliestDisclosurePoint: disclosureSituations[0]
@@ -104,38 +100,22 @@
 				}
 			}
 
-			const sortByBoolean = (a: boolean, b: boolean) => (a !== b ? (a ? -1 : 1) : 0);
-			const sortByCriteria = <T>(criteria: ((a: T, b: T) => 0 | 1 | -1)[]) => {
-				return function (a: T, b: T) {
-					for (let criterion of criteria) {
-						let result = criterion(a, b);
-						if (result !== 0) {
-							return result;
-						}
-					}
-					return 0;
-				};
-			};
-
 			// Sort matches with the best up front.
 			matches.sort(
 				sortByCriteria([
 					// Sort those that are equal to either the user or employer location.
 					(a: Match, b: Match) =>
 						sortByBoolean(
-							isOrInsideLocale(a.localeData, companyLocale) ||
-								isOrInsideLocale(a.localeData, userLocale),
-							isOrInsideLocale(b.localeData, companyLocale) ||
-								isOrInsideLocale(b.localeData, userLocale)
+							companyLocales.map((c) => c.isOrContains(a.locale)).some((f) => f) ||
+								userLocales.map((u) => u.isOrContains(a.locale)).some((f) => f),
+							companyLocales.map((c) => c.isOrContains(b.locale)).some((f) => f) ||
+								userLocales.map((u) => u.isOrContains(b.locale)).some((f) => f)
 						),
 					// Then, sort those that disclose more before those that disclose less.
 					(a: Match, b: Match) => sortByBoolean(a.what.benefits || false, b.what.benefits || false),
 					// Then, sort those that do not require a minimum local employee count before those that do.
 					(a: Match, b: Match) =>
-						sortByBoolean(
-							!a.localeData.who.minEmployeesInLocale,
-							!b.localeData.who.minEmployeesInLocale
-						)
+						sortByBoolean(!a.locale.who.minEmployeesInLocale, !b.locale.who.minEmployeesInLocale)
 				])
 			);
 			matches = matches;
@@ -161,7 +141,7 @@
 {/if}
 {#if matches.length}
 	<p>
-		PayTransparency.work believes the the following laws may provide transparency rights in your
+		PayTransparency.work believes the following laws may provide transparency rights in your
 		situation.
 	</p>
 {:else}
@@ -174,20 +154,20 @@
 	{#each matches as match}
 		<div class="p-6 justify-left text-left">
 			<p>
-				<a href={`/locations/${match.localeId}`}>
-					<span class="float-right"><StateIcon locale={match.localeData} /></span>
-					<strong>{getFormattedLocale(match.localeData)}</strong></a
+				<a href={`/locations/${match.locale.id}`}>
+					<span class="float-right"><StateIcon locale={match.locale} /></span>
+					<strong>{match.locale.name}</strong></a
 				>
 				requires the disclosure of
 			</p>
 			<ul class="pb-2 indent">
-				{#if match.localeData.what.salary}
+				{#if match.locale.what.salary}
 					<li>
 						<GreenCheckIcon />
 						the <strong>pay range</strong>
 					</li>
 				{/if}
-				{#if match.localeData.what.benefits}
+				{#if match.locale.what.benefits}
 					<li>
 						<RedPlusIcon />
 						the <strong>benefits</strong>
@@ -196,8 +176,8 @@
 			</ul>
 			{#if match.minEmployeesInLocale}if the company has at least {match.minEmployeesInLocale} employee{#if match.minEmployeesInLocale > 1}s{/if}
 				located there.{/if}
-			{#if match.localeData.who.officeInLocale}if the company has a presence there.{/if}
-			{#if match.localeData.when.requestRequired} You must explicitly request this data.{/if}
+			{#if match.locale.who.officeInLocale}if the company has a presence there.{/if}
+			{#if match.locale.when.requestRequired} You must explicitly request this data.{/if}
 		</div>
 	{/each}
 </div>

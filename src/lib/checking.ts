@@ -1,18 +1,7 @@
 
 import { z } from 'zod';
-import { data, type LocalityData, type WhatDisclosure } from '$lib/data';
+import { locales, OTHER_LOCALE, US_REMOTE_LOCALE, type Locale, type WhatDisclosure, Situation } from '$lib/data';
 
-export enum Situation {
-    Interested,
-    Application,
-    Interview,
-    Offer,
-    Hire,
-    Employed
-}
-
-export const US_REMOTE_LOCALE = 'us';
-export const OTHER_LOCALE = 'other';
 
 export const Params = z.object({
     situation: z
@@ -23,11 +12,11 @@ export const Params = z.object({
     userLocation: z
         .string()
         .default('')
-        .refine((s) => Object.keys(data).includes(s) || s === '' || s === OTHER_LOCALE),
+        .refine((s) => Object.keys(locales).includes(s) || s === '' || s === OTHER_LOCALE),
     companyLocation: z
         .string()
         .default('')
-        .refine((s) => Object.keys(data).includes(s) || s === '' || s === OTHER_LOCALE),
+        .refine((s) => Object.keys(locales).includes(s) || s === '' || s === OTHER_LOCALE),
     employeeInLocation: z.boolean().default(false),
     totalEmployees: z.number().default(0),
     roleLocation: z
@@ -37,7 +26,7 @@ export const Params = z.object({
         .refine((s) =>
             s.every(
                 (l) =>
-                    Object.keys(data).includes(l) ||
+                    Object.keys(locales).includes(l) ||
                     l === '' ||
                     l === OTHER_LOCALE ||
                     l === US_REMOTE_LOCALE
@@ -45,12 +34,9 @@ export const Params = z.object({
         ),
 });
 
-export const isOrInsideLocale = (a: LocalityData, b: LocalityData) =>
-    (a.state === b.state && a.city === b.city) || (a.state === b.state && !b.city);
 
 export interface Match {
-    localeId: string;
-    localeData: LocalityData;
+    locale: Locale;
     earliestDisclosurePoint: Situation;
     minEmployeesInLocale?: number;
     what: WhatDisclosure;
