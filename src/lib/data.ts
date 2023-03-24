@@ -1,3 +1,13 @@
+
+export enum Situation {
+    Interested,
+    Application,
+    Interview,
+    Offer,
+    Hire,
+    Employed
+}
+
 interface LocalityData {
     state: string;
     stateCode: string;
@@ -9,7 +19,7 @@ interface LocalityData {
     reportViolationUrl?: string;
     reportViolationProcess?: string;
     who: WhoDisclosure;
-    when: WhenDisclosure;
+    when: { situation: Situation, requestRequired?: boolean }[];
     what: WhatDisclosure,
     penalty?: string;
 }
@@ -19,16 +29,6 @@ interface WhoDisclosure {
     canHireInLocale?: boolean;
     minEmployees?: number;
     minEmployeesInLocale?: number;
-}
-
-interface WhenDisclosure {
-    inPosting?: boolean;
-    afterInterview?: boolean;
-    onApplicantRequest?: boolean;
-    onExistingEmployeeRequest?: boolean;
-    onHire?: boolean;
-    onOffer?: boolean;
-    requestRequired?: boolean;
 }
 
 interface WhatDisclosure {
@@ -56,9 +56,9 @@ let data: Record<string, LocalityData> = {
             minEmployeesInLocale: 1,
             canHireInLocale: true
         },
-        when: {
-            inPosting: true,
-        },
+        when: [
+            { situation: Situation.Interested }
+        ],
         what: {
             salary: true,
             benefits: true
@@ -72,10 +72,10 @@ let data: Record<string, LocalityData> = {
         state: 'California',
         stateCode: 'CA',
         strength: Strength.Strong,
-        when: {
-            inPosting: true,
-            onExistingEmployeeRequest: true,
-        },
+        when: [
+            { situation: Situation.Interested },
+            { situation: Situation.Employed }
+        ],
         who: {
             minEmployees: 15,
             minEmployeesInLocale: 1,
@@ -102,9 +102,9 @@ let data: Record<string, LocalityData> = {
             minEmployeesInLocale: 1,
             canHireInLocale: true,
         },
-        when: {
-            inPosting: true,
-        },
+        when: [
+            { situation: Situation.Interested }
+        ],
         what: {
             salary: true,
             benefits: true
@@ -125,12 +125,12 @@ let data: Record<string, LocalityData> = {
         what: {
             salary: true,
         },
-        when: {
-            onApplicantRequest: true,
-            onExistingEmployeeRequest: true,
-            onHire: true,
-            onOffer: true,
-        },
+        when: [
+            { situation: Situation.Application },
+            { situation: Situation.Hire },
+            { situation: Situation.Offer },
+            { situation: Situation.Employed },
+        ],
         legalUrl: 'https://cga.ct.gov/2021/act/pa/pdf/2021PA-00030-R00HB-06380-PA.pdf',
         referenceUrl: "https://portal.ct.gov/dolui/salary-range-disclosure-law-faqs",
         referenceSource: 'Connecticut Department of Labor',
@@ -149,9 +149,9 @@ let data: Record<string, LocalityData> = {
         what: {
             salary: true,
         },
-        when: {
-            inPosting: true,
-        },
+        when: [
+            { situation: Situation.Interested }
+        ],
         referenceSource: 'New York Commission on Human Rights',
         referenceUrl: 'https://www.nyc.gov/site/cchr/media/pay-transparency.page',
         reportViolationUrl: 'https://www.nyc.gov/site/cchr/about/report-discrimination.page',
@@ -168,11 +168,11 @@ let data: Record<string, LocalityData> = {
         what: {
             salary: true,
         },
-        when: {
-            onApplicantRequest: true,
-            onHire: true,
-            onExistingEmployeeRequest: true
-        },
+        when: [
+            { situation: Situation.Application },
+            { situation: Situation.Hire },
+            { situation: Situation.Employed }
+        ],
         legalUrl: 'http://webserver.rilin.state.ri.us/Statutes/TITLE28/28-6/INDEX.htm',
     },
     'nevada': {
@@ -183,9 +183,9 @@ let data: Record<string, LocalityData> = {
             // Nevada's definition is unclear
             officeInLocale: true,
         },
-        when: {
-            afterInterview: true,
-        },
+        when: [
+            { situation: Situation.Interview }
+        ],
         what: {
             salary: true,
         },
@@ -204,10 +204,9 @@ let data: Record<string, LocalityData> = {
         what: {
             salary: true,
         },
-        when: {
-            onOffer: true,
-            requestRequired: true
-        },
+        when: [
+            { situation: Situation.Offer, requestRequired: true }
+        ],
         legalUrl: 'https://www.cincinnati-oh.gov/cityofcincinnati/equity-in-cincinnati/city-of-cincinnati-s-salary-equity-ordinance/',
         penalty: 'a private cause of action; no enforcement is done by the city'
     },
@@ -223,9 +222,9 @@ let data: Record<string, LocalityData> = {
         what: {
             salary: true,
         },
-        when: {
-            onApplicantRequest: true
-        },
+        when: [
+            { situation: Situation.Application }
+        ],
         legalUrl: 'https://legiscan.com/MD/bill/HB123/2020',
         penalty: 'a letter compelling compliance (first violation); up to $300 per applicant (second violation); $600 per applicant (further violations)',
         reportViolationProcess: 'by submitting a complaint to the Department of Labor'
@@ -242,9 +241,9 @@ let data: Record<string, LocalityData> = {
         what: {
             salary: true
         },
-        when: {
-            inPosting: true
-        },
+        when: [
+            { situation: Situation.Interested }
+        ],
         legalUrl: 'https://westchestercountyny.legistar.com/View.ashx?M=F&amp;ID=10917730&amp;GUID=6BB79D87-02B9-48F0-995D-FA1E9940A0E4'
     },
     'new-york-ithaca': {
@@ -259,9 +258,9 @@ let data: Record<string, LocalityData> = {
         what: {
             salary: true
         },
-        when: {
-            inPosting: true
-        },
+        when: [
+            { situation: Situation.Interested }
+        ],
         legalUrl: 'https://www.cityofithaca.org/AgendaCenter/ViewFile/Agenda/_05042022-2491',
         referenceSource: 'City of Ithaca',
         referenceUrl: 'https://www.cityofithaca.org/faq.aspx?TID=50'
@@ -278,9 +277,9 @@ let data: Record<string, LocalityData> = {
         what: {
             salary: true,
         },
-        when: {
-            inPosting: true
-        },
+        when: [
+            { situation: Situation.Interested }
+        ],
         legalUrl: 'https://cityofjerseycity.civicweb.net/document/68348/'
     },
     'ohio-toledo': {
@@ -291,10 +290,9 @@ let data: Record<string, LocalityData> = {
         what: {
             salary: true
         },
-        when: {
-            onOffer: true,
-            requestRequired: true
-        },
+        when: [
+            { situation: Situation.Offer, requestRequired: true }
+        ],
         who: {
             minEmployeesInLocale: 15,
             officeInLocale: true,

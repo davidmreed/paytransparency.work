@@ -8,7 +8,6 @@ const QueryParams = z.record(z.coerce.string());
 // Adapted from https://github.com/sveltejs/kit/issues/969
 
 export function createQueryStore<T>(paramType: ZodType<T>) {
-    let query: T | undefined = undefined;
     return {
         subscribe: (h: (input: T) => void) => {
             return page.subscribe((p) => {
@@ -28,10 +27,10 @@ export function createQueryStore<T>(paramType: ZodType<T>) {
     };
 }
 
-export function asURLSearchParams(p): URLSearchParams {
+export function asURLSearchParams(p: any): URLSearchParams {
     return new URLSearchParams(QueryParams.parse(p));
 }
 
-export function asQueryString(p): string {
+export function asQueryString(p: any): string {
     return new URLSearchParams(QueryParams.parse(p)).toString();
 }

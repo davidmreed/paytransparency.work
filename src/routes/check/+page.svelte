@@ -1,7 +1,13 @@
 <script lang="ts">
 	import { data, getFormattedLocale } from '$lib/data';
 	import { asQueryString, createQueryStore } from '$lib/URLParamStore';
-	import { Params, Situation, US_REMOTE_LOCALE, OTHER_LOCALE } from '$lib/checking';
+	import {
+		Params,
+		Situation,
+		US_REMOTE_LOCALE,
+		OTHER_LOCALE,
+		isOrInsideLocale
+	} from '$lib/checking';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
 	import { writable } from 'svelte/store';
@@ -23,10 +29,38 @@
 	function handleFind() {
 		goto(`/rights?${asQueryString($pageParams)}`);
 	}
+
+	let canSelectEmployeeInLocation = true;
+
+	$: {
+		if ($pageParams.companyLocation && $pageParams.userLocation) {
+			if (isOrInsideLocale(data[$pageParams.companyLocation], data[$pageParams.userLocation])) {
+				$pageParams.employeeInLocation = true;
+				canSelectEmployeeInLocation = false;
+			} else {
+				canSelectEmployeeInLocation = true;
+			}
+		}
+	}
+
+	$: validParams = Boolean(
+		$pageParams &&
+			$pageParams.userLocation &&
+			$pageParams.roleLocation.length !== 0 &&
+			$pageParams.companyLocation &&
+			$pageParams.totalEmployees
+	);
 </script>
 
 <main>
-	<h1>Discover Pay Transparency Rights for Your Situation</h1>
+	<h1>Discover Your Pay Transparency Rights</h1>
+	<p>
+		PayTransparency.work knows about transparency laws in {Object.keys(data).length} jurisdictions. Some
+		laws may provide you with rights even if you do not live in their jurisdiction. Let's find out what
+		rights you have!
+	</p>
+	<hr class="color-gray-900 p-1" />
+
 	<form class="pb-4">
 		<div class="grid grid-cols-1 gap-6">
 			<label class="block" for="situation"
@@ -62,7 +96,8 @@
 				<input
 					type="checkbox"
 					bind:checked={$pageParams.employeeInLocation}
-					class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
+					disabled={!canSelectEmployeeInLocation}
+					class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50 disabled:bg-gray-400 disabled:hover:bg-gray-400"
 				/>
 				Does the employer already have any employees in your location?
 			</label>
@@ -110,6 +145,17 @@
 				</select>
 			</label>
 		</div>
-		<input type="submit" on:click|preventDefault={handleFind} title="Find Rights" />
+		<div class="container mx-auto">
+			<input
+				disabled={!validParams}
+				class="form-input block border-gray-300 focus:border-indigo-300 rounded-md shadow-sm border-gray-300 hover:bg-gray-800 hover:text-white mt-4 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:text-white"
+				type="submit"
+				on:click|preventDefault={handleFind}
+				value="Find Rights"
+			/>
+			{#if !validParams}
+				<span class="text-xs italic">Enter more information to find your rights.</span>
+			{/if}
+		</div>
 	</form>
 </main>

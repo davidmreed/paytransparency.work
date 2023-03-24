@@ -55,27 +55,3 @@ export interface Match {
     minEmployeesInLocale?: number;
     what: WhatDisclosure;
 }
-
-export const shimDisclosurePoints = (d: LocalityData): Situation[] => {
-    let sits = [];
-    if (d.when.inPosting) {
-        sits.push(Situation.Interested);
-    }
-    if (d.when.onApplicantRequest) {
-        sits.push(Situation.Application);
-    }
-    if (d.when.afterInterview) {
-        sits.push(Situation.Interview);
-    }
-    if (d.when.onOffer) {
-        sits.push(Situation.Offer);
-    }
-    if (d.when.onHire) {
-        sits.push(Situation.Hire);
-    }
-    if (d.when.onExistingEmployeeRequest) {
-        sits.push(Situation.Employed);
-    }
-
-    return sits.sort();
-};

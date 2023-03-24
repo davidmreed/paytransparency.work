@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { data } from '$lib/data';
+	import { data, getFormattedLocale } from '$lib/data';
+	import StateIcon from '$lib/StateIcon.svelte';
 	let locales = Object.keys(data)
 		.map((d) => ({ locale: d, ...data[d] }))
 		.sort((a, b) => {
@@ -27,14 +28,16 @@
 	and Washington, which require multi-state employers to disclose in many situations &mdash; even if
 	you don't live there.
 </p>
+<p class="justify-center"><a href="/check">Find Your Transparency Rights</a></p>
 <div class="flex flex-col sm:flex-row flex-wrap justify-center">
 	{#each locales as locale (locale.locale)}
 		<div class="p-6 grow justify-center text-center">
 			<a href={`/locations/${locale.locale}`}>
-				<img alt={locale.locale} src={`svgs/${locale.stateCode}.svg`} class="mx-auto" />
-
-				{#if locale.city}{locale.city}, {locale.stateCode}{:else}{locale.state}{/if}</a
-			>
+				<div class="mx-auto">
+					<StateIcon {locale} />
+				</div>
+				{getFormattedLocale(locale)}
+			</a>
 		</div>
 	{/each}
 </div>

@@ -6,8 +6,7 @@
 	<div class="flex flex-row justify-center items-center">
 		<div class="bg-gray-600 mb-4 text-white text-center mt-4 w-3/4 md:w-1/2">
 			<aside class="font-light text-s italic p-2">
-				This site does not provide legal advice and is not reviewed by an attorney. Please consult
-				your attorney and reference current legislation.
+				This site does not provide legal advice and is not reviewed by an attorney.
 			</aside>
 		</div>
 	</div>
@@ -27,6 +26,7 @@
 			<nav class="p-2">
 				<a class="text-white" href="/">Home</a> |
 				<a class="text-white" href="/about">About</a> |
+				<a class="text-white" href="/check">Find Your Rights</a> |
 				<a class="text-white" href="https://github.com/davidmreed/paytransparency.work">GitHub</a>
 			</nav>
 		</div>
