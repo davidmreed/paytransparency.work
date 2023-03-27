@@ -52,11 +52,11 @@ export interface Match {
 export function isValidParams(params: MatchParameters): boolean {
 	return Boolean(
 		params &&
-			params.situation !== undefined &&
-			params.userLocation &&
-			(params.roleLocation.length > 0 || params.situation === Situation.Employed) &&
-			params.companyLocation &&
-			params.totalEmployees
+		params.situation !== undefined &&
+		params.userLocation &&
+		(params.roleLocation.length > 0 || params.situation === Situation.Employed) &&
+		params.companyLocation &&
+		params.totalEmployees
 	);
 }
 
@@ -97,15 +97,15 @@ export function findMatchingLaws(
 		const companyLocales =
 			params.companyLocation !== OTHER_LOCALE
 				? Object.values(availableLocales).filter((l) =>
-						l.isOrContains(availableLocales[params.companyLocation])
-				  )
+					l.isOrContains(availableLocales[params.companyLocation])
+				)
 				: [];
 		// Same rubric for users.
 		const userLocales =
 			params.userLocation !== OTHER_LOCALE
 				? Object.values(availableLocales).filter((l) =>
-						l.isOrContains(availableLocales[params.userLocation])
-				  )
+					l.isOrContains(availableLocales[params.userLocation])
+				)
 				: [];
 
 		for (const thisLocale of Object.values(availableLocales)) {
@@ -118,7 +118,7 @@ export function findMatchingLaws(
 				params.roleLocation.filter((eachLocale) =>
 					availableAllLocales[eachLocale].isOrContains(thisLocale)
 				).length > 0;
-			if (!isEligibleHireLocale) continue;
+			if (!isEligibleHireLocale && params.situation !== Situation.Employed) continue;
 
 			// Would this locale's "when" rules apply to the user's situation?
 			const situationMatch =
@@ -135,9 +135,9 @@ export function findMatchingLaws(
 				// (A geographic match makes the fit easier to evaluate).
 				const geographicMatch = Boolean(
 					companyLocales.map((c) => c.isOrContains(thisLocale)).some((f) => f) ||
-						(userLocales.map((u) => u.isOrContains(thisLocale)).some((f) => f) &&
-							(thisLocale.who.minEmployeesInLocale || 0 <= 1) &&
-							params.employeeInLocation)
+					(userLocales.map((u) => u.isOrContains(thisLocale)).some((f) => f) &&
+						(thisLocale.who.minEmployeesInLocale || 0 <= 1) &&
+						params.employeeInLocation)
 				);
 
 				// Determine if we match the _local_ employee count requirement (if present).
