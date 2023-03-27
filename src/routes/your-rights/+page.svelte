@@ -20,8 +20,11 @@
 		nonGeoMatches = matches.filter((m) => !m.isGeoMatch);
 	}
 </script>
+<svelte:head>
+	<title>Your Pay Transparency Rights</title>
+</svelte:head>
 
-<h2 class="pb-0">Your Disclosure Rights</h2>
+<h2 class="pb-0">Your Pay Transparency Rights</h2>
 <aside class="italic text-xs pb-6">
 	This analysis is based on a summary of laws by a non-attorney. Review laws in detail before taking
 	action, or retain an attorney in your area.

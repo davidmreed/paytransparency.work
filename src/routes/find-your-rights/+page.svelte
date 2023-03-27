@@ -41,6 +41,9 @@
 
 	$: validParams = isValidParams($pageParams);
 </script>
+<svelte:head>
+	<title>Discover Your Pay Transparency Rights</title>
+</svelte:head>
 
 <main>
 	<h1>Discover Your Pay Transparency Rights</h1>
