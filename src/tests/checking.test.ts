@@ -347,13 +347,13 @@ describe('matches with sub-locations', () => {
 });
 
 describe('handles different situation thresholds', () => {
-	it('handles Employed situations', () => {
+	it('handles Employed situations with employee out of state', () => {
 		const matches = findMatchingLaws(
 			{
 				situation: Situation.Employed,
 				userLocation: 'colorado',
 				companyLocation: 'california',
-				employeeInLocation: true,
+				employeeInLocation: false,
 				totalEmployees: 50,
 				roleLocation: ['us']
 			},
@@ -370,6 +370,31 @@ describe('handles different situation thresholds', () => {
 			isGeoMatch: true
 		});
 	});
+
+	it('handles Employed situation with user in state', () => {
+		const matches = findMatchingLaws(
+			{
+				situation: Situation.Employed,
+				userLocation: 'california',
+				companyLocation: 'colorado',
+				employeeInLocation: false,
+				totalEmployees: 50,
+				roleLocation: ['us']
+			},
+			locales,
+			allLocales
+		);
+
+		expect(matches.length).toBe(1);
+		expect(matches).toContainEqual({
+			locale: locales['california'],
+			earliestDisclosurePoint: Situation.Interested,
+			minEmployeesInLocale: 0,
+			what: { salary: true },
+			isGeoMatch: true
+		});
+	});
+
 
 	it('handles Offer situations', () => {
 		const matches = findMatchingLaws(

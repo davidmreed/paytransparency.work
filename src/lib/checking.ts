@@ -137,7 +137,7 @@ export function findMatchingLaws(
 					companyLocales.map((c) => c.isOrContains(thisLocale)).some((f) => f) ||
 					(userLocales.map((u) => u.isOrContains(thisLocale)).some((f) => f) &&
 						(thisLocale.who.minEmployeesInLocale || 0 <= 1) &&
-						params.employeeInLocation)
+						(params.employeeInLocation || params.situation === Situation.Employed))
 				);
 
 				// Determine if we match the _local_ employee count requirement (if present).
