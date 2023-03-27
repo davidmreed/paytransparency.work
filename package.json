@@ -1,5 +1,5 @@
 {
-	"name": "sharethepayband",
+	"name": "paytransparency.work",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
@@ -10,12 +10,15 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test:unit": "vitest",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
+		"lint:fix": "prettier --plugin-search-dir . --write . --fix && eslint --fix .",
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
+		"@svelte-put/inline-svg": "^1.0.0",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/adapter-static": "^2.0.1",
 		"@sveltejs/kit": "^1.5.0",
+		"@tailwindcss/forms": "^0.5.3",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
 		"autoprefixer": "^10.4.13",
@@ -33,5 +36,9 @@
 		"vite": "^4.0.0",
 		"vitest": "^0.25.3"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"remix-params-helper": "^0.4.10",
+		"zod": "^3.21.0"
+	}
 }
