@@ -2,7 +2,7 @@
 	import { Situation } from '$lib/data';
 	import GreenCheckIcon from './GreenCheckIcon.svelte';
 	export let situation: { situation: Situation; requestRequired?: boolean };
-	export let showIcon: boolean = true;
+	export let showIcon = true;
 </script>
 
 {#if situation}

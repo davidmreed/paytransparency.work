@@ -2,37 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
-    svg {
-        @apply inline;
-    }
+	svg {
+		@apply inline;
+	}
 
-    html {
-        @apply bg-gray-800;
-    }
+	html {
+		@apply bg-gray-800;
+	}
 
-    h1 {
-        @apply text-2xl pb-6 font-sans font-black;
-    }
+	h1 {
+		@apply text-2xl pb-6 font-sans font-black;
+	}
 
-    h2 {
-        @apply text-xl pb-6 font-sans font-black;
-    }
+	h2 {
+		@apply text-xl pb-6 font-sans font-black;
+	}
 
-    h3 {
-        @apply text-lg pb-6 font-sans font-black;
-    }
+	h3 {
+		@apply text-lg pb-6 font-sans font-black;
+	}
 
-    a {
-        @apply text-gray-900 underline underline-offset-4
-    }
+	a {
+		@apply text-gray-900 underline underline-offset-4;
+	}
 
-    p {
-        @apply pb-2
-    }
+	p {
+		@apply pb-2;
+	}
 
-    .indent {
-        @apply pl-6;
-    }
+	.indent {
+		@apply pl-6;
+	}
 }

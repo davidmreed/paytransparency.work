@@ -1,9 +1,10 @@
 # PayTransparency.work
 
 PayTransparency.work is built by <a href="https://ktema.org">David Reed</a> using
-	<a href="https://kit.svelte.dev">SvelteKit</a>,
-	<a href="https://heroicons.com/">Heroicons</a>, and
-	<a href="https://tailwindcss.com/">Tailwind CSS</a>.
+<a href="https://kit.svelte.dev">SvelteKit</a>,
+<a href="https://heroicons.com/">Heroicons</a>, and
+<a href="https://tailwindcss.com/">Tailwind CSS</a>.
+
 </p>
 <p>
 	State map icons are from
