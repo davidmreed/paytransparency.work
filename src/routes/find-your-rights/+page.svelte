@@ -144,7 +144,7 @@
 				disabled={!validParams}
 				class="form-input block border-gray-300 focus:border-indigo-300 rounded-md shadow-sm border-gray-300 hover:bg-gray-800 hover:text-white mt-4 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:text-white"
 				type="submit"
-				on:keydown={handleFind}
+				on:click|preventDefault={handleFind}
 				value="Find Rights"
 			/>
 			{#if !validParams}

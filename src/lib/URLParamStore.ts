@@ -15,7 +15,6 @@ export function createQueryStore<K extends ZodType>(paramType: K) {
                 if (parsedResult.success) {
                     h(parsedResult.data);
                 } else {
-                    console.log(JSON.stringify(parsedResult));
                     h(paramType.parse({}));
                     goto('?', { keepFocus: true, replaceState: true, noScroll: false });
                 }
