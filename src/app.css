@@ -20,6 +20,10 @@
         @apply text-xl pb-6 font-sans font-black;
     }
 
+    h3 {
+        @apply text-lg pb-6 font-sans font-black;
+    }
+
     a {
         @apply text-gray-900 underline underline-offset-4
     }

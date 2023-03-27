@@ -1,10 +1,14 @@
+<script lang="ts">
+	import SiteName from '$lib/SiteName.svelte';
+</script>
+
 <svelte:head>
 	<title>Discover Pay Transparency Laws | About</title>
 </svelte:head>
 
 <h1>Pay Transparency at Work</h1>
 <p>
-	PayTransparency.work is built by <a href="https://ktema.org">David Reed</a> using
+	<SiteName /> is built by <a href="https://ktema.org">David Reed</a> using
 	<a href="https://kit.svelte.dev">SvelteKit</a>,
 	<a href="https://heroicons.com/">Heroicons</a>, and
 	<a href="https://tailwindcss.com/">Tailwind CSS</a>.

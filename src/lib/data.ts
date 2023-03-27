@@ -8,7 +8,7 @@ export enum Situation {
     Employed
 }
 
-interface AbstractLocale {
+export interface AbstractLocale {
     name: string;
     id: string;
 
@@ -107,7 +107,7 @@ interface WhatDisclosure {
     benefits?: boolean;
 }
 
-enum Strength {
+export enum Strength {
     Weak = "weak",
     Moderate = "moderate",
     Strong = "strong",

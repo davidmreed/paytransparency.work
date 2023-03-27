@@ -14,7 +14,7 @@
 <main>
 	<div class="pt-6 pb-6 flex flex-row justify-center items-center">
 		<div
-			class="w-3/4 md:w-2/3 bg-white rounded-xl p-6 pl-10 pr-10 bg-zinc-100 shadow-md shadow-black"
+			class="w-3/4 md:w-2/3 max-w-screen-lg bg-white rounded-xl p-6 pl-10 pr-10 bg-zinc-100 shadow-md shadow-black"
 		>
 			<slot />
 		</div>
@@ -26,8 +26,9 @@
 			<nav class="p-2">
 				<a class="text-white" href="/">Home</a> |
 				<a class="text-white" href="/about">About</a> |
-				<a class="text-white" href="/check">Find Your Rights</a> |
-				<a class="text-white" href="https://github.com/davidmreed/paytransparency.work">GitHub</a>
+				<a class="text-white" href="/check">Find Your Transparency Rights</a> |
+				<a class="text-white" href="https://github.com/davidmreed/paytransparency.work">GitHub</a> |
+				<a class="text-white" href="https://ktema.org">by David Reed</a>
 			</nav>
 		</div>
 	</div>

@@ -88,7 +88,6 @@
 	</p>
 {/if}
 <p class="text-xs italic text-center pt-2">
-	This summary may not capture all nuances of the legislation. Review guidance from {data.locale
-		.name}
-	to confirm compliance.
+	This summary may not capture all nuances of the legislation. Review guidance from
+	{data.locale.name} to confirm compliance.
 </p>

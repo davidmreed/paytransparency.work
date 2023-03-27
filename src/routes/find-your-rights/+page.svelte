@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { US_REMOTE_LOCALE, OTHER_LOCALE, locales, allLocales, Situation } from '$lib/data';
 	import { asQueryString, createQueryStore } from '$lib/URLParamStore';
-	import { Params } from '$lib/checking';
+	import { isValidParams, Params } from '$lib/checking';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
 	import { writable } from 'svelte/store';
@@ -21,7 +21,7 @@
 	].concat(locationOptions);
 
 	function handleFind() {
-		goto(`/rights?${asQueryString($pageParams)}`);
+		goto(`/your-rights?${asQueryString($pageParams)}`);
 	}
 
 	let canSelectEmployeeInLocation = true;
@@ -39,13 +39,7 @@
 		}
 	}
 
-	$: validParams = Boolean(
-		$pageParams &&
-			$pageParams.userLocation &&
-			$pageParams.roleLocation.length !== 0 &&
-			$pageParams.companyLocation &&
-			$pageParams.totalEmployees
-	);
+	$: validParams = isValidParams($pageParams);
 </script>
 
 <main>
