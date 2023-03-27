@@ -231,6 +231,7 @@ const locales: Record<string, Locale> = [
 		city: 'Albany County',
 		strength: Strength.Strong,
 		who: {
+			minEmployees: 4,
 			canHireInLocale: true
 		},
 		what: {
