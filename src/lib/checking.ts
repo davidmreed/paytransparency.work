@@ -26,8 +26,9 @@ export const Params = z.object({
 		.default('')
 		.refine((s) => Object.keys(locales).includes(s) || s === '' || s === OTHER_LOCALE),
 	employeeInLocation: z.boolean().default(false),
-	// TODO: The way Zod handles this results in a parse failure if the user deletes the content of the field.
-	totalEmployees: z.number().default(0),
+	// This circumlocution avoids an issue with how Zod handles 
+	// some input values, resulting in a parse failure if the user deletes the content of the field.
+	totalEmployees: z.coerce.string().default('').transform((s) => Number(s) || 0),
 	roleLocation: z
 		.string()
 		.default('')
