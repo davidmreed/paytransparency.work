@@ -226,6 +226,21 @@ const locales: Record<string, Locale> = [
 		penalty: 'up to $250,000 if employer does not come into compliance, or for second offenses'
 	}),
 	new Locale({
+		state: 'New York',
+		stateCode: 'NY',
+		city: 'Albany County',
+		strength: Strength.Strong,
+		who: {
+			canHireInLocale: true
+		},
+		what: {
+			salary: true
+		},
+		when: [{ situation: Situation.Interested }],
+		legalUrl: 'https://www.albanycounty.com/home/showpublisheddocument/27437/638103243588570000',
+	}),
+
+	new Locale({
 		state: 'Rhode Island',
 		stateCode: 'RI',
 		strength: Strength.Moderate,
