@@ -32,7 +32,8 @@
 				{/if}
 			</ul>
 			{#if match.minEmployeesInLocale}if the company has at least {match.minEmployeesInLocale} employee{#if match.minEmployeesInLocale > 1}s{/if}
-				located there.{:else if match.locale.who.officeInLocale}if the company has a presence there.{/if}
+				located there.{:else if match.locale.who.officeInLocale && !match.isGeoMatch}if the company
+				has a presence there.{/if}
 		</div>
 	{/each}
 </div>

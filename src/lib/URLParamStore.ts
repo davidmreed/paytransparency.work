@@ -7,20 +7,21 @@ const QueryParams = z.record(z.coerce.string());
 
 // Adapted from https://github.com/sveltejs/kit/issues/969
 
-export function createQueryStore<T>(paramType: ZodType<T>) {
+export function createQueryStore<K extends ZodType<any, any, any>>(paramType: K) {
     return {
-        subscribe: (h: (input: T) => void) => {
+        subscribe: (h: (input: z.TypeOf<K>) => void) => {
             return page.subscribe((p) => {
                 let parsedResult = getParams(p.url.searchParams, paramType);
                 if (parsedResult.success) {
                     h(parsedResult.data);
                 } else {
+                    console.log(JSON.stringify(parsedResult));
                     h(paramType.parse({}))
                     goto('?', { keepFocus: true, replaceState: true, noScroll: false });
                 }
             });
         },
-        set: (v: T) => {
+        set: (v: z.TypeOf<K>) => {
             const g = `?${asQueryString(v)}`;
             goto(g, { keepFocus: true, replaceState: true, noScroll: true });
         }

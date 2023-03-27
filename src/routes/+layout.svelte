@@ -26,7 +26,7 @@
 			<nav class="p-2">
 				<a class="text-white" href="/">Home</a> |
 				<a class="text-white" href="/about">About</a> |
-				<a class="text-white" href="/check">Find Your Transparency Rights</a> |
+				<a class="text-white" href="/find-your-rights">Find Your Transparency Rights</a> |
 				<a class="text-white" href="https://github.com/davidmreed/paytransparency.work">GitHub</a> |
 				<a class="text-white" href="https://ktema.org">by David Reed</a>
 			</nav>

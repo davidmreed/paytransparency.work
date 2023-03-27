@@ -2,10 +2,13 @@
 	import { Situation } from '$lib/data';
 	import GreenCheckIcon from './GreenCheckIcon.svelte';
 	export let situation: { situation: Situation; requestRequired?: boolean };
+	export let showIcon: boolean = true;
 </script>
 
 {#if situation}
-	<GreenCheckIcon />
+	{#if showIcon}
+		<GreenCheckIcon />
+	{/if}
 	{#if situation.situation === Situation.Interested}
 		in the <strong>job posting</strong>
 	{:else if situation.situation === Situation.Application}

@@ -22,7 +22,9 @@
 	and Washington, which require multi-state employers to disclose in many situations &mdash; even if
 	you don't live there.
 </p>
-<p class="justify-center"><a href="/find-your-rights">Find Your Transparency Rights</a></p>
+<p class="text-center font-semibold">
+	<a href="/find-your-rights">Find Your Transparency Rights</a>
+</p>
 <div class="flex flex-col sm:flex-row flex-wrap justify-center">
 	{#each sortedLocales as locale (locale.id)}
 		<div class="p-6 grow justify-center text-center">

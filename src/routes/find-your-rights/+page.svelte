@@ -82,15 +82,17 @@
 				</select>
 			</label>
 
-			<label class="inline" for="employeeInLocation">
-				<input
-					type="checkbox"
-					bind:checked={$pageParams.employeeInLocation}
-					disabled={!canSelectEmployeeInLocation}
-					class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50 disabled:bg-gray-400 disabled:hover:bg-gray-400"
-				/>
-				Does the employer already have any employees in your location?
-			</label>
+			{#if $pageParams.situation !== Situation.Employed}
+				<label class="inline" for="employeeInLocation">
+					<input
+						type="checkbox"
+						bind:checked={$pageParams.employeeInLocation}
+						disabled={!canSelectEmployeeInLocation}
+						class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50 disabled:bg-gray-400 disabled:hover:bg-gray-400"
+					/>
+					Does the employer already have any employees in your location?
+				</label>
+			{/if}
 
 			<label class="block" for="companyLocation"
 				>Where is the employer located?
@@ -116,31 +118,33 @@
 					bind:value={$pageParams.totalEmployees}
 				/>
 			</label>
-			<label class="block" for="roleLocation"
-				>Where is the role eligible for hire?
-				<aside class="text-xs italic">
-					Choose as many as apply. On Linux and Windows, hold <kbd>CONTROL</kbd> to select rows. On
-					Mac, use <kbd>COMMAND</kbd>.
-				</aside>
-				<select
-					multiple
-					bind:value={$pageParams.roleLocation}
-					id="roleLocation"
-					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
-				>
-					<select value="">All US (Remote)</select>
-					{#each roleLocationOptions as locale (locale[0])}
-						<option value={locale[0]}>{locale[1]}</option>
-					{/each}
-				</select>
-			</label>
+			{#if $pageParams.situation !== Situation.Employed}
+				<label class="block" for="roleLocation"
+					>Where is the role eligible for hire?
+					<aside class="text-xs italic">
+						Choose as many as apply. On Linux and Windows, hold <kbd>CONTROL</kbd> to select rows.
+						On Mac, use <kbd>COMMAND</kbd>.
+					</aside>
+					<select
+						multiple
+						bind:value={$pageParams.roleLocation}
+						id="roleLocation"
+						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
+					>
+						<select value="">All US (Remote)</select>
+						{#each roleLocationOptions as locale (locale[0])}
+							<option value={locale[0]}>{locale[1]}</option>
+						{/each}
+					</select>
+				</label>
+			{/if}
 		</div>
 		<div class="container mx-auto">
 			<input
 				disabled={!validParams}
 				class="form-input block border-gray-300 focus:border-indigo-300 rounded-md shadow-sm border-gray-300 hover:bg-gray-800 hover:text-white mt-4 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:text-white"
 				type="submit"
-				on:click|preventDefault={handleFind}
+				on:keydown={handleFind}
 				value="Find Rights"
 			/>
 			{#if !validParams}

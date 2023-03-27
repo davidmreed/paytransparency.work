@@ -10,10 +10,6 @@ const locales: Record<string, Locale> = [
         state: 'Colorado',
         stateCode: 'CO',
         strength: Strength.Strong,
-        referenceSource: 'Colorado Department of Labor and Enforcement',
-        referenceUrl: 'https://cdle.colorado.gov/equalpaytransparency',
-        reportViolationUrl: 'https://cdle.colorado.gov/equalpaytransparency',
-        reportViolationProcess: 'by submitting a PDF form via email',
         who: {
             minEmployeesInLocale: 1,
             canHireInLocale: true
@@ -25,8 +21,6 @@ const locales: Record<string, Locale> = [
             salary: true,
             benefits: true
         },
-        penalty: 'between $500 and $10,000 per violation',
-        legalUrl: 'https://leg.colorado.gov/sites/default/files/2019a_085_signed.pdf'
     }),
     new Locale({
         // Note: the California disclosure requirements upon request
@@ -46,12 +40,6 @@ const locales: Record<string, Locale> = [
         what: {
             salary: true,
         },
-        referenceUrl: 'https://www.dir.ca.gov/dlse/california_equal_pay_act.htm',
-        referenceSource: 'California Department of Industrial Relations',
-        legalUrl: 'https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220SB1162',
-        penalty: 'between $100 and $10,000 per violation',
-        reportViolationProcess: 'by filing a complaint in writing with the California Labor Commissioner',
-        reportViolationUrl: 'https://www.dir.ca.gov/dlse/howtofileretaliationcomplaint.htm'
     }),
     new Locale({
         // Note: Washington also requires that "Upon request of an employee offered an internal transfer to a new position or promotion, the employer must provide the wage scale or salary range for the employee's new position"
@@ -71,18 +59,12 @@ const locales: Record<string, Locale> = [
             salary: true,
             benefits: true
         },
-        referenceUrl: 'https://lni.wa.gov/workers-rights/wages/equal-pay-opportunities-act/#job-postings',
-        referenceSource: 'Washington Department of Labor & Industries',
-        legalUrl: 'https://app.leg.wa.gov/RCW/default.aspx?cite=49.58.110',
-        reportViolationUrl: 'https://lni.wa.gov/workers-rights/workplace-complaints/index',
-        reportViolationProcess: 'by filing a complaint online with the Washington Department of Labor & Industries'
     }),
     new Locale({
         state: 'Nevada',
         stateCode: 'NV',
         strength: Strength.Weak,
         who: {
-            // Nevada's definition is unclear
             officeInLocale: true,
         },
         when: [
@@ -91,8 +73,6 @@ const locales: Record<string, Locale> = [
         what: {
             salary: true,
         },
-        legalUrl: 'https://www.leg.state.nv.us/App/NELIS/REL/81st2021/Bill/7896/Text',
-        penalty: 'up to $5,000 per violation',
     }),
     new Locale({
         state: 'Nevada',
@@ -125,8 +105,6 @@ const locales: Record<string, Locale> = [
             minEmployeesInLocale: 15,
             officeInLocale: true,
         },
-        legalUrl: 'https://codelibrary.amlegal.com/codes/toledo/latest/toledo_oh/0-0-0-159338',
-        reportViolationProcess: 'a private cause of action; no enforcement is done by the city'
     })
 ].reduce((map, locale) => { map[locale.id] = locale; return map; }, {} as Record<string, Locale>);
 
@@ -140,7 +118,7 @@ const allLocales: Record<string, AbstractLocale> = {
 describe('parsing parameters', () => {
     it('parses valid parameters', () => {
         const params = Params.parse({
-            situation: 1,
+            situation: Situation.Interested,
             userLocation: 'california',
             companyLocation: 'colorado',
             employeeInLocation: true,
@@ -148,13 +126,26 @@ describe('parsing parameters', () => {
             roleLocation: "california,colorado"
         });
 
-        expect(params.situation).toBe(Situation.Application);
+        expect(params.situation).toBe(Situation.Interested);
         expect(params.userLocation).toBe('california');
         expect(params.companyLocation).toBe('colorado');
         expect(params.employeeInLocation).toBe(true);
         expect(params.totalEmployees).toBe(50);
         expect(params.roleLocation).toStrictEqual(['california', 'colorado']);
     });
+
+    it('allows no role location for Situation.Employed', () => {
+        const params = Params.parse({
+            situation: Situation.Employed,
+            userLocation: 'california',
+            companyLocation: 'colorado',
+            employeeInLocation: true,
+            totalEmployees: 50,
+        });
+
+        expect(params.situation).toBe(Situation.Employed);
+    });
+
 
     it('rejects invalid locales', () => {
         try {
@@ -181,6 +172,17 @@ describe('validating parameters', () => {
     it('notes invalid parameters', () => {
         expect(isValidParams(Params.parse({}))).toBe(false);
     });
+
+    it('requires at least one roleLocation', () => {
+        expect(isValidParams(Params.parse({
+            situation: 1,
+            userLocation: 'california',
+            companyLocation: 'colorado',
+            employeeInLocation: true,
+            totalEmployees: 50,
+        }))).toBe(false);
+    });
+
 });
 
 describe('matches simple laws', () => {
@@ -190,15 +192,17 @@ describe('matches simple laws', () => {
         companyLocation: 'colorado',
         employeeInLocation: true,
         totalEmployees: 50,
-        roleLocation: ["california", "colorado", "washington", "nevada"]
-    });
+        roleLocation: ["california", "colorado", "washington", "nevada"],
+    }, locales, allLocales
+    );
 
     it('includes matching user location', () => {
         expect(matches).toContainEqual({
             locale: locales['california'],
             earliestDisclosurePoint: Situation.Interested,
             minEmployeesInLocale: 0,
-            what: { salary: true }
+            what: { salary: true },
+            isGeoMatch: true
         });
     });
     it('includes matching company location', () => {
@@ -206,7 +210,8 @@ describe('matches simple laws', () => {
             locale: locales['colorado'],
             earliestDisclosurePoint: Situation.Interested,
             minEmployeesInLocale: 0,
-            what: { salary: true, benefits: true }
+            what: { salary: true, benefits: true },
+            isGeoMatch: true
         });
     });
     it('includes matching third location', () => {
@@ -214,7 +219,8 @@ describe('matches simple laws', () => {
             locale: locales['washington'],
             earliestDisclosurePoint: Situation.Interested,
             minEmployeesInLocale: 1,
-            what: { salary: true, benefits: true }
+            what: { salary: true, benefits: true },
+            isGeoMatch: false,
         });
     });
     it('does not include non-matching location', () => {
@@ -222,7 +228,7 @@ describe('matches simple laws', () => {
     });
 });
 
-describe('matches with placeholder locations', () => {
+describe('matches with placeholder role location', () => {
     const matches = findMatchingLaws({
         situation: Situation.Interested,
         userLocation: 'california',
@@ -237,7 +243,8 @@ describe('matches with placeholder locations', () => {
             locale: locales['california'],
             earliestDisclosurePoint: Situation.Interested,
             minEmployeesInLocale: 0,
-            what: { salary: true }
+            what: { salary: true },
+            isGeoMatch: true,
         });
     });
     it('includes matching company location', () => {
@@ -245,7 +252,8 @@ describe('matches with placeholder locations', () => {
             locale: locales['colorado'],
             earliestDisclosurePoint: Situation.Interested,
             minEmployeesInLocale: 0,
-            what: { salary: true, benefits: true }
+            what: { salary: true, benefits: true },
+            isGeoMatch: true
         });
     });
     it('includes matching third location with employee threshold', () => {
@@ -253,10 +261,11 @@ describe('matches with placeholder locations', () => {
             locale: locales['washington'],
             earliestDisclosurePoint: Situation.Interested,
             minEmployeesInLocale: 1,
-            what: { salary: true, benefits: true }
+            what: { salary: true, benefits: true },
+            isGeoMatch: false,
         });
     });
-    it('includes does not include non-matching location', () => {
+    it('does not include non-matching location', () => {
         expect(matches.filter((m) => m.locale.id === 'nevada').length).toBe(0);
     });
     it('does not include abstract location matches', () => {
@@ -267,27 +276,55 @@ describe('matches with placeholder locations', () => {
 });
 
 describe('matches with sub-locations', () => {
-    const matches = findMatchingLaws({
-        situation: Situation.Interview,
-        userLocation: 'other',
-        companyLocation: 'nevada-goodsprings',
-        employeeInLocation: true,
-        totalEmployees: 50,
-        roleLocation: ["nevada"]
-    }, locales, allLocales);
+    it('includes both city and state company locales', () => {
+        const matches = findMatchingLaws({
+            situation: Situation.Interview,
+            userLocation: 'other',
+            companyLocation: 'nevada-goodsprings',
+            employeeInLocation: true,
+            totalEmployees: 50,
+            roleLocation: ["nevada"]
+        }, locales, allLocales);
 
-    it('includes both city and state locales', () => {
         expect(matches).toContainEqual({
             locale: locales['nevada-goodsprings'],
             earliestDisclosurePoint: Situation.Interview,
             minEmployeesInLocale: 5,
-            what: { salary: true, benefits: true }
+            what: { salary: true, benefits: true },
+            isGeoMatch: true
         });
         expect(matches).toContainEqual({
             locale: locales['nevada'],
             earliestDisclosurePoint: Situation.Interview,
             minEmployeesInLocale: 0,
-            what: { salary: true }
+            what: { salary: true },
+            isGeoMatch: true
+        });
+    });
+
+    it('includes both city and state user locales', () => {
+        const matches = findMatchingLaws({
+            situation: Situation.Interview,
+            userLocation: 'nevada-goodsprings',
+            companyLocation: 'california',
+            employeeInLocation: true,
+            totalEmployees: 50,
+            roleLocation: ["us"]
+        }, locales, allLocales);
+
+        expect(matches).toContainEqual({
+            locale: locales['nevada-goodsprings'],
+            earliestDisclosurePoint: Situation.Interview,
+            minEmployeesInLocale: 5,
+            what: { salary: true, benefits: true },
+            isGeoMatch: true
+        });
+        expect(matches).toContainEqual({
+            locale: locales['nevada'],
+            earliestDisclosurePoint: Situation.Interview,
+            minEmployeesInLocale: 0,
+            what: { salary: true },
+            isGeoMatch: true
         });
     });
 
@@ -295,6 +332,44 @@ describe('matches with sub-locations', () => {
 
 
 describe('handles different situation thresholds', () => {
+    it('handles Employed situations', () => {
+        const matches = findMatchingLaws({
+            situation: Situation.Employed,
+            userLocation: 'colorado',
+            companyLocation: 'california',
+            employeeInLocation: true,
+            totalEmployees: 50,
+            roleLocation: ["us"]
+        }, locales, allLocales);
 
+        expect(matches.length).toBe(1);
+        expect(matches).toContainEqual({
+            locale: locales['california'],
+            earliestDisclosurePoint: Situation.Interested,
+            minEmployeesInLocale: 0,
+            what: { salary: true },
+            isGeoMatch: true
+        });
+    });
+
+    it('handles Offer situations', () => {
+        const matches = findMatchingLaws({
+            situation: Situation.Offer,
+            userLocation: 'other',
+            companyLocation: 'ohio-toledo',
+            employeeInLocation: false,
+            totalEmployees: 50,
+            roleLocation: ["us"]
+        }, locales, allLocales);
+
+
+        expect(matches).toContainEqual({
+            locale: locales['ohio-toledo'],
+            earliestDisclosurePoint: Situation.Offer,
+            minEmployeesInLocale: 15,
+            what: { salary: true },
+            isGeoMatch: true
+        });
+    });
 });
 

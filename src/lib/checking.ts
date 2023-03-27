@@ -19,23 +19,23 @@ export const Params = z.object({
         .default('')
         .refine((s) => Object.keys(locales).includes(s) || s === '' || s === OTHER_LOCALE),
     employeeInLocation: z.boolean().default(false),
+    // TODO: The way Zod handles this results in a parse failure if the user deletes the content of the field.
     totalEmployees: z.number().default(0),
     roleLocation: z
         .string()
         .default('')
-        .transform((s) => s.split(','))
+        .transform((s) => s.split(',').filter((m) => m !== ''))
         .refine((s) =>
             s.every(
                 (l) =>
                     Object.keys(locales).includes(l) ||
-                    l === '' ||
                     l === OTHER_LOCALE ||
                     l === US_REMOTE_LOCALE
             )
         ),
 });
 
-export type MatchParameters = z.infer<typeof Params>;
+export type MatchParameters = z.TypeOf<typeof Params>;
 
 export interface Match {
     locale: Locale;
@@ -50,7 +50,7 @@ export function isValidParams(params: MatchParameters): boolean {
         params &&
         params.situation !== undefined &&
         params.userLocation &&
-        params.roleLocation.length > 0 &&
+        (params.roleLocation.length > 0 || params.situation === Situation.Employed) &&
         params.companyLocation &&
         params.totalEmployees
     )
@@ -98,6 +98,8 @@ export function findMatchingLaws(params: MatchParameters, useLocales?: Record<st
             const disclosureSituations = thisLocale.when.map((s) => s.situation).sort();
 
             // Is this actually a hireable locale?
+            // TODO: There are probably situations where a locale is not hireable but
+            // local law might prevail on a company located there.
             const isEligibleHireLocale =
                 params.roleLocation.filter((eachLocale) =>
                     availableAllLocales[eachLocale].isOrContains(thisLocale)

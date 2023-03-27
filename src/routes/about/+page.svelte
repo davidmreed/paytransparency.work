@@ -19,8 +19,12 @@
 	<a href="https://github.com/propublica/stateface">ProPublica's StateFace</a>.
 </p>
 <p>
+	<SiteName /> uses no cookies, tracking functionality, or ads. We don't have a privacy policy because
+	we collect no information at all, although our hosting service and your ISP may do so.
+</p>
+<p>
 	This site is <a href="https://github.com/davidmreed/paytransparency.work">open source</a> and
 	available under the
 	<a href="https://github.com/davidmreed/paytransparency.work/blob/main/LICENSE">MIT License</a>.
-	Want to improve the site, or add more transparency data? Open a Pull Request on GitHub!
+	Want to improve the site, or add more transparency data? Open an Issue or Pull Request on GitHub!
 </p>

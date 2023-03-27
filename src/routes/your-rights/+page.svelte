@@ -15,6 +15,7 @@
 	$: validParams = isValidParams($pageParams);
 	$: {
 		const matches = findMatchingLaws($pageParams);
+
 		geoMatches = matches.filter((m) => m.isGeoMatch);
 		nonGeoMatches = matches.filter((m) => !m.isGeoMatch);
 	}
@@ -37,7 +38,8 @@
 	</p>
 {/if}
 {#if geoMatches.length}
-	<h3 class="pb-0">Strong Matches</h3>
+	<hr />
+	<h3 class="pb-2 pt-4">Strong Matches</h3>
 	<p>
 		<SiteName /> believes the following laws are likely to provide transparency rights in your situation,
 		based on your location and the location of the company.
@@ -51,13 +53,17 @@
 {/if}
 
 {#if nonGeoMatches.length}
-	<h3 class="pb-0">Weaker Matches</h3>
+	<hr />
+	<h3 class="pb-2 pt-4">Weaker Matches</h3>
 	<p>
 		<SiteName /> found potential rights under the laws of jurisdictions outside of your location and
 		the location of the company. Depending on the company's presence and the availability of the role
-		in these areas, as well as the stage of your process, it's possible that the laws of these jurisdictions
-		could provide some transparency rights.
+		in these areas, it's possible that the laws of these jurisdictions could provide some transparency
+		rights.
 	</p>
-	<p>Evaluate the protections offered by these laws carefully.</p>
+	<p>
+		Carefully review the transparency protections in these jurisdictions to determine if they apply
+		to your situation.
+	</p>
 	<MatchTable matches={nonGeoMatches} />
 {/if}
