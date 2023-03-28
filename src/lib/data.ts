@@ -238,7 +238,7 @@ const locales: Record<string, Locale> = [
 			salary: true
 		},
 		when: [{ situation: Situation.Interested }],
-		legalUrl: 'https://www.albanycounty.com/home/showpublisheddocument/27437/638103243588570000',
+		legalUrl: 'https://www.albanycounty.com/home/showpublisheddocument/27437/638103243588570000'
 	}),
 
 	new Locale({

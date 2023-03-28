@@ -26,9 +26,12 @@ export const Params = z.object({
 		.default('')
 		.refine((s) => Object.keys(locales).includes(s) || s === '' || s === OTHER_LOCALE),
 	employeeInLocation: z.boolean().default(false),
-	// This circumlocution avoids an issue with how Zod handles 
+	// This circumlocution avoids an issue with how Zod handles
 	// some input values, resulting in a parse failure if the user deletes the content of the field.
-	totalEmployees: z.coerce.string().default('').transform((s) => Number(s) || 0),
+	totalEmployees: z.coerce
+		.string()
+		.default('')
+		.transform((s) => Number(s) || 0),
 	roleLocation: z
 		.string()
 		.default('')
@@ -53,11 +56,11 @@ export interface Match {
 export function isValidParams(params: MatchParameters): boolean {
 	return Boolean(
 		params &&
-		params.situation !== undefined &&
-		params.userLocation &&
-		(params.roleLocation.length > 0 || params.situation === Situation.Employed) &&
-		params.companyLocation &&
-		params.totalEmployees
+			params.situation !== undefined &&
+			params.userLocation &&
+			(params.roleLocation.length > 0 || params.situation === Situation.Employed) &&
+			params.companyLocation &&
+			params.totalEmployees
 	);
 }
 
@@ -98,15 +101,15 @@ export function findMatchingLaws(
 		const companyLocales =
 			params.companyLocation !== OTHER_LOCALE
 				? Object.values(availableLocales).filter((l) =>
-					l.isOrContains(availableLocales[params.companyLocation])
-				)
+						l.isOrContains(availableLocales[params.companyLocation])
+				  )
 				: [];
 		// Same rubric for users.
 		const userLocales =
 			params.userLocation !== OTHER_LOCALE
 				? Object.values(availableLocales).filter((l) =>
-					l.isOrContains(availableLocales[params.userLocation])
-				)
+						l.isOrContains(availableLocales[params.userLocation])
+				  )
 				: [];
 
 		for (const thisLocale of Object.values(availableLocales)) {
@@ -136,9 +139,9 @@ export function findMatchingLaws(
 				// (A geographic match makes the fit easier to evaluate).
 				const geographicMatch = Boolean(
 					companyLocales.map((c) => c.isOrContains(thisLocale)).some((f) => f) ||
-					(userLocales.map((u) => u.isOrContains(thisLocale)).some((f) => f) &&
-						(thisLocale.who.minEmployeesInLocale || 0 <= 1) &&
-						(params.employeeInLocation || params.situation === Situation.Employed))
+						(userLocales.map((u) => u.isOrContains(thisLocale)).some((f) => f) &&
+							(thisLocale.who.minEmployeesInLocale || 0 <= 1) &&
+							(params.employeeInLocation || params.situation === Situation.Employed))
 				);
 
 				// Determine if we match the _local_ employee count requirement (if present).

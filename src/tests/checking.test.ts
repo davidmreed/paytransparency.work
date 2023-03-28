@@ -395,7 +395,6 @@ describe('handles different situation thresholds', () => {
 		});
 	});
 
-
 	it('handles Offer situations', () => {
 		const matches = findMatchingLaws(
 			{
