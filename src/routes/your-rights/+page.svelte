@@ -20,6 +20,7 @@
 		nonGeoMatches = matches.filter((m) => !m.isGeoMatch);
 	}
 </script>
+
 <svelte:head>
 	<title>Your Pay Transparency Rights</title>
 </svelte:head>
