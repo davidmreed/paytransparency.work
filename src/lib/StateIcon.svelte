@@ -109,5 +109,4 @@
 <svg use:inlineSvg={"/svgs/WV.svg"} />
 {:else if stateCode == 'WY'}
 <svg use:inlineSvg={"/svgs/WY.svg"} />
-{:else}
 {/if}
