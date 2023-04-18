@@ -4,6 +4,7 @@
 
 	export let locale: Locale;
 	const svgPath = `/svgs/${locale.stateCode}.svg`;
+	const stateCode = locale.stateCode;
 </script>
 
 <!-- We use this repetitive logic because our SVG-inlining package will not process dynamic SVG paths -->
