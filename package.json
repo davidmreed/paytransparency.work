@@ -16,6 +16,7 @@
 	},
 	"devDependencies": {
 		"@svelte-put/inline-svg": "^1.0.0",
+		"@svelte-put/preprocess-inline-svg": "^2.1.0",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/adapter-static": "^2.0.1",
 		"@sveltejs/kit": "^1.15.2",
