@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { inlineSvg } from '@svelte-put/inline-svg';
+	import { inlineSvg } from '@svelte-put/inline-svg/preprocess';
 	import type { Locale } from './data';
 
 	export let locale: Locale;
