@@ -11,103 +11,103 @@
 <!-- This ensures that paths are static at build time. -->
 
 {#if stateCode == 'AK'}
-<svg use:inlineSvg={"/svgs/AK.svg"} />
+<svg inline-src={"/svgs/AK.svg"} />
 {:else if stateCode == 'AL'}
-<svg use:inlineSvg={"/svgs/AL.svg"} />
+<svg inline-src={"/svgs/AL.svg"} />
 {:else if stateCode == 'AR'}
-<svg use:inlineSvg={"/svgs/AR.svg"} />
+<svg inline-src={"/svgs/AR.svg"} />
 {:else if stateCode == 'AZ'}
-<svg use:inlineSvg={"/svgs/AZ.svg"} />
+<svg inline-src={"/svgs/AZ.svg"} />
 {:else if stateCode == 'CA'}
-<svg use:inlineSvg={"/svgs/CA.svg"} />
+<svg inline-src={"/svgs/CA.svg"} />
 {:else if stateCode == 'CO'}
-<svg use:inlineSvg={"/svgs/CO.svg"} />
+<svg inline-src={"/svgs/CO.svg"} />
 {:else if stateCode == 'CT'}
-<svg use:inlineSvg={"/svgs/CT.svg"} />
+<svg inline-src={"/svgs/CT.svg"} />
 {:else if stateCode == 'DC'}
-<svg use:inlineSvg={"/svgs/DC.svg"} />
+<svg inline-src={"/svgs/DC.svg"} />
 {:else if stateCode == 'DE'}
-<svg use:inlineSvg={"/svgs/DE.svg"} />
+<svg inline-src={"/svgs/DE.svg"} />
 {:else if stateCode == 'FL'}
-<svg use:inlineSvg={"/svgs/FL.svg"} />
+<svg inline-src={"/svgs/FL.svg"} />
 {:else if stateCode == 'GA'}
-<svg use:inlineSvg={"/svgs/GA.svg"} />
+<svg inline-src={"/svgs/GA.svg"} />
 {:else if stateCode == 'HI'}
-<svg use:inlineSvg={"/svgs/HI.svg"} />
+<svg inline-src={"/svgs/HI.svg"} />
 {:else if stateCode == 'IA'}
-<svg use:inlineSvg={"/svgs/IA.svg"} />
+<svg inline-src={"/svgs/IA.svg"} />
 {:else if stateCode == 'ID'}
-<svg use:inlineSvg={"/svgs/ID.svg"} />
+<svg inline-src={"/svgs/ID.svg"} />
 {:else if stateCode == 'IL'}
-<svg use:inlineSvg={"/svgs/IN.svg"} />
+<svg inline-src={"/svgs/IN.svg"} />
 {:else if stateCode == 'KS'}
-<svg use:inlineSvg={"/svgs/KS.svg"} />
+<svg inline-src={"/svgs/KS.svg"} />
 {:else if stateCode == 'KY'}
-<svg use:inlineSvg={"/svgs/KY.svg"} />
+<svg inline-src={"/svgs/KY.svg"} />
 {:else if stateCode == 'LA'}
-<svg use:inlineSvg={"/svgs/LA.svg"} />
+<svg inline-src={"/svgs/LA.svg"} />
 {:else if stateCode == 'MA'}
-<svg use:inlineSvg={"/svgs/MA.svg"} />
+<svg inline-src={"/svgs/MA.svg"} />
 {:else if stateCode == 'MD'}
-<svg use:inlineSvg={"/svgs/MD.svg"} />
+<svg inline-src={"/svgs/MD.svg"} />
 {:else if stateCode == 'ME'}
-<svg use:inlineSvg={"/svgs/ME.svg"} />
+<svg inline-src={"/svgs/ME.svg"} />
 {:else if stateCode == 'MI'}
-<svg use:inlineSvg={"/svgs/MI.svg"} />
+<svg inline-src={"/svgs/MI.svg"} />
 {:else if stateCode == 'MN'}
-<svg use:inlineSvg={"/svgs/MN.svg"} />
+<svg inline-src={"/svgs/MN.svg"} />
 {:else if stateCode == 'MO'}
-<svg use:inlineSvg={"/svgs/MO.svg"} />
+<svg inline-src={"/svgs/MO.svg"} />
 {:else if stateCode == 'MS'}
-<svg use:inlineSvg={"/svgs/MS.svg"} />
+<svg inline-src={"/svgs/MS.svg"} />
 {:else if stateCode == 'MT'}
-<svg use:inlineSvg={"/svgs/MT.svg"} />
+<svg inline-src={"/svgs/MT.svg"} />
 {:else if stateCode == 'NC'}
-<svg use:inlineSvg={"/svgs/NC.svg"} />
+<svg inline-src={"/svgs/NC.svg"} />
 {:else if stateCode == 'ND'}
-<svg use:inlineSvg={"/svgs/ND.svg"} />
+<svg inline-src={"/svgs/ND.svg"} />
 {:else if stateCode == 'NE'}
-<svg use:inlineSvg={"/svgs/NE.svg"} />
+<svg inline-src={"/svgs/NE.svg"} />
 {:else if stateCode == 'NH'}
-<svg use:inlineSvg={"/svgs/NH.svg"} />
+<svg inline-src={"/svgs/NH.svg"} />
 {:else if stateCode == 'NJ'}
-<svg use:inlineSvg={"/svgs/NJ.svg"} />
+<svg inline-src={"/svgs/NJ.svg"} />
 {:else if stateCode == 'NM'}
-<svg use:inlineSvg={"/svgs/NM.svg"} />
+<svg inline-src={"/svgs/NM.svg"} />
 {:else if stateCode == 'NV'}
-<svg use:inlineSvg={"/svgs/NV.svg"} />
+<svg inline-src={"/svgs/NV.svg"} />
 {:else if stateCode == 'NY'}
-<svg use:inlineSvg={"/svgs/NY.svg"} />
+<svg inline-src={"/svgs/NY.svg"} />
 {:else if stateCode == 'OH'}
-<svg use:inlineSvg={"/svgs/OH.svg"} />
+<svg inline-src={"/svgs/OH.svg"} />
 {:else if stateCode == 'OK'}
-<svg use:inlineSvg={"/svgs/OK.svg"} />
+<svg inline-src={"/svgs/OK.svg"} />
 {:else if stateCode == 'OR'}
-<svg use:inlineSvg={"/svgs/OR.svg"} />
+<svg inline-src={"/svgs/OR.svg"} />
 {:else if stateCode == 'PA'}
-<svg use:inlineSvg={"/svgs/PA.svg"} />
+<svg inline-src={"/svgs/PA.svg"} />
 {:else if stateCode == 'RI'}
-<svg use:inlineSvg={"/svgs/RI.svg"} />
+<svg inline-src={"/svgs/RI.svg"} />
 {:else if stateCode == 'SC'}
-<svg use:inlineSvg={"/svgs/SC.svg"} />
+<svg inline-src={"/svgs/SC.svg"} />
 {:else if stateCode == 'SD'}
-<svg use:inlineSvg={"/svgs/SD.svg"} />
+<svg inline-src={"/svgs/SD.svg"} />
 {:else if stateCode == 'TN'}
-<svg use:inlineSvg={"/svgs/TN.svg"} />
+<svg inline-src={"/svgs/TN.svg"} />
 {:else if stateCode == 'TX'}
-<svg use:inlineSvg={"/svgs/TX.svg"} />
+<svg inline-src={"/svgs/TX.svg"} />
 {:else if stateCode == 'UT'}
-<svg use:inlineSvg={"/svgs/UT.svg"} />
+<svg inline-src={"/svgs/UT.svg"} />
 {:else if stateCode == 'VA'}
-<svg use:inlineSvg={"/svgs/VA.svg"} />
+<svg inline-src={"/svgs/VA.svg"} />
 {:else if stateCode == 'VT'}
-<svg use:inlineSvg={"/svgs/VT.svg"} />
+<svg inline-src={"/svgs/VT.svg"} />
 {:else if stateCode == 'WA'}
-<svg use:inlineSvg={"/svgs/WA.svg"} />
+<svg inline-src={"/svgs/WA.svg"} />
 {:else if stateCode == 'WI'}
-<svg use:inlineSvg={"/svgs/WI.svg"} />
+<svg inline-src={"/svgs/WI.svg"} />
 {:else if stateCode == 'WV'}
-<svg use:inlineSvg={"/svgs/WV.svg"} />
+<svg inline-src={"/svgs/WV.svg"} />
 {:else if stateCode == 'WY'}
-<svg use:inlineSvg={"/svgs/WY.svg"} />
+<svg inline-src={"/svgs/WY.svg"} />
 {/if}
