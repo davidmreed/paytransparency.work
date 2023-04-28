@@ -1,11 +1,24 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/kit/vite';
+import inlineSvg from '@svelte-put/preprocess-inline-svg';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
 	// for more information about preprocessors
-	preprocess: vitePreprocess(),
+	preprocess: [
+		inlineSvg(
+			{
+				directories: 'static/svgs',
+				attributes: {}
+			},
+			{
+				inlineSrcAttributeName: 'data-inline-src',
+				keepInlineSrcAttribute: false
+			}
+		),
+		vitePreprocess()
+	],
 
 	kit: {
 		adapter: adapter()

@@ -1,6 +1,6 @@
 import { goto } from '$app/navigation';
 import { page } from '$app/stores';
-import { z, ZodType } from 'zod';
+import { z, type ZodType } from 'zod';
 import { getParams } from 'remix-params-helper';
 
 const QueryParams = z.record(z.coerce.string());
