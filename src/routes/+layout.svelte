@@ -4,7 +4,7 @@
 
 <header>
 	<div class="flex flex-row justify-center items-center">
-		<div class="bg-gray-600 mb-4 text-white text-center mt-4 w-3/4 md:w-1/2">
+		<div class="bg-gray-800 mb-4 text-white text-center mt-4 w-3/4 md:w-1/2">
 			<aside class="font-light text-s italic p-2">
 				This site does not provide legal advice and is not reviewed by an attorney.
 			</aside>
@@ -22,7 +22,7 @@
 </main>
 <footer>
 	<div class="flex flex-row justify-center items-center">
-		<div class="bg-gray-600 mb-4 text-center mt-4 w-1/2">
+		<div class="bg-gray-800 mb-4 text-center mt-4 w-1/2">
 			<nav class="p-2">
 				<a class="text-white" href="/">Home</a> |
 				<a class="text-white" href="/about">About</a> |
