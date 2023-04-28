@@ -32,5 +32,5 @@ export function asURLSearchParams(p: any): URLSearchParams {
 }
 
 export function asQueryString(p: any): string {
-	return new URLSearchParams(QueryParams.parse(p)).toString();
+	return asURLSearchParams(p).toString();
 }
