@@ -284,6 +284,31 @@ describe('matches with placeholder role location', () => {
 	});
 });
 
+describe('matches with placeholder user location', () => {
+	const matches = findMatchingLaws(
+		{
+			situation: Situation.Interested,
+			userLocation: 'other',
+			companyLocation: 'colorado',
+			employeeInLocation: false,
+			totalEmployees: 50,
+			roleLocation: ['us', 'other']
+		},
+		locales,
+		allLocales
+	);
+
+	it('includes matching company location', () => {
+		expect(matches).toContainEqual({
+			locale: locales['colorado'],
+			earliestDisclosurePoint: Situation.Interested,
+			minEmployeesInLocale: 0,
+			what: { salary: true, benefits: true },
+			isGeoMatch: true
+		});
+	});
+});
+
 describe('matches with sub-locations', () => {
 	it('includes both city and state company locales', () => {
 		const matches = findMatchingLaws(
