@@ -1,10 +1,12 @@
 <script lang="ts">
 	import type { Locale } from '$lib/data';
-	import GreenCheckIcon from '$lib/GreenCheckIcon.svelte';
 	import RedPlusIcon from '$lib/RedPlusIcon.svelte';
 	import BullhornIcon from '$lib/BullhornIcon.svelte';
 	import SituationDescription from '$lib/SituationDescription.svelte';
 	import StateIcon from '$lib/StateIcon.svelte';
+	import ScaleIcon from '$lib/ScaleIcon.svelte';
+	import BookIcon from '$lib/BookIcon.svelte';
+	import DollarIcon from '$lib/DollarIcon.svelte';
 
 	export let data: { locale: Locale };
 </script>
@@ -47,7 +49,7 @@
 <ul class="pb-2 indent">
 	{#if data.locale.what.salary}
 		<li>
-			<GreenCheckIcon />
+			<DollarIcon />
 			the <strong>pay range</strong>
 		</li>
 	{/if}
@@ -66,6 +68,8 @@
 </ul>
 <hr class="color-gray-900 p-1" />
 <p>
+	{#if (data.locale.referenceUrl && data.locale.referenceSource) || data.locale.legalUrl}<BookIcon
+		/>{/if}
 	{#if data.locale.referenceUrl && data.locale.referenceSource}Learn more at <a
 			href={data.locale.referenceUrl}>{data.locale.referenceSource}</a
 		>.{/if}
@@ -84,6 +88,7 @@
 {/if}
 {#if data.locale.penalty}
 	<p>
+		<ScaleIcon />
 		The penalty for violations is {data.locale.penalty}.
 	</p>
 {/if}
