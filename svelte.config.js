@@ -9,7 +9,7 @@ const config = {
 	preprocess: [
 		inlineSvg(
 			{
-				directories: 'static/svgs',
+				directories: ['static/states', 'static/icons'],
 				attributes: {}
 			},
 			{
