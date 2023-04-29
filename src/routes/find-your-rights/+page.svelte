@@ -5,6 +5,7 @@
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
 	import { writable } from 'svelte/store';
+	import SiteName from '$lib/SiteName.svelte';
 
 	let pageParams = browser ? createQueryStore(Params) : writable(Params.parse({}));
 
@@ -49,9 +50,9 @@
 <main>
 	<h1>Discover Your Pay Transparency Rights</h1>
 	<p>
-		PayTransparency.work knows about transparency laws in {Object.keys(locales).length} jurisdictions.
-		Some laws may provide you with rights even if you do not live in their jurisdiction. Let's find out
-		what rights you have!
+		<SiteName /> knows about transparency laws in {Object.keys(locales).length} jurisdictions. Some laws
+		may provide you with rights even if you do not live in their jurisdiction. Let's find out what rights
+		you have!
 	</p>
 	<hr class="color-gray-900 p-1" />
 
