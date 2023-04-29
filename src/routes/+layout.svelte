@@ -14,7 +14,7 @@
 <main>
 	<div class="pt-6 pb-6 flex flex-row justify-center items-center">
 		<div
-			class="w-3/4 md:w-2/3 max-w-screen-lg bg-white rounded-xl p-6 pl-10 pr-10 bg-zinc-100 shadow-md shadow-black"
+			class="w-10/12 md:w-2/3 max-w-screen-lg bg-white rounded-xl p-3 pl-6 pr-6 md:p-6 md:pl-10 md:pr-10 bg-zinc-100 shadow-md shadow-black"
 		>
 			<slot />
 		</div>
