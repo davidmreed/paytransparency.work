@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { Locale } from '$lib/data';
-	import GreenCheckIcon from '$lib/GreenCheckIcon.svelte';
 	import RedPlusIcon from '$lib/RedPlusIcon.svelte';
 	import BullhornIcon from '$lib/BullhornIcon.svelte';
 	import SituationDescription from '$lib/SituationDescription.svelte';
