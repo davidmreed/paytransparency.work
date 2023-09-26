@@ -101,6 +101,7 @@ export class Locale implements AbstractLocale {
 interface WhoDisclosure {
 	officeInLocale?: boolean;
 	canHireInLocale?: boolean;
+	officeSupervisorInLocale?: boolean;
 	minEmployees?: number;
 	minEmployeesInLocale?: number;
 }
@@ -372,6 +373,25 @@ const locales: Record<string, Locale> = [
 		},
 		legalUrl: 'https://codelibrary.amlegal.com/codes/toledo/latest/toledo_oh/0-0-0-159338',
 		reportViolationProcess: 'a private cause of action; no enforcement is done by the city'
+	}),
+	new Locale({
+		state: 'New York',
+		stateCode: 'NY',
+		strength: Strength.Strong,
+		what: {
+			salary: true
+		},
+		when: [{ situation: Situation.Application }],
+		who: {
+			minEmployees: 4,
+			canHireInLocale: true,
+			officeSupervisorInLocale: true
+		},
+		referenceSource: 'New York Department of Labor',
+		referenceUrl: 'https://dol.ny.gov/pay-transparency',
+		reportViolationProcess: '',
+		reportViolationUrl: 'https://dol.ny.gov/pay-transparency',
+		legalUrl: 'https://www.nysenate.gov/legislation/bills/2023/S1326'
 	})
 ].reduce((map, locale) => {
 	map[locale.id] = locale;

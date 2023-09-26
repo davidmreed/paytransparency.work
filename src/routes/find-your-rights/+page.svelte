@@ -112,6 +112,22 @@
 					{/each}
 				</select>
 			</label>
+			<label class="block" for="officeSupervisorLocation"
+				>Where is your office or non-remote supervisor located?
+				<aside class="italic text-xs">
+					If you don't know, or if your supervisor works remotely, choose "Somewhere else".
+				</aside>
+				<select
+					bind:value={$pageParams.officeSupervisorLocation}
+					id="officeSupervisorLocation"
+					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
+				>
+					{#each myLocationOptions as locale (locale[0])}
+						<option value={locale[0]}>{locale[1]}</option>
+					{/each}
+				</select>
+			</label>
+
 			<label class="block" for="totalEmployees">
 				How many total employees does the employer have?
 				<aside class="text-xs italic">

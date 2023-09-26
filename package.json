@@ -41,6 +41,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"kolorist": "^1.8.0",
 		"remix-params-helper": "^0.4.10",
 		"zod": "^3.21.0"
 	}

@@ -290,6 +290,7 @@ describe('matches with placeholder user location', () => {
 			situation: Situation.Interested,
 			userLocation: 'other',
 			companyLocation: 'colorado',
+			officeSupervisorLocation: 'other',
 			employeeInLocation: false,
 			totalEmployees: 50,
 			roleLocation: ['us', 'other']
@@ -316,6 +317,7 @@ describe('matches with sub-locations', () => {
 				situation: Situation.Interview,
 				userLocation: 'other',
 				companyLocation: 'nevada-goodsprings',
+				officeSupervisorLocation: 'other',
 				employeeInLocation: true,
 				totalEmployees: 50,
 				roleLocation: ['nevada']
@@ -346,6 +348,7 @@ describe('matches with sub-locations', () => {
 				situation: Situation.Interview,
 				userLocation: 'nevada-goodsprings',
 				companyLocation: 'california',
+				officeSupervisorLocation: 'other',
 				employeeInLocation: true,
 				totalEmployees: 50,
 				roleLocation: ['us']
@@ -378,6 +381,7 @@ describe('handles different situation thresholds', () => {
 				situation: Situation.Employed,
 				userLocation: 'colorado',
 				companyLocation: 'california',
+				officeSupervisorLocation: 'other',
 				employeeInLocation: false,
 				totalEmployees: 50,
 				roleLocation: ['us']
@@ -402,6 +406,7 @@ describe('handles different situation thresholds', () => {
 				situation: Situation.Employed,
 				userLocation: 'california',
 				companyLocation: 'colorado',
+				officeSupervisorLocation: 'other',
 				employeeInLocation: false,
 				totalEmployees: 50,
 				roleLocation: ['us']
@@ -426,6 +431,7 @@ describe('handles different situation thresholds', () => {
 				situation: Situation.Offer,
 				userLocation: 'other',
 				companyLocation: 'ohio-toledo',
+				officeSupervisorLocation: 'other',
 				employeeInLocation: false,
 				totalEmployees: 50,
 				roleLocation: ['us']

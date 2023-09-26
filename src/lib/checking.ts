@@ -25,6 +25,10 @@ export const Params = z.object({
 		.string()
 		.default('')
 		.refine((s) => Object.keys(locales).includes(s) || s === '' || s === OTHER_LOCALE),
+	officeSupervisorLocation: z
+		.string()
+		.default('')
+		.refine((s) => Object.keys(locales).includes(s) || s === '' || s === OTHER_LOCALE),
 	employeeInLocation: z.boolean().default(false),
 	// This circumlocution avoids an issue with how Zod handles
 	// some input values, resulting in a parse failure if the user deletes the content of the field.
@@ -56,11 +60,12 @@ export interface Match {
 export function isValidParams(params: MatchParameters): boolean {
 	return Boolean(
 		params &&
-			params.situation !== undefined &&
-			params.userLocation &&
-			(params.roleLocation.length > 0 || params.situation === Situation.Employed) &&
-			params.companyLocation &&
-			params.totalEmployees
+		params.situation !== undefined &&
+		params.userLocation &&
+		(params.roleLocation.length > 0 || params.situation === Situation.Employed) &&
+		params.companyLocation &&
+		params.officeSupervisorLocation &&
+		params.totalEmployees
 	);
 }
 
@@ -101,15 +106,22 @@ export function findMatchingLaws(
 		const companyLocales =
 			params.companyLocation !== OTHER_LOCALE
 				? Object.values(availableLocales).filter((l) =>
-						l.isOrContains(availableLocales[params.companyLocation])
-				  )
+					l.isOrContains(availableLocales[params.companyLocation])
+				)
 				: [];
 		// Same rubric for users.
 		const userLocales =
 			params.userLocation !== OTHER_LOCALE
 				? Object.values(availableLocales).filter((l) =>
-						l.isOrContains(availableLocales[params.userLocation])
-				  )
+					l.isOrContains(availableLocales[params.userLocation])
+				)
+				: [];
+		// And same rubric for supervisor/office locales.
+		const supervisorOfficeLocales =
+			params.officeSupervisorLocation !== OTHER_LOCALE
+				? Object.values(availableLocales).filter((l) =>
+					l.who.officeSupervisorInLocale && l.isOrContains(availableLocales[params.officeSupervisorLocation])
+				)
 				: [];
 
 		for (const thisLocale of Object.values(availableLocales)) {
@@ -135,13 +147,14 @@ export function findMatchingLaws(
 				!thisLocale.who.minEmployees || thisLocale.who.minEmployees <= params.totalEmployees;
 
 			if (situationMatch && totalEmployeeCountMatch) {
-				// Is this locality the same as or inside either the user's location or the company's?
+				// Is this locality the same as or encloses either the user's location or the company's?
 				// (A geographic match makes the fit easier to evaluate).
 				const geographicMatch = Boolean(
-					companyLocales.map((c) => c.isOrContains(thisLocale)).some((f) => f) ||
-						(userLocales.map((u) => u.isOrContains(thisLocale)).some((f) => f) &&
-							(thisLocale.who.minEmployeesInLocale || 0 <= 1) &&
-							(params.employeeInLocation || params.situation === Situation.Employed))
+					companyLocales.map((c) => thisLocale.isOrContains(c)).some((f) => f) ||
+					supervisorOfficeLocales.map((u) => thisLocale.isOrContains(u)).some((f) => f) ||
+					(userLocales.map((u) => thisLocale.isOrContains(u)).some((f) => f) &&
+						(thisLocale.who.minEmployeesInLocale || 0 <= 1) &&
+						(params.employeeInLocation || params.situation === Situation.Employed))
 				);
 
 				// Determine if we match the _local_ employee count requirement (if present).
