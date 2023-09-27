@@ -39,11 +39,19 @@
 			<br /><span class="italic text-xs"
 				>Note that this criterion is often poorly defined by the locale.</span
 			>
-		</li>{/if}
+		</li>
+	{/if}
 	{#if data.locale.who.canHireInLocale}
 		<li>
 			the role <strong>can be hired in {data.locale.name}</strong> (including remote);
-		</li>{/if}
+		</li>
+	{/if}
+	{#if data.locale.who.officeSupervisorInLocale}
+		<li>
+			the position is outside {data.locale.name}, but
+			<strong>reports to an office or non-remote supervisor located in {data.locale.name}; </strong>
+		</li>
+	{/if}
 </ul>
 <p>The employer must disclose:</p>
 <ul class="pb-2 indent">

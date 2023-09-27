@@ -100,6 +100,18 @@ const locales: Record<string, Locale> = [
 			minEmployeesInLocale: 15,
 			officeInLocale: true
 		}
+	}),
+	new Locale({
+		state: 'New York',
+		stateCode: 'NY',
+		strength: Strength.Strong,
+		what: {
+			salary: true
+		},
+		when: [{ situation: Situation.Interested }],
+		who: {
+			officeSupervisorInLocale: true
+		}
 	})
 ].reduce((map, locale) => {
 	map[locale.id] = locale;
@@ -161,6 +173,7 @@ describe('validating parameters', () => {
 					situation: 1,
 					userLocation: 'california',
 					companyLocation: 'colorado',
+					officeSupervisorLocation: 'other',
 					employeeInLocation: true,
 					totalEmployees: 50,
 					roleLocation: 'california,colorado'
@@ -180,6 +193,7 @@ describe('validating parameters', () => {
 					situation: 1,
 					userLocation: 'california',
 					companyLocation: 'colorado',
+					officeSupervisorLocation: 'other',
 					employeeInLocation: true,
 					totalEmployees: 50
 				})
@@ -194,6 +208,7 @@ describe('matches simple laws', () => {
 			situation: Situation.Interested,
 			userLocation: 'california',
 			companyLocation: 'colorado',
+			officeSupervisorLocation: 'other',
 			employeeInLocation: true,
 			totalEmployees: 50,
 			roleLocation: ['california', 'colorado', 'washington', 'nevada']
@@ -240,6 +255,7 @@ describe('matches with placeholder role location', () => {
 			situation: Situation.Interested,
 			userLocation: 'california',
 			companyLocation: 'colorado',
+			officeSupervisorLocation: 'other',
 			employeeInLocation: true,
 			totalEmployees: 50,
 			roleLocation: ['us', 'other']
@@ -290,6 +306,7 @@ describe('matches with placeholder user location', () => {
 			situation: Situation.Interested,
 			userLocation: 'other',
 			companyLocation: 'colorado',
+			officeSupervisorLocation: 'other',
 			employeeInLocation: false,
 			totalEmployees: 50,
 			roleLocation: ['us', 'other']
@@ -316,6 +333,7 @@ describe('matches with sub-locations', () => {
 				situation: Situation.Interview,
 				userLocation: 'other',
 				companyLocation: 'nevada-goodsprings',
+				officeSupervisorLocation: 'other',
 				employeeInLocation: true,
 				totalEmployees: 50,
 				roleLocation: ['nevada']
@@ -346,6 +364,7 @@ describe('matches with sub-locations', () => {
 				situation: Situation.Interview,
 				userLocation: 'nevada-goodsprings',
 				companyLocation: 'california',
+				officeSupervisorLocation: 'other',
 				employeeInLocation: true,
 				totalEmployees: 50,
 				roleLocation: ['us']
@@ -378,6 +397,7 @@ describe('handles different situation thresholds', () => {
 				situation: Situation.Employed,
 				userLocation: 'colorado',
 				companyLocation: 'california',
+				officeSupervisorLocation: 'other',
 				employeeInLocation: false,
 				totalEmployees: 50,
 				roleLocation: ['us']
@@ -402,6 +422,7 @@ describe('handles different situation thresholds', () => {
 				situation: Situation.Employed,
 				userLocation: 'california',
 				companyLocation: 'colorado',
+				officeSupervisorLocation: 'other',
 				employeeInLocation: false,
 				totalEmployees: 50,
 				roleLocation: ['us']
@@ -426,6 +447,7 @@ describe('handles different situation thresholds', () => {
 				situation: Situation.Offer,
 				userLocation: 'other',
 				companyLocation: 'ohio-toledo',
+				officeSupervisorLocation: 'other',
 				employeeInLocation: false,
 				totalEmployees: 50,
 				roleLocation: ['us']
@@ -441,5 +463,30 @@ describe('handles different situation thresholds', () => {
 			what: { salary: true },
 			isGeoMatch: true
 		});
+	});
+});
+
+it("handles New York's supervisor-location rubric", () => {
+	const matches = findMatchingLaws(
+		{
+			situation: Situation.Interested,
+			userLocation: 'other',
+			companyLocation: 'california',
+			officeSupervisorLocation: 'new-york',
+			employeeInLocation: false,
+			totalEmployees: 50,
+			roleLocation: ['california']
+		},
+		locales,
+		allLocales
+	);
+
+	expect(matches.length).toEqual(2);
+	expect(matches).toContainEqual({
+		locale: locales['new-york'],
+		earliestDisclosurePoint: Situation.Interested,
+		minEmployeesInLocale: 0,
+		what: { salary: true },
+		isGeoMatch: true
 	});
 });
