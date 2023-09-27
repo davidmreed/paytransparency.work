@@ -182,7 +182,7 @@ const locales: Record<string, Locale> = [
 			'https://lni.wa.gov/workers-rights/wages/equal-pay-opportunities-act/#job-postings',
 		referenceSource: 'Washington Department of Labor & Industries',
 		legalUrl: 'https://app.leg.wa.gov/RCW/default.aspx?cite=49.58.110',
-		reportViolationUrl: 'https://lni.wa.gov/workers-rights/workplace-complaints/index',
+		reportViolationUrl: 'https://lni.wa.gov/workers-rights/wages/equal-pay-opportunities-act/#job-postings',
 		reportViolationProcess:
 			'by filing a complaint online with the Washington Department of Labor & Industries'
 	}),
