@@ -60,12 +60,12 @@ export interface Match {
 export function isValidParams(params: MatchParameters): boolean {
 	return Boolean(
 		params &&
-		params.situation !== undefined &&
-		params.userLocation &&
-		(params.roleLocation.length > 0 || params.situation === Situation.Employed) &&
-		params.companyLocation &&
-		params.officeSupervisorLocation &&
-		params.totalEmployees
+			params.situation !== undefined &&
+			params.userLocation &&
+			(params.roleLocation.length > 0 || params.situation === Situation.Employed) &&
+			params.companyLocation &&
+			params.officeSupervisorLocation &&
+			params.totalEmployees
 	);
 }
 
@@ -106,22 +106,24 @@ export function findMatchingLaws(
 		const companyLocales =
 			params.companyLocation !== OTHER_LOCALE
 				? Object.values(availableLocales).filter((l) =>
-					l.isOrContains(availableLocales[params.companyLocation])
-				)
+						l.isOrContains(availableLocales[params.companyLocation])
+				  )
 				: [];
 		// Same rubric for users.
 		const userLocales =
 			params.userLocation !== OTHER_LOCALE
 				? Object.values(availableLocales).filter((l) =>
-					l.isOrContains(availableLocales[params.userLocation])
-				)
+						l.isOrContains(availableLocales[params.userLocation])
+				  )
 				: [];
 		// And same rubric for supervisor/office locales.
 		const supervisorOfficeLocales =
 			params.officeSupervisorLocation !== OTHER_LOCALE
-				? Object.values(availableLocales).filter((l) =>
-					l.who.officeSupervisorInLocale && l.isOrContains(availableLocales[params.officeSupervisorLocation])
-				)
+				? Object.values(availableLocales).filter(
+						(l) =>
+							l.who.officeSupervisorInLocale &&
+							l.isOrContains(availableLocales[params.officeSupervisorLocation])
+				  )
 				: [];
 
 		for (const thisLocale of Object.values(availableLocales)) {
@@ -134,7 +136,15 @@ export function findMatchingLaws(
 				params.roleLocation.filter((eachLocale) =>
 					availableAllLocales[eachLocale].isOrContains(thisLocale)
 				).length > 0;
-			if (!isEligibleHireLocale && params.situation !== Situation.Employed) continue;
+			const isRelevantSupervisorLocale = supervisorOfficeLocales
+				.map((u) => thisLocale.isOrContains(u))
+				.some((f) => f);
+			if (
+				!isEligibleHireLocale &&
+				params.situation !== Situation.Employed &&
+				!isRelevantSupervisorLocale
+			)
+				continue;
 
 			// Would this locale's "when" rules apply to the user's situation?
 			const situationMatch =
@@ -151,10 +161,10 @@ export function findMatchingLaws(
 				// (A geographic match makes the fit easier to evaluate).
 				const geographicMatch = Boolean(
 					companyLocales.map((c) => thisLocale.isOrContains(c)).some((f) => f) ||
-					supervisorOfficeLocales.map((u) => thisLocale.isOrContains(u)).some((f) => f) ||
-					(userLocales.map((u) => thisLocale.isOrContains(u)).some((f) => f) &&
-						(thisLocale.who.minEmployeesInLocale || 0 <= 1) &&
-						(params.employeeInLocation || params.situation === Situation.Employed))
+						isRelevantSupervisorLocale ||
+						(userLocales.map((u) => thisLocale.isOrContains(u)).some((f) => f) &&
+							(thisLocale.who.minEmployeesInLocale || 0 <= 1) &&
+							(params.employeeInLocation || params.situation === Situation.Employed))
 				);
 
 				// Determine if we match the _local_ employee count requirement (if present).

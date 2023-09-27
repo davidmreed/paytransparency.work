@@ -26,7 +26,7 @@ export default defineConfig({
 					}
 				],
 				display: 'minimal-ui'
-			},
+			}
 		})
 	],
 	test: {
