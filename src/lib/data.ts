@@ -381,7 +381,7 @@ const locales: Record<string, Locale> = [
 		what: {
 			salary: true
 		},
-		when: [{ situation: Situation.Application }],
+		when: [{ situation: Situation.Interested }],
 		who: {
 			minEmployees: 4,
 			canHireInLocale: true,

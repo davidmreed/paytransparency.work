@@ -25,7 +25,10 @@
 		situation={{ situation: params.situation, requestRequired: false }}
 		showIcon={false}
 	/>. The company is based in {localeName(params.companyLocation)}{#if params.employeeInLocation},
-		and already has employees in your location{/if}. The company has at least {params.totalEmployees}
+		and already has employees in your location{/if}. {#if params.officeSupervisorLocation !== OTHER_LOCALE}The
+		role reports to an office or non-remote supervisor in {localeName(
+			params.officeSupervisorLocation
+		)}.{/if} The company has at least {params.totalEmployees}
 	employee{#if params.totalEmployees !== 1}s{/if}. {#if params.roleLocation.length}The role can hire
 		in {#each params.roleLocation as roleLocation, i (roleLocation)}
 			{localeName(roleLocation)}{#if i < params.roleLocation.length - 1}, {#if i === params.roleLocation.length - 2}and
