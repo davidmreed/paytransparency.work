@@ -43,6 +43,6 @@
 	"dependencies": {
 		"kolorist": "^1.8.0",
 		"remix-params-helper": "^0.4.10",
-		"zod": "^3.21.0"
+		"zod": "^3.22.3"
 	}
 }
