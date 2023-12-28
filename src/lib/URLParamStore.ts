@@ -27,10 +27,10 @@ export function createQueryStore<K extends ZodType>(paramType: K) {
 	};
 }
 
-export function asURLSearchParams(p: any): URLSearchParams {
+export function asURLSearchParams(p: unknown): URLSearchParams {
 	return new URLSearchParams(QueryParams.parse(p));
 }
 
-export function asQueryString(p: any): string {
+export function asQueryString(p: unknown): string {
 	return asURLSearchParams(p).toString();
 }

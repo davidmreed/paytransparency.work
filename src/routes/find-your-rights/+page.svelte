@@ -1,5 +1,12 @@
 <script lang="ts">
-	import { US_REMOTE_LOCALE, OTHER_LOCALE, locales, allLocales, Situation } from '$lib/data';
+	import {
+		US_REMOTE_LOCALE,
+		CA_REMOTE_LOCALE,
+		OTHER_LOCALE,
+		locales,
+		allLocales,
+		Situation
+	} from '$lib/data';
 	import { asQueryString, createQueryStore } from '$lib/URLParamStore';
 	import { isValidParams, Params } from '$lib/checking';
 	import { goto } from '$app/navigation';
@@ -18,7 +25,8 @@
 	].concat(locationOptions);
 	const roleLocationOptions = [
 		[OTHER_LOCALE, 'Somewhere else'],
-		[US_REMOTE_LOCALE, 'All US (Remote)']
+		[US_REMOTE_LOCALE, 'All US (Remote)'],
+		[CA_REMOTE_LOCALE, 'All Canada (Remote)']
 	].concat(locationOptions);
 
 	function handleFind() {

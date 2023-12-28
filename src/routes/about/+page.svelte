@@ -14,9 +14,11 @@
 	<a href="https://tailwindcss.com/">Tailwind CSS</a>.
 </p>
 <p>
-	State map icons are from
+	United States map icons are from
 	<a href="https://github.com/coryetzkorn/state-svg-defs">coryetzkorn</a> and originally derive from
-	<a href="https://github.com/propublica/stateface">ProPublica's StateFace</a>.
+	<a href="https://github.com/propublica/stateface">ProPublica's StateFace</a>. Canada map icons are
+	derived from
+	<a href="https://commons.wikimedia.org/wiki/File:Canada_blank_map.svg">Wikimedia's Canada map</a>.
 </p>
 <p>
 	<SiteName /> uses no cookies, tracking functionality, or ads. We don't have a privacy policy because

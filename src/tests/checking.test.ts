@@ -5,9 +5,11 @@ import {
 	Strength,
 	OTHER_LOCALE,
 	US_REMOTE_LOCALE,
+	CA_REMOTE_LOCALE,
 	type AbstractLocale,
 	UnknownLocale,
-	AllUSLocale
+	AllUSLocale,
+	AllCanadaLocale
 } from '$lib/data';
 import { describe, expect, it } from 'vitest';
 
@@ -15,6 +17,7 @@ import { describe, expect, it } from 'vitest';
 // This is a test data set that draws on, but mutates, real data.
 const locales: Record<string, Locale> = [
 	new Locale({
+		country: 'United States',
 		state: 'Colorado',
 		stateCode: 'CO',
 		strength: Strength.Strong,
@@ -31,6 +34,7 @@ const locales: Record<string, Locale> = [
 	new Locale({
 		// Note: the California disclosure requirements upon request
 		// do not require that the 15-employee minimum is met.
+		country: 'United States',
 		state: 'California',
 		stateCode: 'CA',
 		strength: Strength.Strong,
@@ -47,6 +51,7 @@ const locales: Record<string, Locale> = [
 	new Locale({
 		// Note: Washington also requires that "Upon request of an employee offered an internal transfer to a new position or promotion, the employer must provide the wage scale or salary range for the employee's new position"
 		// Guidance from Washington: https://www.lni.wa.gov/workers-rights/_docs/ese1.pdf
+		country: 'United States',
 		state: 'Washington',
 		stateCode: 'WA',
 		strength: Strength.Strong,
@@ -62,6 +67,7 @@ const locales: Record<string, Locale> = [
 		}
 	}),
 	new Locale({
+		country: 'United States',
 		state: 'Nevada',
 		stateCode: 'NV',
 		strength: Strength.Weak,
@@ -74,6 +80,7 @@ const locales: Record<string, Locale> = [
 		}
 	}),
 	new Locale({
+		country: 'United States',
 		state: 'Nevada',
 		stateCode: 'NV',
 		city: 'Goodsprings',
@@ -88,6 +95,7 @@ const locales: Record<string, Locale> = [
 		}
 	}),
 	new Locale({
+		country: 'United States',
 		state: 'Ohio',
 		stateCode: 'OH',
 		city: 'Toledo',
@@ -102,8 +110,22 @@ const locales: Record<string, Locale> = [
 		}
 	}),
 	new Locale({
+		country: 'United States',
 		state: 'New York',
 		stateCode: 'NY',
+		strength: Strength.Strong,
+		what: {
+			salary: true
+		},
+		when: [{ situation: Situation.Interested }],
+		who: {
+			officeSupervisorInLocale: true
+		}
+	}),
+	new Locale({
+		country: 'Canada',
+		state: 'British Columbia',
+		stateCode: 'BC',
 		strength: Strength.Strong,
 		what: {
 			salary: true
@@ -121,6 +143,7 @@ const locales: Record<string, Locale> = [
 const allLocales: Record<string, AbstractLocale> = {
 	[OTHER_LOCALE]: new UnknownLocale(),
 	[US_REMOTE_LOCALE]: new AllUSLocale(),
+	[CA_REMOTE_LOCALE]: new AllCanadaLocale(),
 	...locales
 };
 
@@ -294,9 +317,39 @@ describe('matches with placeholder role location', () => {
 	it('does not include non-matching location', () => {
 		expect(matches.filter((m) => m.locale.id === 'nevada').length).toBe(0);
 	});
+	it('does not include non-matching Canada location', () => {
+		expect(matches.filter((m) => m.locale.id === 'canada-british-columbia').length).toBe(0);
+	});
 	it('does not include abstract location matches', () => {
 		expect(matches.filter((m) => m.locale.id === 'us').length).toBe(0);
+		expect(matches.filter((m) => m.locale.id === 'canada').length).toBe(0);
 		expect(matches.filter((m) => m.locale.id === 'other').length).toBe(0);
+	});
+});
+
+describe('handles Canadian and cross-border roles', () => {
+	const matches = findMatchingLaws(
+		{
+			situation: Situation.Interested,
+			userLocation: 'canada-british-columbia',
+			companyLocation: 'colorado',
+			officeSupervisorLocation: 'other',
+			employeeInLocation: true,
+			totalEmployees: 50,
+			roleLocation: ['us', 'canada', 'other']
+		},
+		locales,
+		allLocales
+	);
+
+	it('includes matching user location in Canada', () => {
+		expect(matches).toContainEqual({
+			locale: locales['canada-british-columbia'],
+			earliestDisclosurePoint: Situation.Interested,
+			minEmployeesInLocale: 0,
+			what: { salary: true },
+			isGeoMatch: true
+		});
 	});
 });
 

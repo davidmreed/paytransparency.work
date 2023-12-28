@@ -14,8 +14,8 @@
 
 <h1>Discover Pay Transparency Laws</h1>
 <p>
-	<SiteName /> covers pay transparency and disclosure laws in the United States. Discover pay transparency
-	rules by state and city below.
+	<SiteName /> covers pay transparency and disclosure laws in the United States and Canada. Discover
+	pay transparency rules by state or province and city below.
 </p>
 <p>
 	Not in an area with a disclosure law? You may still benefit from laws in states like California

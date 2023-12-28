@@ -7,9 +7,11 @@ PayTransparency.work is built by <a href="https://ktema.org">David Reed</a> usin
 
 </p>
 <p>
-	State map icons are from
+	United States map icons are from
 	<a href="https://github.com/coryetzkorn/state-svg-defs">coryetzkorn</a> and originally derive from
-	<a href="https://github.com/propublica/stateface">ProPublica's StateFace</a>.
+	<a href="https://github.com/propublica/stateface">ProPublica's StateFace</a>. Canada map icons are
+	derived from <a href="https://commons.wikimedia.org/wiki/File:Canada_blank_map.svg">Wikimedia's Canada
+	map</a>.
 </p>
 <p>
 	This site is <a href="https://github.com/davidmreed/paytransparency.work">open source</a> and
