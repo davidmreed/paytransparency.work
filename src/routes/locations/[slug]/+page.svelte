@@ -100,6 +100,13 @@
 		The penalty for violations is {data.locale.penalty}.
 	</p>
 {/if}
+<p>
+	<a
+		class="text-center form-input block border-gray-300 focus:border-indigo-300 rounded-md shadow-sm border-gray-300 hover:bg-gray-800 hover:text-white mt-4 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:text-white"
+		href="/find-your-rights?userLocation={data.locale.id}">Find Your Rights in {data.locale.name}</a
+	>
+</p>
+
 <p class="text-xs italic text-center pt-2">
 	This summary may not capture all nuances of the legislation. Review guidance from
 	{data.locale.name} to confirm compliance.
