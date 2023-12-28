@@ -7,7 +7,8 @@ import {
 	type WhatDisclosure,
 	Situation,
 	allLocales,
-	type AbstractLocale
+	type AbstractLocale,
+	CA_REMOTE_LOCALE
 } from '$lib/data';
 import { sortByBoolean, sortByCriteria } from './sorting';
 
@@ -42,7 +43,11 @@ export const Params = z.object({
 		.transform((s) => s.split(',').filter((m) => m !== ''))
 		.refine((s) =>
 			s.every(
-				(l) => Object.keys(locales).includes(l) || l === OTHER_LOCALE || l === US_REMOTE_LOCALE
+				(l) =>
+					Object.keys(locales).includes(l) ||
+					l === OTHER_LOCALE ||
+					l === US_REMOTE_LOCALE ||
+					l === CA_REMOTE_LOCALE
 			)
 		)
 });

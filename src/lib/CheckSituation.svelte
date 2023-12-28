@@ -3,13 +3,15 @@
 
 	import SituationDescription from './SituationDescription.svelte';
 	import type { z } from 'zod';
-	import { locales, OTHER_LOCALE, US_REMOTE_LOCALE } from '$lib/data';
+	import { CA_REMOTE_LOCALE, locales, OTHER_LOCALE, US_REMOTE_LOCALE } from '$lib/data';
 
 	export let params: z.infer<typeof Params>;
 
 	function localeName(l: string): string {
 		if (l === US_REMOTE_LOCALE) {
 			return 'the entire United States';
+		} else if (l === CA_REMOTE_LOCALE) {
+			return 'all of Canada';
 		} else if (l === OTHER_LOCALE) {
 			return "a location for which we don't track laws";
 		} else {

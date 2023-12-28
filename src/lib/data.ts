@@ -15,6 +15,7 @@ export interface AbstractLocale {
 }
 
 export const US_REMOTE_LOCALE = 'us';
+export const CA_REMOTE_LOCALE = 'canada';
 export const OTHER_LOCALE = 'other';
 
 export class UnknownLocale implements AbstractLocale {
@@ -26,7 +27,7 @@ export class UnknownLocale implements AbstractLocale {
 		return OTHER_LOCALE;
 	}
 
-	isOrContains(_other: AbstractLocale): boolean {
+	isOrContains(): boolean {
 		return false;
 	}
 }
@@ -40,12 +41,27 @@ export class AllUSLocale implements AbstractLocale {
 		return US_REMOTE_LOCALE;
 	}
 
-	isOrContains(other: AbstractLocale): boolean {
-		return other.id !== OTHER_LOCALE;
+	isOrContains(other: AbstractLocale | Locale): boolean {
+		return 'country' in other && other.country === 'United States';
+	}
+}
+
+export class AllCanadaLocale implements AbstractLocale {
+	get name() {
+		return 'All Canada (Remote)';
+	}
+
+	get id() {
+		return CA_REMOTE_LOCALE;
+	}
+
+	isOrContains(other: AbstractLocale | Locale): boolean {
+		return 'country' in other && other.country === 'Canada';
 	}
 }
 
 export class Locale implements AbstractLocale {
+	country!: string;
 	state!: string;
 	stateCode!: string;
 	city?: string;
@@ -61,6 +77,7 @@ export class Locale implements AbstractLocale {
 	penalty?: string;
 
 	constructor(params: {
+		country: string;
 		state: string;
 		stateCode: string;
 		city?: string;
@@ -79,10 +96,14 @@ export class Locale implements AbstractLocale {
 	}
 
 	get id() {
+		const cityAndState = this.city
+			? `${this.state.toLocaleLowerCase()}-${this.city.toLocaleLowerCase()}`
+			: this.state.toLocaleLowerCase();
+
 		return (
-			this.city
-				? `${this.state.toLocaleLowerCase()}-${this.city.toLocaleLowerCase()}`
-				: this.state.toLocaleLowerCase()
+			this.country !== 'United States'
+				? `${this.country.toLocaleLowerCase()}-${cityAndState}`
+				: cityAndState
 		).replaceAll(/\s+/g, '-');
 	}
 
@@ -92,8 +113,9 @@ export class Locale implements AbstractLocale {
 
 	isOrContains(other: Locale) {
 		return (
-			(this.state === other.state && this.city === other.city) ||
-			(this.state === other.state && !this.city)
+			this.country === other.country &&
+			((this.state === other.state && this.city === other.city) ||
+				(this.state === other.state && !this.city))
 		);
 	}
 }
@@ -119,6 +141,7 @@ export enum Strength {
 
 const locales: Record<string, Locale> = [
 	new Locale({
+		country: 'United States',
 		state: 'Colorado',
 		stateCode: 'CO',
 		strength: Strength.Strong,
@@ -141,6 +164,7 @@ const locales: Record<string, Locale> = [
 	new Locale({
 		// Note: the California disclosure requirements upon request
 		// do not require that the 15-employee minimum is met.
+		country: 'United States',
 		state: 'California',
 		stateCode: 'CA',
 		strength: Strength.Strong,
@@ -165,6 +189,7 @@ const locales: Record<string, Locale> = [
 	new Locale({
 		// Note: Washington also requires that "Upon request of an employee offered an internal transfer to a new position or promotion, the employer must provide the wage scale or salary range for the employee's new position"
 		// Guidance from Washington: https://www.lni.wa.gov/workers-rights/_docs/ese1.pdf
+		country: 'United States',
 		state: 'Washington',
 		stateCode: 'WA',
 		strength: Strength.Strong,
@@ -188,6 +213,7 @@ const locales: Record<string, Locale> = [
 			'by filing a complaint online with the Washington Department of Labor & Industries'
 	}),
 	new Locale({
+		country: 'United States',
 		state: 'Connecticut',
 		stateCode: 'CT',
 		strength: Strength.Moderate,
@@ -209,6 +235,7 @@ const locales: Record<string, Locale> = [
 		reportViolationProcess: 'by filing a complaint with the Labor Commissioner'
 	}),
 	new Locale({
+		country: 'United States',
 		state: 'New York',
 		stateCode: 'NY',
 		city: 'New York',
@@ -228,6 +255,7 @@ const locales: Record<string, Locale> = [
 		penalty: 'up to $250,000 if employer does not come into compliance, or for second offenses'
 	}),
 	new Locale({
+		country: 'United States',
 		state: 'New York',
 		stateCode: 'NY',
 		city: 'Albany County',
@@ -242,8 +270,8 @@ const locales: Record<string, Locale> = [
 		when: [{ situation: Situation.Interested }],
 		legalUrl: 'https://www.albanycounty.com/home/showpublisheddocument/27437/638103243588570000'
 	}),
-
 	new Locale({
+		country: 'United States',
 		state: 'Rhode Island',
 		stateCode: 'RI',
 		strength: Strength.Moderate,
@@ -262,6 +290,7 @@ const locales: Record<string, Locale> = [
 		legalUrl: 'http://webserver.rilin.state.ri.us/Statutes/TITLE28/28-6/INDEX.htm'
 	}),
 	new Locale({
+		country: 'United States',
 		state: 'Nevada',
 		stateCode: 'NV',
 		strength: Strength.Weak,
@@ -277,6 +306,7 @@ const locales: Record<string, Locale> = [
 		penalty: 'up to $5,000 per violation'
 	}),
 	new Locale({
+		country: 'United States',
 		state: 'Ohio',
 		stateCode: 'OH',
 		city: 'Cincinnati',
@@ -294,6 +324,7 @@ const locales: Record<string, Locale> = [
 		penalty: 'a private cause of action; no enforcement is done by the city'
 	}),
 	new Locale({
+		country: 'United States',
 		state: 'Maryland',
 		stateCode: 'MD',
 		strength: Strength.Weak,
@@ -312,6 +343,7 @@ const locales: Record<string, Locale> = [
 		reportViolationProcess: 'by submitting a complaint to the Department of Labor'
 	}),
 	new Locale({
+		country: 'United States',
 		state: 'New York',
 		stateCode: 'NY',
 		city: 'Westchester County',
@@ -328,6 +360,7 @@ const locales: Record<string, Locale> = [
 			'https://westchestercountyny.legistar.com/View.ashx?M=F&amp;ID=10917730&amp;GUID=6BB79D87-02B9-48F0-995D-FA1E9940A0E4'
 	}),
 	new Locale({
+		country: 'United States',
 		state: 'New York',
 		stateCode: 'NY',
 		city: 'Ithaca',
@@ -345,6 +378,7 @@ const locales: Record<string, Locale> = [
 		referenceUrl: 'https://www.cityofithaca.org/faq.aspx?TID=50'
 	}),
 	new Locale({
+		country: 'United States',
 		state: 'New Jersey',
 		stateCode: 'NJ',
 		city: 'Jersey City',
@@ -360,6 +394,7 @@ const locales: Record<string, Locale> = [
 		legalUrl: 'https://cityofjerseycity.civicweb.net/document/68348/'
 	}),
 	new Locale({
+		country: 'United States',
 		state: 'Ohio',
 		stateCode: 'OH',
 		city: 'Toledo',
@@ -376,6 +411,7 @@ const locales: Record<string, Locale> = [
 		reportViolationProcess: 'a private cause of action; no enforcement is done by the city'
 	}),
 	new Locale({
+		country: 'United States',
 		state: 'New York',
 		stateCode: 'NY',
 		strength: Strength.Strong,
@@ -393,6 +429,40 @@ const locales: Record<string, Locale> = [
 		reportViolationProcess: '',
 		reportViolationUrl: 'https://dol.ny.gov/pay-transparency',
 		legalUrl: 'https://www.nysenate.gov/legislation/bills/2023/S1326'
+	}),
+	new Locale({
+		country: 'Canada',
+		state: 'British Columbia',
+		stateCode: 'BC',
+		strength: Strength.Strong,
+		what: {
+			salary: true
+		},
+		when: [{ situation: Situation.Interested }],
+		who: {
+			canHireInLocale: true
+		},
+		referenceSource: 'British Columbia Government',
+		referenceUrl: 'https://www2.gov.bc.ca/gov/content/gender-equity/pay-transparency-laws-in-bc',
+		legalUrl: 'https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/23018'
+	}),
+	new Locale({
+		country: 'Canada',
+		state: 'Prince Edward Island',
+		stateCode: 'PE',
+		strength: Strength.Strong,
+		what: {
+			salary: true
+		},
+		when: [{ situation: Situation.Interested }],
+		who: {
+			canHireInLocale: true
+		},
+		referenceUrl:
+			'https://www.princeedwardisland.ca/en/information/workforce-advanced-learning-and-population/pay-transparency',
+		referenceSource: 'Prince Edward Island',
+		legalUrl:
+			'https://docs.assembly.pe.ca/download/dms?objectId=2e8abdf3-3f95-463c-b2b0-3ba944edce0d&fileName=bill-119.pdf'
 	})
 ].reduce((map, locale) => {
 	map[locale.id] = locale;
@@ -402,6 +472,7 @@ const locales: Record<string, Locale> = [
 export const allLocales: Record<string, AbstractLocale> = {
 	[OTHER_LOCALE]: new UnknownLocale(),
 	[US_REMOTE_LOCALE]: new AllUSLocale(),
+	[CA_REMOTE_LOCALE]: new AllCanadaLocale(),
 	...locales
 };
 
