@@ -1,1 +1,1 @@
-<svg data-inline-src="plus" class="w-6 h-6 fill-orange-700" />
+<svg data-inline-src="plus" class="w-6 h-6 mr-1 fill-rose-900" />
