@@ -431,6 +431,22 @@ const locales: Record<string, Locale> = [
 		legalUrl: 'https://www.nysenate.gov/legislation/bills/2023/S1326'
 	}),
 	new Locale({
+		country: 'United States',
+		state: 'Hawaii',
+		stateCode: 'HI',
+		strength: Strength.Strong,
+		what: {
+			salary: true
+		},
+		when: [{ situation: Situation.Interested }],
+		who: {
+			minEmployees: 50,
+		},
+		referenceSource: 'Hawaii Civil Rights Commission',
+		referenceUrl: 'https://labor.hawaii.gov/hcrc/3767-2/',
+		legalUrl: 'https://www.capitol.hawaii.gov/session/archives/measure_indiv_Archives.aspx?billtype=SB&billnumber=1057&year=2023'
+	}),
+	new Locale({
 		country: 'Canada',
 		state: 'British Columbia',
 		stateCode: 'BC',
