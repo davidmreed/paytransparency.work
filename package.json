@@ -18,7 +18,7 @@
 		"@svelte-put/preprocess-inline-svg": "^2.1.0",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/adapter-static": "^2.0.1",
-		"@sveltejs/kit": "^1.27.6",
+		"@sveltejs/kit": "^1.30.4",
 		"@tailwindcss/forms": "^0.5.3",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
