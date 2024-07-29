@@ -497,7 +497,7 @@ const locales: Record<string, Locale> = [
 		legalUrl: 'https://code.dccouncil.gov/us/dc/council/laws/25-138',
 		reportViolationProcess: 'by emailing the Office of the D.C. Attorney General',
 		reportViolationUrl: 'mailto:workers@dc.gov',
-		penalty: 'lawsuit by Attorney General with various penalties possible'
+		penalty: 'a lawsuit by D.C. Attorney General with various penalties possible'
 	})
 ].reduce((map, locale) => {
 	map[locale.id] = locale;
