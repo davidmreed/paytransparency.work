@@ -440,11 +440,12 @@ const locales: Record<string, Locale> = [
 		},
 		when: [{ situation: Situation.Interested }],
 		who: {
-			minEmployees: 50,
+			minEmployees: 50
 		},
 		referenceSource: 'Hawaii Civil Rights Commission',
 		referenceUrl: 'https://labor.hawaii.gov/hcrc/3767-2/',
-		legalUrl: 'https://www.capitol.hawaii.gov/session/archives/measure_indiv_Archives.aspx?billtype=SB&billnumber=1057&year=2023'
+		legalUrl:
+			'https://www.capitol.hawaii.gov/session/archives/measure_indiv_Archives.aspx?billtype=SB&billnumber=1057&year=2023'
 	}),
 	new Locale({
 		country: 'Canada',
@@ -479,6 +480,24 @@ const locales: Record<string, Locale> = [
 		referenceSource: 'Prince Edward Island',
 		legalUrl:
 			'https://docs.assembly.pe.ca/download/dms?objectId=2e8abdf3-3f95-463c-b2b0-3ba944edce0d&fileName=bill-119.pdf'
+	}),
+	new Locale({
+		country: 'United States',
+		state: 'Washington, D.C.',
+		stateCode: 'DC',
+		strength: Strength.Strong,
+		what: {
+			salary: true,
+			benefits: true
+		},
+		when: [{ situation: Situation.Interested }],
+		who: {
+			minEmployeesInLocale: 1
+		},
+		legalUrl: 'https://code.dccouncil.gov/us/dc/council/laws/25-138',
+		reportViolationProcess: 'by emailing the Office of the D.C. Attorney General',
+		reportViolationUrl: 'mailto:workers@dc.gov',
+		penalty: 'lawsuit by Attorney General with various penalties possible'
 	})
 ].reduce((map, locale) => {
 	map[locale.id] = locale;
