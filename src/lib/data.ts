@@ -327,20 +327,21 @@ const locales: Record<string, Locale> = [
 		country: 'United States',
 		state: 'Maryland',
 		stateCode: 'MD',
-		strength: Strength.Weak,
+		strength: Strength.Strong,
 		who: {
-			// Maryland's criteria are unclear:
-			// "(i) a person engaged in a business, industry, profession, trade, or other enterprise in the State;"
-			officeInLocale: true
+			canHireInLocale: true
 		},
 		what: {
-			salary: true
+			salary: true;
+            benefits: true;
 		},
 		when: [{ situation: Situation.Application }],
-		legalUrl: 'https://legiscan.com/MD/bill/HB123/2020',
+		legalUrl: 'https://mgaleg.maryland.gov/2024RS/chapters_noln/Ch_272_sb0525T.pdf',
 		penalty:
 			'a letter compelling compliance (first violation); up to $300 per applicant (second violation); $600 per applicant (further violations)',
-		reportViolationProcess: 'by submitting a complaint to the Department of Labor'
+		reportViolationProcess: 'by submitting a complaint to the Department of Labor',
+        referenceUrl: 'https://labor.maryland.gov/labor/wages/',
+        referenceSource: 'Maryland Department of Labor'
 	}),
 	new Locale({
 		country: 'United States',
