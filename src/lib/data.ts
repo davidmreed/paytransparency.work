@@ -332,8 +332,8 @@ const locales: Record<string, Locale> = [
 			canHireInLocale: true
 		},
 		what: {
-			salary: true;
-            benefits: true;
+			salary: true,
+            benefits: true
 		},
 		when: [{ situation: Situation.Application }],
 		legalUrl: 'https://mgaleg.maryland.gov/2024RS/chapters_noln/Ch_272_sb0525T.pdf',
