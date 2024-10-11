@@ -335,7 +335,7 @@ const locales: Record<string, Locale> = [
 			salary: true,
             benefits: true
 		},
-		when: [{ situation: Situation.Application }],
+		when: [{ situation: Situation.Interested }],
 		legalUrl: 'https://mgaleg.maryland.gov/2024RS/chapters_noln/Ch_272_sb0525T.pdf',
 		penalty:
 			'a letter compelling compliance (first violation); up to $300 per applicant (second violation); $600 per applicant (further violations)',
