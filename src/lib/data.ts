@@ -177,14 +177,14 @@ const locales: Record<string, Locale> = [
 		what: {
 			salary: true
 		},
-		referenceUrl: 'https://www.dir.ca.gov/dlse/california_equal_pay_act.htm',
-		referenceSource: 'California Department of Industrial Relations',
+		referenceUrl: 'https://www.dir.ca.gov/dlse/Pay-Trans-Instructions.pdf',
+		referenceSource: 'California Division of Labor Standards Enforcement (PDF)',
 		legalUrl:
 			'https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220SB1162',
 		penalty: 'between $100 and $10,000 per violation',
 		reportViolationProcess:
-			'by filing a complaint in writing with the California Labor Commissioner',
-		reportViolationUrl: 'https://www.dir.ca.gov/dlse/howtofileretaliationcomplaint.htm'
+			'by filling and emailing a PDF form',
+		reportViolationUrl: 'https://www.dir.ca.gov/dlse/Pay-Transparency-Complaint.pdf'
 	}),
 	new Locale({
 		// Note: Washington also requires that "Upon request of an employee offered an internal transfer to a new position or promotion, the employer must provide the wage scale or salary range for the employee's new position"
