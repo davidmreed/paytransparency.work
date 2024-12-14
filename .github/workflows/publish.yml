@@ -1,0 +1,31 @@
+name: Test
+
+on:
+  pull_request:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    name: Deploy to Cloudflare Pages
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('flake.lock') }}-${{ hashFiles('package-lock.json') }}
+      - uses: workflow/nix-shell-action@v3.3.0
+        with:
+          flakes-from-devshell: true
+          script: npm run build
+      - name: Publish
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy build --project-name=paytransparency
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
