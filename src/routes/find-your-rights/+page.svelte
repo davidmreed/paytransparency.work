@@ -7,14 +7,14 @@
 		allLocales,
 		Situation
 	} from '$lib/data';
-	import { asQueryString, createQueryStore } from '$lib/URLParamStore';
-	import { isValidParams, Params } from '$lib/checking';
+	import { isValidParams, Params, type MatchParameters } from '$lib/checking';
 	import { goto } from '$app/navigation';
-	import { browser } from '$app/environment';
-	import { writable } from 'svelte/store';
 	import SiteName from '$lib/SiteName.svelte';
 
-	let pageParams = browser ? createQueryStore(Params) : writable(Params.parse({}));
+	import { createUseQueryParams, type QueryHelpers } from 'svelte-query-params';
+	import { sveltekit } from 'svelte-query-params/adapters/sveltekit';
+	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
 
 	const locationOptions = Object.keys(locales)
 		.sort()
@@ -29,26 +29,37 @@
 		[CA_REMOTE_LOCALE, 'All Canada (Remote)']
 	].concat(locationOptions);
 
-	function handleFind() {
-		goto(`/your-rights?${asQueryString($pageParams)}`);
-	}
+	let params: MatchParameters = $state({
+		situation: Situation.Application,
+		userLocation: '',
+		companyLocation: '',
+		officeSupervisorLocation: '',
+		employeeInLocation: false,
+		totalEmployees: 1,
+		roleLocation: []
+	});
+	let helpers: QueryHelpers<MatchParameters> | undefined;
+	let validParams = $derived(params ? isValidParams(params) : false);
 
-	let canSelectEmployeeInLocation = true;
+	let companyLocale = $derived(allLocales[params.companyLocation]);
+	let userLocale = $derived(allLocales[params.userLocation]);
+	let canSelectEmployeeInLocation = $derived(
+		!(companyLocale && userLocale && userLocale.isOrContains(companyLocale))
+	);
 
-	$: {
-		let companyLocale = allLocales[$pageParams.companyLocation];
-		let userLocale = allLocales[$pageParams.userLocation];
-		if (companyLocale && userLocale) {
-			if (userLocale.isOrContains(companyLocale)) {
-				$pageParams.employeeInLocation = true;
-				canSelectEmployeeInLocation = false;
-			} else {
-				canSelectEmployeeInLocation = true;
-			}
+	function handleFind(event: Event) {
+		event.preventDefault();
+		params.employeeInLocation = !canSelectEmployeeInLocation || params.employeeInLocation;
+		if (helpers) {
+			goto(`/your-rights${helpers.search}`);
 		}
 	}
 
-	$: validParams = isValidParams($pageParams);
+	onMount(() => {
+		[params, helpers] = createUseQueryParams(Params, { adapter: sveltekit({ replace: true }) })(
+			$page.url
+		);
+	});
 </script>
 
 <svelte:head>
@@ -69,7 +80,7 @@
 			<label class="block" for="situation"
 				>What's your situation?
 				<select
-					bind:value={$pageParams.situation}
+					bind:value={params.situation}
 					id="situation"
 					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
 				>
@@ -85,7 +96,7 @@
 			<label class="block" for="location"
 				>Where are you located?
 				<select
-					bind:value={$pageParams.userLocation}
+					bind:value={params.userLocation}
 					id="location"
 					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
 				>
@@ -95,11 +106,11 @@
 				</select>
 			</label>
 
-			{#if $pageParams.situation !== Situation.Employed}
+			{#if params.situation !== Situation.Employed}
 				<label class="inline" for="employeeInLocation">
 					<input
 						type="checkbox"
-						bind:checked={$pageParams.employeeInLocation}
+						bind:checked={params.employeeInLocation}
 						disabled={!canSelectEmployeeInLocation}
 						class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50 disabled:bg-gray-400 disabled:hover:bg-gray-400"
 					/>
@@ -111,7 +122,7 @@
 				>Where is the employer located?
 				<aside class="italic text-xs">If you don't know, choose "Somewhere else".</aside>
 				<select
-					bind:value={$pageParams.companyLocation}
+					bind:value={params.companyLocation}
 					id="companyLocation"
 					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
 				>
@@ -126,7 +137,7 @@
 					If you don't know, or if your supervisor works remotely, choose "Somewhere else".
 				</aside>
 				<select
-					bind:value={$pageParams.officeSupervisorLocation}
+					bind:value={params.officeSupervisorLocation}
 					id="officeSupervisorLocation"
 					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
 				>
@@ -144,10 +155,10 @@
 				<input
 					class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
 					type="number"
-					bind:value={$pageParams.totalEmployees}
+					bind:value={params.totalEmployees}
 				/>
 			</label>
-			{#if $pageParams.situation !== Situation.Employed}
+			{#if params.situation !== Situation.Employed}
 				<label class="block" for="roleLocation"
 					>Where is the role eligible for hire?
 					<aside class="text-xs italic">
@@ -156,11 +167,10 @@
 					</aside>
 					<select
 						multiple
-						bind:value={$pageParams.roleLocation}
+						bind:value={params.roleLocation}
 						id="roleLocation"
 						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
 					>
-						<select value="">All US (Remote)</select>
 						{#each roleLocationOptions as locale (locale[0])}
 							<option value={locale[0]}>{locale[1]}</option>
 						{/each}
@@ -173,7 +183,7 @@
 				disabled={!validParams}
 				class="form-input block border-gray-300 focus:border-indigo-300 rounded-md shadow-sm border-gray-300 hover:bg-gray-800 hover:text-white mt-4 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:text-white"
 				type="submit"
-				on:click|preventDefault={handleFind}
+				onclick={handleFind}
 				value="Find Rights"
 			/>
 			{#if !validParams}

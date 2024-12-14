@@ -13,7 +13,7 @@ import {
 import { sortByBoolean, sortByCriteria } from './sorting';
 
 export const Params = z.object({
-	situation: z
+	situation: z.coerce
 		.number()
 		.min(Situation.Interested)
 		.max(Situation.Employed)
@@ -30,7 +30,10 @@ export const Params = z.object({
 		.string()
 		.default('')
 		.refine((s) => Object.keys(locales).includes(s) || s === '' || s === OTHER_LOCALE),
-	employeeInLocation: z.boolean().default(false),
+	employeeInLocation: z
+		.union([z.string(), z.boolean()])
+		.default('false')
+		.transform((b) => (typeof b === 'string' ? b === 'true' : b)),
 	// This circumlocution avoids an issue with how Zod handles
 	// some input values, resulting in a parse failure if the user deletes the content of the field.
 	totalEmployees: z.coerce
@@ -38,9 +41,16 @@ export const Params = z.object({
 		.default('')
 		.transform((s) => Number(s) || 0),
 	roleLocation: z
-		.string()
-		.default('')
-		.transform((s) => s.split(',').filter((m) => m !== ''))
+		.union([z.string().array(), z.string()])
+		.default([])
+		.transform((s) => {
+			if (Array.isArray(s)) {
+				return s;
+			} else {
+				// Make sure we parse comma-separated values from before we used svelte-param-store
+				return s.split(',').filter((m) => m !== '');
+			}
+		})
 		.refine((s) =>
 			s.every(
 				(l) =>
@@ -62,7 +72,7 @@ export interface Match {
 	isGeoMatch: boolean;
 }
 
-export function isValidParams(params: MatchParameters): boolean {
+export function isValidParams(params?: MatchParameters): boolean {
 	return Boolean(
 		params &&
 			params.situation !== undefined &&
@@ -112,14 +122,14 @@ export function findMatchingLaws(
 			params.companyLocation !== OTHER_LOCALE
 				? Object.values(availableLocales).filter((l) =>
 						l.isOrContains(availableLocales[params.companyLocation])
-				  )
+					)
 				: [];
 		// Same rubric for users.
 		const userLocales =
 			params.userLocation !== OTHER_LOCALE
 				? Object.values(availableLocales).filter((l) =>
 						l.isOrContains(availableLocales[params.userLocation])
-				  )
+					)
 				: [];
 		// And same rubric for supervisor/office locales.
 		const supervisorOfficeLocales =
@@ -128,7 +138,7 @@ export function findMatchingLaws(
 						(l) =>
 							l.who.officeSupervisorInLocale &&
 							l.isOrContains(availableLocales[params.officeSupervisorLocation])
-				  )
+					)
 				: [];
 
 		for (const thisLocale of Object.values(availableLocales)) {

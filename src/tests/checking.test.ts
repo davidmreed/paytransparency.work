@@ -135,10 +135,13 @@ const locales: Record<string, Locale> = [
 			officeSupervisorInLocale: true
 		}
 	})
-].reduce((map, locale) => {
-	map[locale.id] = locale;
-	return map;
-}, {} as Record<string, Locale>);
+].reduce(
+	(map, locale) => {
+		map[locale.id] = locale;
+		return map;
+	},
+	{} as Record<string, Locale>
+);
 
 const allLocales: Record<string, AbstractLocale> = {
 	[OTHER_LOCALE]: new UnknownLocale(),
