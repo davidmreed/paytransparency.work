@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { Situation } from '$lib/data';
 	import GreenCheckIcon from './GreenCheckIcon.svelte';
-	export let situation: { situation: Situation; requestRequired?: boolean };
-	export let showIcon = true;
+	interface Props {
+		situation: { situation: Situation; requestRequired?: boolean };
+		showIcon?: boolean;
+	}
+
+	let { situation, showIcon = true }: Props = $props();
 </script>
 
 {#if situation}

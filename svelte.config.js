@@ -1,6 +1,6 @@
 import adapter from '@sveltejs/adapter-static';
-import { vitePreprocess } from '@sveltejs/kit/vite';
-import inlineSvg from '@svelte-put/preprocess-inline-svg';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import inlineSvg from '@svelte-put/inline-svg/preprocessor';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {

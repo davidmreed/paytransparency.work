@@ -4,7 +4,11 @@
 	import RedPlusIcon from './RedPlusIcon.svelte';
 	import StateIcon from './StateIcon.svelte';
 
-	export let matches: Match[];
+	interface Props {
+		matches: Match[];
+	}
+
+	let { matches }: Props = $props();
 </script>
 
 <div class="grid md:grid-cols-2 grid-cols-1">

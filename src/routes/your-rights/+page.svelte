@@ -1,24 +1,19 @@
 <script lang="ts">
-	import { createQueryStore } from '$lib/URLParamStore';
-	import { findMatchingLaws, isValidParams, Params, type Match } from '$lib/checking';
+	import { findMatchingLaws, isValidParams, Params } from '$lib/checking';
 	import CheckSituation from '$lib/CheckSituation.svelte';
-	import { browser } from '$app/environment';
-	import { writable } from 'svelte/store';
 	import MatchTable from '$lib/MatchTable.svelte';
 	import SiteName from '$lib/SiteName.svelte';
+	import { createUseQueryParams } from 'svelte-query-params';
+	import { sveltekit } from 'svelte-query-params/adapters/sveltekit';
+	import { page } from '$app/stores';
 
-	let pageParams = browser ? createQueryStore(Params) : writable(Params.parse({}));
-
-	let geoMatches: Match[] = [];
-	let nonGeoMatches: Match[] = [];
-
-	$: validParams = isValidParams($pageParams);
-	$: {
-		const matches = findMatchingLaws($pageParams);
-
-		geoMatches = matches.filter((m) => m.isGeoMatch);
-		nonGeoMatches = matches.filter((m) => !m.isGeoMatch);
-	}
+	const [params] = createUseQueryParams(Params, {
+		adapter: sveltekit({ replace: true })
+	})($page.url);
+	let validParams = $derived(isValidParams(params));
+	let matches = $derived(findMatchingLaws(params));
+	let geoMatches = $derived(matches.filter((m) => m.isGeoMatch));
+	let nonGeoMatches = $derived(matches.filter((m) => !m.isGeoMatch));
 </script>
 
 <svelte:head>
@@ -33,7 +28,7 @@
 
 {#if validParams}
 	<p>You shared the following information about your situation.</p>
-	<CheckSituation params={$pageParams} />
+	<CheckSituation {params} />
 {:else}
 	<p>
 		It looks like you didn't share enough information about your situation. <a
@@ -49,7 +44,7 @@
 		based on your location and the location of the company.
 	</p>
 	<MatchTable matches={geoMatches} />
-{:else}
+{:else if validParams}
 	<p>
 		Unfortunately, <SiteName /> could not find any laws in your location or the company's location that
 		provide transparency rights in your situation.
@@ -61,12 +56,8 @@
 	<h3 class="pb-2 pt-4">Weaker Matches</h3>
 	<p>
 		<SiteName /> found potential rights under the laws of jurisdictions outside of your location and
-		the location of the company. Depending on the company's presence and the availability of the role
-		in these areas, it's possible that the laws of these jurisdictions could provide some transparency
-		rights.
-	</p>
-	<p>
-		Carefully review the transparency protections in these jurisdictions to determine if they apply
+		the location of the company. It's possible that these laws could provide some transparency rights,
+		but we don't have enough information to assess them. Carefully review to determine if they apply
 		to your situation.
 	</p>
 	<MatchTable matches={nonGeoMatches} />

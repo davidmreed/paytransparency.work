@@ -1,4 +1,5 @@
 .DS_Store
+.direnv
 node_modules
 /build
 /.svelte-kit

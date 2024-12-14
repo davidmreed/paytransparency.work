@@ -1,7 +1,11 @@
 <script lang="ts">
 	import type { Locale } from './data';
 
-	export let locale: Locale;
+	interface Props {
+		locale: Locale;
+	}
+
+	let { locale }: Props = $props();
 	const stateCode = locale.stateCode;
 	const country = locale.country;
 </script>

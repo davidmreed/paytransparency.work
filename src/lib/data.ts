@@ -182,8 +182,7 @@ const locales: Record<string, Locale> = [
 		legalUrl:
 			'https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220SB1162',
 		penalty: 'between $100 and $10,000 per violation',
-		reportViolationProcess:
-			'by filling and emailing a PDF form',
+		reportViolationProcess: 'by filling and emailing a PDF form',
 		reportViolationUrl: 'https://www.dir.ca.gov/dlse/Pay-Transparency-Complaint.pdf'
 	}),
 	new Locale({
@@ -333,15 +332,15 @@ const locales: Record<string, Locale> = [
 		},
 		what: {
 			salary: true,
-            benefits: true
+			benefits: true
 		},
 		when: [{ situation: Situation.Interested }],
 		legalUrl: 'https://mgaleg.maryland.gov/2024RS/chapters_noln/Ch_272_sb0525T.pdf',
 		penalty:
 			'a letter compelling compliance (first violation); up to $300 per applicant (second violation); $600 per applicant (further violations)',
 		reportViolationProcess: 'by submitting a complaint to the Department of Labor',
-        referenceUrl: 'https://labor.maryland.gov/labor/wages/',
-        referenceSource: 'Maryland Department of Labor'
+		referenceUrl: 'https://labor.maryland.gov/labor/wages/',
+		referenceSource: 'Maryland Department of Labor'
 	}),
 	new Locale({
 		country: 'United States',
@@ -500,10 +499,13 @@ const locales: Record<string, Locale> = [
 		reportViolationUrl: 'mailto:workers@dc.gov',
 		penalty: 'a lawsuit by D.C. Attorney General with various penalties possible'
 	})
-].reduce((map, locale) => {
-	map[locale.id] = locale;
-	return map;
-}, {} as Record<string, Locale>);
+].reduce(
+	(map, locale) => {
+		map[locale.id] = locale;
+		return map;
+	},
+	{} as Record<string, Locale>
+);
 
 export const allLocales: Record<string, AbstractLocale> = {
 	[OTHER_LOCALE]: new UnknownLocale(),

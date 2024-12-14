@@ -8,60 +8,65 @@
 	import BookIcon from '$lib/BookIcon.svelte';
 	import DollarIcon from '$lib/DollarIcon.svelte';
 
-	export let data: { locale: Locale };
+	interface Props {
+		data: { locale: Locale };
+	}
+
+	let { data }: Props = $props();
+	let { locale } = $derived(data);
 </script>
 
 <svelte:head>
-	<title>Pay Transparency in {data.locale.name}</title>
+	<title>Pay Transparency in {locale.name}</title>
 </svelte:head>
 <h1>
-	Pay Transparency in {data.locale.name}
-	<span class="float-right"><StateIcon locale={data.locale} /></span>
+	Pay Transparency in {locale.name}
+	<span class="float-right"><StateIcon {locale} /></span>
 </h1>
 <p>
-	{data.locale.name}'s <strong>{data.locale.strength}</strong> pay transparency law applies when:
+	{locale.name}'s <strong>{locale.strength}</strong> pay transparency law applies when:
 </p>
 <ul class="pb-2 indent">
-	{#if data.locale.who.minEmployees}
-		<li>the employer <strong>has {data.locale.who.minEmployees} employees or more</strong>;</li>
+	{#if locale.who.minEmployees}
+		<li>the employer <strong>has {locale.who.minEmployees} employees or more</strong>;</li>
 	{/if}
-	{#if data.locale.who.minEmployeesInLocale}
+	{#if locale.who.minEmployeesInLocale}
 		<li>
 			the employer <strong
-				>has {data.locale.who.minEmployeesInLocale} employee{#if data.locale.who.minEmployeesInLocale > 1}s{/if}
+				>has {locale.who.minEmployeesInLocale} employee{#if locale.who.minEmployeesInLocale > 1}s{/if}
 				or more</strong
 			>
-			in {data.locale.name};
+			in {locale.name};
 		</li>
 	{/if}
-	{#if data.locale.who.officeInLocale}<li>
-			the employer <strong>has a presence in {data.locale.name};</strong>
+	{#if locale.who.officeInLocale}<li>
+			the employer <strong>has a presence in {locale.name};</strong>
 			<br /><span class="italic text-xs"
 				>Note that this criterion is often poorly defined by the locale.</span
 			>
 		</li>
 	{/if}
-	{#if data.locale.who.canHireInLocale}
+	{#if locale.who.canHireInLocale}
 		<li>
-			the role <strong>can be hired in {data.locale.name}</strong> (including remote);
+			the role <strong>can be hired in {locale.name}</strong> (including remote);
 		</li>
 	{/if}
-	{#if data.locale.who.officeSupervisorInLocale}
+	{#if locale.who.officeSupervisorInLocale}
 		<li>
-			the position is outside {data.locale.name}, but
-			<strong>reports to an office or non-remote supervisor located in {data.locale.name}; </strong>
+			the position is outside {locale.name}, but
+			<strong>reports to an office or non-remote supervisor located in {locale.name}; </strong>
 		</li>
 	{/if}
 </ul>
 <p>The employer must disclose:</p>
 <ul class="pb-2 indent">
-	{#if data.locale.what.salary}
+	{#if locale.what.salary}
 		<li>
 			<DollarIcon />
 			the <strong>pay range</strong>
 		</li>
 	{/if}
-	{#if data.locale.what.benefits}
+	{#if locale.what.benefits}
 		<li>
 			<RedPlusIcon />
 			the <strong>benefits</strong>
@@ -70,44 +75,43 @@
 </ul>
 <p>Disclosure must happen:</p>
 <ul class="pb-2 indent">
-	{#each data.locale.when as situation (situation.situation)}
+	{#each locale.when as situation (situation.situation)}
 		<li><SituationDescription {situation} /></li>
 	{/each}
 </ul>
 <hr class="color-gray-900 p-1" />
 <p>
-	{#if (data.locale.referenceUrl && data.locale.referenceSource) || data.locale.legalUrl}<BookIcon
-		/>{/if}
-	{#if data.locale.referenceUrl && data.locale.referenceSource}Learn more at <a
-			href={data.locale.referenceUrl}>{data.locale.referenceSource}</a
+	{#if (locale.referenceUrl && locale.referenceSource) || locale.legalUrl}<BookIcon />{/if}
+	{#if locale.referenceUrl && locale.referenceSource}Learn more at <a href={locale.referenceUrl}
+			>{locale.referenceSource}</a
 		>.{/if}
-	{#if data.locale.legalUrl}Review the <a href={data.locale.legalUrl}>legislation</a>.{/if}
+	{#if locale.legalUrl}Review the <a href={locale.legalUrl}>legislation</a>.{/if}
 </p>
-{#if data.locale.reportViolationProcess || data.locale.reportViolationUrl}
+{#if locale.reportViolationProcess || locale.reportViolationUrl}
 	<p>
 		<BullhornIcon />
 		Report a violation
-		{#if data.locale.reportViolationUrl}
-			<a href={data.locale.reportViolationUrl}>{data.locale.reportViolationProcess || 'here'}</a>.
-		{:else if data.locale.reportViolationProcess}
-			{data.locale.reportViolationProcess}.
+		{#if locale.reportViolationUrl}
+			<a href={locale.reportViolationUrl}>{locale.reportViolationProcess || 'here'}</a>.
+		{:else if locale.reportViolationProcess}
+			{locale.reportViolationProcess}.
 		{/if}
 	</p>
 {/if}
-{#if data.locale.penalty}
+{#if locale.penalty}
 	<p>
 		<ScaleIcon />
-		The penalty for violations is {data.locale.penalty}.
+		The penalty for violations is {locale.penalty}.
 	</p>
 {/if}
 <p>
 	<a
 		class="text-center form-input block border-gray-300 focus:border-indigo-300 rounded-md shadow-sm border-gray-300 hover:bg-gray-800 hover:text-white mt-4 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:text-white"
-		href="/find-your-rights?userLocation={data.locale.id}">Find Your Rights in {data.locale.name}</a
+		href="/find-your-rights?userLocation={locale.id}">Find Your Rights in {locale.name}</a
 	>
 </p>
 
 <p class="text-xs italic text-center pt-2">
 	This summary may not capture all nuances of the legislation. Review guidance from
-	{data.locale.name} to confirm compliance.
+	{locale.name} to confirm compliance.
 </p>
