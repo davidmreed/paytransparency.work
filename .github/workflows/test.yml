@@ -23,7 +23,7 @@ jobs:
       - uses: workflow/nix-shell-action@v3.3.0
         with:
           flakes-from-devshell: true
-          script: npm lint
+          script: npm run lint
       - uses: workflow/nix-shell-action@v3.3.0
         with:
           flakes-from-devshell: true
