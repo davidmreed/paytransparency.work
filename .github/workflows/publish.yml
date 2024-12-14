@@ -22,7 +22,9 @@ jobs:
       - uses: workflow/nix-shell-action@v3.3.0
         with:
           flakes-from-devshell: true
-          script: npm run build
+          script: |
+            npm install
+            npm run build
       - name: Publish
         uses: cloudflare/wrangler-action@v3
         with:
