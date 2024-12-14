@@ -48,7 +48,7 @@ jobs:
     needs:
       - test
       - lint
-      - check
+      - svelte-check
       - nix-check
     permissions:
       contents: read
