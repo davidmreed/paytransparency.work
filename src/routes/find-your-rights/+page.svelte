@@ -7,18 +7,14 @@
 		allLocales,
 		Situation
 	} from '$lib/data';
-	import { isValidParams, Params } from '$lib/checking';
+	import { isValidParams, Params, type MatchParameters } from '$lib/checking';
 	import { goto } from '$app/navigation';
 	import SiteName from '$lib/SiteName.svelte';
 
-	import { createUseQueryParams } from 'svelte-query-params';
+	import { createUseQueryParams, type QueryHelpers } from 'svelte-query-params';
 	import { sveltekit } from 'svelte-query-params/adapters/sveltekit';
 	import { page } from '$app/stores';
-
-	const [params, helpers] = createUseQueryParams(Params, { adapter: sveltekit({ replace: true }) })(
-		$page.url
-	);
-	let validParams = $derived(isValidParams(params));
+	import { onMount } from 'svelte';
 
 	const locationOptions = Object.keys(locales)
 		.sort()
@@ -33,17 +29,37 @@
 		[CA_REMOTE_LOCALE, 'All Canada (Remote)']
 	].concat(locationOptions);
 
-	function handleFind(event: Event) {
-		event.preventDefault();
-		params.employeeInLocation = !canSelectEmployeeInLocation || params.employeeInLocation;
-		goto(`/your-rights${helpers.search}`);
-	}
+	let params: MatchParameters = $state({
+		situation: Situation.Application,
+		userLocation: '',
+		companyLocation: '',
+		officeSupervisorLocation: '',
+		employeeInLocation: false,
+		totalEmployees: 1,
+		roleLocation: []
+	});
+	let helpers: QueryHelpers<MatchParameters> | undefined;
+	let validParams = $derived(params ? isValidParams(params) : false);
 
 	let companyLocale = $derived(allLocales[params.companyLocation]);
 	let userLocale = $derived(allLocales[params.userLocation]);
 	let canSelectEmployeeInLocation = $derived(
 		!(companyLocale && userLocale && userLocale.isOrContains(companyLocale))
 	);
+
+	function handleFind(event: Event) {
+		event.preventDefault();
+		params.employeeInLocation = !canSelectEmployeeInLocation || params.employeeInLocation;
+		if (helpers) {
+			goto(`/your-rights${helpers.search}`);
+		}
+	}
+
+	onMount(() => {
+		[params, helpers] = createUseQueryParams(Params, { adapter: sveltekit({ replace: true }) })(
+			$page.url
+		);
+	});
 </script>
 
 <svelte:head>

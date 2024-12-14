@@ -72,7 +72,7 @@ export interface Match {
 	isGeoMatch: boolean;
 }
 
-export function isValidParams(params: MatchParameters): boolean {
+export function isValidParams(params?: MatchParameters): boolean {
 	return Boolean(
 		params &&
 			params.situation !== undefined &&

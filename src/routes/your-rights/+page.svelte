@@ -1,19 +1,32 @@
 <script lang="ts">
-	import { findMatchingLaws, isValidParams, Params } from '$lib/checking';
+	import { findMatchingLaws, isValidParams, Params, type MatchParameters } from '$lib/checking';
 	import CheckSituation from '$lib/CheckSituation.svelte';
 	import MatchTable from '$lib/MatchTable.svelte';
 	import SiteName from '$lib/SiteName.svelte';
 	import { createUseQueryParams } from 'svelte-query-params';
 	import { sveltekit } from 'svelte-query-params/adapters/sveltekit';
 	import { page } from '$app/stores';
+	import { Situation } from '$lib/data';
+	import { onMount } from 'svelte';
 
-	const [params] = createUseQueryParams(Params, {
-		adapter: sveltekit({ replace: true })
-	})($page.url);
+	let params: MatchParameters = $state({
+		situation: Situation.Application,
+		userLocation: '',
+		companyLocation: '',
+		officeSupervisorLocation: '',
+		employeeInLocation: false,
+		totalEmployees: 1,
+		roleLocation: []
+	});
+
 	let validParams = $derived(isValidParams(params));
 	let matches = $derived(findMatchingLaws(params));
 	let geoMatches = $derived(matches.filter((m) => m.isGeoMatch));
 	let nonGeoMatches = $derived(matches.filter((m) => !m.isGeoMatch));
+
+	onMount(() => {
+		[params] = createUseQueryParams(Params, { adapter: sveltekit({ replace: true }) })($page.url);
+	});
 </script>
 
 <svelte:head>
