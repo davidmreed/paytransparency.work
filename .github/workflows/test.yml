@@ -14,7 +14,14 @@ jobs:
           flakes-from-devshell: true
           script: |
             npm run lint
-  check:
+  nix-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - run: nix flake check
+  svelte-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,6 +49,7 @@ jobs:
       - test
       - lint
       - check
+      - nix-check
     permissions:
       contents: read
       deployments: write
