@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: ['main']
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,11 +24,39 @@ jobs:
         with:
           flakes-from-devshell: true
           script: npm run lint
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('flake.lock') }}-${{ hashFiles('package-lock.json') }}
       - uses: workflow/nix-shell-action@v3.3.0
         with:
           flakes-from-devshell: true
-          script: npm run test:unit
+          script: npm ci
       - uses: workflow/nix-shell-action@v3.3.0
         with:
           flakes-from-devshell: true
           script: npm run check
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('flake.lock') }}-${{ hashFiles('package-lock.json') }}
+      - uses: workflow/nix-shell-action@v3.3.0
+        with:
+          flakes-from-devshell: true
+          script: npm ci
+      - uses: workflow/nix-shell-action@v3.3.0
+        with:
+          flakes-from-devshell: true
+          script: npm run test:unit
