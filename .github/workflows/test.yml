@@ -79,7 +79,7 @@ jobs:
       - uses: workflow/nix-shell-action@v3.3.0
         with:
           flakes-from-devshell: true
-          script: npm build
+          script: npm run build
       - name: Publish
         uses: cloudflare/wrangler-action@v3
         with:
