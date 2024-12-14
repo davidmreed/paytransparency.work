@@ -21,8 +21,8 @@
 	<a href="https://commons.wikimedia.org/wiki/File:Canada_blank_map.svg">Wikimedia's Canada map</a>.
 </p>
 <p>
-	<SiteName /> uses no cookies, tracking functionality, or ads. We don't have a privacy policy because
-	we collect no information at all, although our hosting service and your ISP may do so.
+	<SiteName /> uses no cookies, trackers, or ads. We do not collect or store any information about you,
+	although our hosting service (Cloudflare) and your ISP may do so.
 </p>
 <p>
 	This site is <a href="https://github.com/davidmreed/paytransparency.work">open source</a> and
