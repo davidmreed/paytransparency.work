@@ -123,6 +123,7 @@ export class Locale implements AbstractLocale {
 interface WhoDisclosure {
 	officeInLocale?: boolean;
 	canHireInLocale?: boolean;
+	requiresPhysicalPresence?: boolean;
 	officeSupervisorInLocale?: boolean;
 	minEmployees?: number;
 	minEmployeesInLocale?: number;
@@ -498,6 +499,48 @@ const locales: Record<string, Locale> = [
 		reportViolationProcess: 'by emailing the Office of the D.C. Attorney General',
 		reportViolationUrl: 'mailto:workers@dc.gov',
 		penalty: 'a lawsuit by D.C. Attorney General with various penalties possible'
+	}),
+	new Locale({
+		country: 'United States',
+		state: 'Illinois',
+		stateCode: 'IL',
+		strength: Strength.Strong,
+		/* Illinois specifically exempts out-of-state employers hiring remote, unless they have
+			a reason to believe work will be performed in Illinois */
+		who: {
+			minEmployees: 15,
+			canHireInLocale: true,
+			requiresPhysicalPresence: true,
+			officeSupervisorInLocale: true
+		},
+		when: [{ situation: Situation.Interested }, { situation: Situation.Application }],
+		what: {
+			salary: true,
+			benefits: true
+		},
+		referenceUrl:
+			'https://labor.illinois.gov/faqs/equal-pay-act-salary-transparency-faq.html#faq-1whatistheillinoisequalpayact-faq',
+		reportViolationProcess: 'by making a complaint online to the Illinois Department of Labor',
+		reportViolationUrl: 'https://labor.illinois.gov/pay',
+		penalty:
+			'a notice to cure, followed by fines escalating from a maximum of $500 to a maximum of $10,000',
+		legalUrl:
+			'https://ilga.gov/legislation/fulltext.asp?DocName=&SessionId=112&GA=103&DocTypeId=SB&DocNum=2038&GAID=17&LegID=&SpecSess=&Session='
+	}),
+	new Locale({
+		country: 'United States',
+		state: 'Minnesota',
+		stateCode: 'MN',
+		strength: Strength.Strong,
+		who: {
+			minEmployeesInLocale: 30
+		},
+		what: {
+			salary: true,
+			benefits: true
+		},
+		when: [{ situation: Situation.Interested }],
+		legalUrl: 'https://www.revisor.mn.gov/statutes/cite/181.173'
 	})
 ].reduce(
 	(map, locale) => {

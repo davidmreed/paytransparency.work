@@ -48,7 +48,9 @@
 	{/if}
 	{#if locale.who.canHireInLocale}
 		<li>
-			the role <strong>can be hired in {locale.name}</strong> (including remote);
+			the role <strong>can be hired in {locale.name}</strong>
+			{#if !locale.who.requiresPhysicalPresence}(including remote){:else}(with a physical presence
+				in {locale.name}){/if};
 		</li>
 	{/if}
 	{#if locale.who.officeSupervisorInLocale}
