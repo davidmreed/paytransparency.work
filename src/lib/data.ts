@@ -541,7 +541,28 @@ const locales: Record<string, Locale> = [
 		},
 		when: [{ situation: Situation.Interested }],
 		legalUrl: 'https://www.revisor.mn.gov/statutes/cite/181.173'
-	})
+	}),
+    new Locale({
+        country: 'United States',
+        state: 'New Jersey',
+        stateCode: 'NJ',
+        strength: Strength.Strong,
+        what: {
+            salary: true,
+            benefits: true,
+        },
+        who: {
+            minEmployees: 10,
+            canHireInLocale: true,
+            officeInLocale: true,
+        },
+        when: [{ situation: Situation.Interested }],
+        penalty: 'fine of up to $600 per violation',
+        legalUrl: 'https://pub.njleg.state.nj.us/Bills/2024/AL24/91_.PDF'
+        referenceUrl: 'https://www.nj.gov/labor/myworkrights/wages/pay-transparency/',
+        reportViolationProcess: 'by filing a complaint online with the New Jersey Department of Labor and Workforce Development',
+        reportViolationUrl: 'https://www.nj.gov/labor/wageandhour/claims-appeals-investigations/file/#fileonline'
+    }),
 ].reduce(
 	(map, locale) => {
 		map[locale.id] = locale;
