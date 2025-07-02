@@ -542,27 +542,50 @@ const locales: Record<string, Locale> = [
 		when: [{ situation: Situation.Interested }],
 		legalUrl: 'https://www.revisor.mn.gov/statutes/cite/181.173'
 	}),
-    new Locale({
-        country: 'United States',
-        state: 'New Jersey',
-        stateCode: 'NJ',
-        strength: Strength.Strong,
-        what: {
-            salary: true,
-            benefits: true,
-        },
-        who: {
-            minEmployees: 10,
-            canHireInLocale: true,
-            officeInLocale: true,
-        },
-        when: [{ situation: Situation.Interested }],
-        penalty: 'fine of up to $600 per violation',
-        legalUrl: 'https://pub.njleg.state.nj.us/Bills/2024/AL24/91_.PDF',
-        referenceUrl: 'https://www.nj.gov/labor/myworkrights/wages/pay-transparency/',
-        reportViolationProcess: 'by filing a complaint online with the New Jersey Department of Labor and Workforce Development',
-        reportViolationUrl: 'https://www.nj.gov/labor/wageandhour/claims-appeals-investigations/file/#fileonline'
-    }),
+	new Locale({
+		country: 'United States',
+		state: 'New Jersey',
+		stateCode: 'NJ',
+		strength: Strength.Strong,
+		what: {
+			salary: true,
+			benefits: true
+		},
+		who: {
+			minEmployees: 10,
+			canHireInLocale: true,
+			officeInLocale: true
+		},
+		when: [{ situation: Situation.Interested }],
+		penalty: 'fine of up to $600 per violation',
+		legalUrl: 'https://pub.njleg.state.nj.us/Bills/2024/AL24/91_.PDF',
+		referenceUrl: 'https://www.nj.gov/labor/myworkrights/wages/pay-transparency/',
+		reportViolationProcess:
+			'by filing a complaint online with the New Jersey Department of Labor and Workforce Development',
+		reportViolationUrl:
+			'https://www.nj.gov/labor/wageandhour/claims-appeals-investigations/file/#fileonline'
+	}),
+	new Locale({
+		country: 'United States',
+		state: 'Vermont',
+		stateCode: 'VT',
+		strength: Strength.Strong,
+		referenceUrl:
+			'https://ago.vermont.gov/sites/ago/files/2024-12/Final%20Version%20of%20H%20704%20Guidance%20(12-31-24).pdf',
+		legalUrl:
+			'https://legislature.vermont.gov/Documents/2024/Docs/ACTS/ACT155/ACT155%20As%20Enacted.pdf',
+		who: {
+			minEmployeesInLocale: 1,
+			minEmployees: 5,
+			canHireInLocale: true
+		},
+		when: [{ situation: Situation.Interested }],
+		what: {
+			salary: true
+		},
+		reportViolationProcess:
+			"by emailing the Vermont Attorney General's Civil Rights Unit <agocivilrights@vermont.gov>"
+	})
 ].reduce(
 	(map, locale) => {
 		map[locale.id] = locale;
