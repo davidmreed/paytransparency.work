@@ -44,6 +44,8 @@
 		{:else if stateCode == 'ID'}
 			<svg data-inline-src="ID.svg" />
 		{:else if stateCode == 'IL'}
+			<svg data-inline-src="IL.svg" />
+		{:else if stateCode == 'IN'}
 			<svg data-inline-src="IN.svg" />
 		{:else if stateCode == 'KS'}
 			<svg data-inline-src="KS.svg" />
