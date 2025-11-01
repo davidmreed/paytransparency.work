@@ -585,6 +585,27 @@ const locales: Record<string, Locale> = [
 		},
 		reportViolationProcess:
 			"by emailing the Vermont Attorney General's Civil Rights Unit <agocivilrights@vermont.gov>"
+	}),
+	new Locale({
+		country: 'United States',
+		state: 'Massachusetts',
+		stateCode: 'MA',
+		strength: Strength.Strong,
+		who: {
+			minEmployeesInLocale: 25,
+			canHireInLocale: true
+		},
+		when: [{ situation: Situation.Interested }, { situation: situation.Employed }],
+		what: {
+			salary: true
+		},
+		legalUrl: 'https://malegislature.gov/Laws/SessionLaws/Acts/2024/Chapter141',
+		referenceUrl:
+			'https://www.mass.gov/info-details/pay-transparency-in-massachusetts#pay-transparency-faq',
+		penalty: 'Warning followed by escalating fines of up to $1,000.',
+		reportViolationProcess:
+			"by filing a complaint with the Massachusetts Attorney General's office",
+		reportViolationUrl: 'https://www.mass.gov/how-to/file-a-workplace-complaint'
 	})
 ].reduce(
 	(map, locale) => {
