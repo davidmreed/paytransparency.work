@@ -585,6 +585,48 @@ const locales: Record<string, Locale> = [
 		},
 		reportViolationProcess:
 			"by emailing the Vermont Attorney General's Civil Rights Unit <agocivilrights@vermont.gov>"
+	}),
+	new Locale({
+		country: 'United States',
+		state: 'Massachusetts',
+		stateCode: 'MA',
+		strength: Strength.Strong,
+		who: {
+			minEmployeesInLocale: 25,
+			canHireInLocale: true
+		},
+		when: [{ situation: Situation.Interested }, { situation: Situation.Employed }],
+		what: {
+			salary: true
+		},
+		legalUrl: 'https://malegislature.gov/Laws/SessionLaws/Acts/2024/Chapter141',
+		referenceUrl:
+			'https://www.mass.gov/info-details/pay-transparency-in-massachusetts#pay-transparency-faq',
+		penalty: 'a warning followed by escalating fines of up to $1,000',
+		reportViolationProcess:
+			"by filing a complaint with the Massachusetts Attorney General's office",
+		reportViolationUrl: 'https://www.mass.gov/how-to/file-a-workplace-complaint'
+	}),
+	new Locale({
+		country: 'United States',
+		state: 'Ohio',
+		stateCode: 'OH',
+		city: 'Cleveland',
+		strength: Strength.Moderate,
+		legalUrl:
+			'https://cityofcleveland.legistar.com/LegislationDetail.aspx?ID=7103557&GUID=E45B9F67-8D0D-495E-B8B7-70218CD3B789',
+		who: {
+			canHireInLocale: true,
+			minEmployeesInLocale: 15
+		},
+		what: {
+			salary: true
+		},
+		when: [{ situation: Situation.Interested }],
+		reportViolationProcess:
+			'by filing a written complaint with the Cleveland Fair Employment Wage Board',
+		penalty:
+			'opportunity to fix; if unfixed, civil penalties may be assessed by Cleveland FEWB of up to $1,000 (first offense); $2,500 (second offence); or $5,000 (further offences).'
 	})
 ].reduce(
 	(map, locale) => {
