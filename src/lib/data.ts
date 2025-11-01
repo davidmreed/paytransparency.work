@@ -602,7 +602,7 @@ const locales: Record<string, Locale> = [
 		legalUrl: 'https://malegislature.gov/Laws/SessionLaws/Acts/2024/Chapter141',
 		referenceUrl:
 			'https://www.mass.gov/info-details/pay-transparency-in-massachusetts#pay-transparency-faq',
-		penalty: 'Warning followed by escalating fines of up to $1,000.',
+		penalty: 'a warning followed by escalating fines of up to $1,000',
 		reportViolationProcess:
 			"by filing a complaint with the Massachusetts Attorney General's office",
 		reportViolationUrl: 'https://www.mass.gov/how-to/file-a-workplace-complaint'
