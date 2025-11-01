@@ -612,6 +612,7 @@ const locales: Record<string, Locale> = [
 		state: 'Ohio',
 		stateCode: 'OH',
 		city: 'Cleveland',
+        strength: Strength.Moderate,
 		legalUrl:
 			'https://cityofcleveland.legistar.com/LegislationDetail.aspx?ID=7103557&GUID=E45B9F67-8D0D-495E-B8B7-70218CD3B789',
 		who: {
