@@ -97,10 +97,14 @@ export class Locale implements AbstractLocale {
 		Object.assign(this, params);
 	}
 
-	get id() {
-		const cityAndState = this.city
+	get cityAndState() {
+		return this.city
 			? `${this.state.toLocaleLowerCase()}-${this.city.toLocaleLowerCase()}`
 			: this.state.toLocaleLowerCase();
+	}
+
+	get id() {
+		const cityAndState = this.cityAndState;
 
 		return (
 			this.country !== 'United States'
