@@ -60,6 +60,9 @@
 		</li>
 	{/if}
 </ul>
+{#if locale.note}
+	<small>{locale.note}</small>
+{/if}
 <p>The employer must disclose:</p>
 <ul class="pb-2 indent">
 	{#if locale.what.salary}
