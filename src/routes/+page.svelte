@@ -4,7 +4,7 @@
 	import StateIcon from '$lib/StateIcon.svelte';
 
 	let sortedLocales = Object.values(locales).sort((a, b) => {
-		return a.id.localeCompare(b.id);
+		return a.cityAndState.localeCompare(b.cityAndState);
 	});
 </script>
 

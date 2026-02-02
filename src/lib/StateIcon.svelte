@@ -124,6 +124,8 @@
 			<svg data-inline-src="CA-BC.svg" />
 		{:else if stateCode == 'PE'}
 			<svg data-inline-src="CA-PE.svg" />
+		{:else if stateCode == 'ON'}
+			<svg data-inline-src="CA-ON.svg" />
 		{/if}
 	{/if}
 </span>

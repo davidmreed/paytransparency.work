@@ -75,6 +75,7 @@ export class Locale implements AbstractLocale {
 	when!: { situation: Situation; requestRequired?: boolean }[];
 	what!: WhatDisclosure;
 	penalty?: string;
+	note?: string;
 
 	constructor(params: {
 		country: string;
@@ -91,14 +92,19 @@ export class Locale implements AbstractLocale {
 		when: { situation: Situation; requestRequired?: boolean }[];
 		what: WhatDisclosure;
 		penalty?: string;
+		note?: string;
 	}) {
 		Object.assign(this, params);
 	}
 
-	get id() {
-		const cityAndState = this.city
+	get cityAndState() {
+		return this.city
 			? `${this.state.toLocaleLowerCase()}-${this.city.toLocaleLowerCase()}`
 			: this.state.toLocaleLowerCase();
+	}
+
+	get id() {
+		const cityAndState = this.cityAndState;
 
 		return (
 			this.country !== 'United States'
@@ -481,6 +487,25 @@ const locales: Record<string, Locale> = [
 		referenceSource: 'Prince Edward Island',
 		legalUrl:
 			'https://docs.assembly.pe.ca/download/dms?objectId=2e8abdf3-3f95-463c-b2b0-3ba944edce0d&fileName=bill-119.pdf'
+	}),
+	new Locale({
+		country: 'Canada',
+		state: 'Ontario',
+		stateCode: 'ON',
+		strength: Strength.Weak,
+		what: {
+			salary: true
+		},
+		when: [{ situation: Situation.Interested }],
+		who: {
+			canHireInLocale: true,
+			minEmployees: 25
+		},
+		referenceUrl:
+			'https://www.ontario.ca/document/your-guide-employment-standards-act-0/recent-changes#job-postings',
+		referenceSource: 'Ontario',
+		legalUrl: 'https://www.ontario.ca/laws/regulation/r24476',
+		note: 'Does not apply to roles whose maximum compensation is over $200,000,'
 	}),
 	new Locale({
 		country: 'United States',
