@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Locale } from '$lib/data';
+	import { resolve } from '$lib/paths';
 	import RedPlusIcon from '$lib/RedPlusIcon.svelte';
 	import BullhornIcon from '$lib/BullhornIcon.svelte';
 	import SituationDescription from '$lib/SituationDescription.svelte';
@@ -87,17 +88,17 @@
 <hr class="color-gray-900 p-1" />
 <p>
 	{#if (locale.referenceUrl && locale.referenceSource) || locale.legalUrl}<BookIcon />{/if}
-	{#if locale.referenceUrl && locale.referenceSource}Learn more at <a href={locale.referenceUrl}
-			>{locale.referenceSource}</a
+	{#if locale.referenceUrl && locale.referenceSource}Learn more at <a
+			href={resolve(locale.referenceUrl)}>{locale.referenceSource}</a
 		>.{/if}
-	{#if locale.legalUrl}Review the <a href={locale.legalUrl}>legislation</a>.{/if}
+	{#if locale.legalUrl}Review the <a href={resolve(locale.legalUrl)}>legislation</a>.{/if}
 </p>
 {#if locale.reportViolationProcess || locale.reportViolationUrl}
 	<p>
 		<BullhornIcon />
 		Report a violation
 		{#if locale.reportViolationUrl}
-			<a href={locale.reportViolationUrl}>{locale.reportViolationProcess || 'here'}</a>.
+			<a href={resolve(locale.reportViolationUrl)}>{locale.reportViolationProcess || 'here'}</a>.
 		{:else if locale.reportViolationProcess}
 			{locale.reportViolationProcess}.
 		{/if}
@@ -112,7 +113,8 @@
 <p>
 	<a
 		class="text-center form-input block border-gray-300 focus:border-indigo-300 rounded-md shadow-sm border-gray-300 hover:bg-gray-800 hover:text-white mt-4 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:text-white"
-		href="/find-your-rights?userLocation={locale.id}">Find Your Rights in {locale.name}</a
+		href={resolve(`/find-your-rights?userLocation=${locale.id}`)}
+		>Find Your Rights in {locale.name}</a
 	>
 </p>
 

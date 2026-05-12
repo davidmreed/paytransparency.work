@@ -8,6 +8,7 @@
 	import { page } from '$app/stores';
 	import { Situation } from '$lib/data';
 	import { onMount } from 'svelte';
+	import { resolve } from '$app/paths';
 
 	let params: MatchParameters = $state({
 		situation: Situation.Application,
@@ -45,7 +46,7 @@
 {:else}
 	<p>
 		It looks like you didn't share enough information about your situation. <a
-			href="/find-your-rights">Find Your Rights</a
+			href={resolve('/find-your-rights')}>Find Your Rights</a
 		>.
 	</p>
 {/if}
@@ -68,10 +69,10 @@
 	<hr />
 	<h3 class="pb-2 pt-4">Weaker Matches</h3>
 	<p>
-		<SiteName /> found potential rights under the laws of jurisdictions outside of your location and
-		the location of the company. It's possible that these laws could provide some transparency rights,
-		but we don't have enough information to assess them. Carefully review to determine if they apply
-		to your situation.
+		<SiteName /> found potential rights under the laws of jurisdictions outside of your location and the
+		location of the company. It's possible that these laws could provide some transparency rights, but
+		we don't have enough information to assess them. Carefully review to determine if they apply to your
+		situation.
 	</p>
 	<MatchTable matches={nonGeoMatches} />
 {/if}

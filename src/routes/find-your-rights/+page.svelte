@@ -9,6 +9,7 @@
 	} from '$lib/data';
 	import { isValidParams, Params, type MatchParameters } from '$lib/checking';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import SiteName from '$lib/SiteName.svelte';
 
 	import { createUseQueryParams, type QueryHelpers } from 'svelte-query-params';
@@ -51,7 +52,7 @@
 		event.preventDefault();
 		params.employeeInLocation = !canSelectEmployeeInLocation || params.employeeInLocation;
 		if (helpers) {
-			goto(`/your-rights${helpers.search}`);
+			goto(resolve(`/your-rights${helpers.search}`));
 		}
 	}
 

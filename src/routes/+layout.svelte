@@ -1,5 +1,7 @@
 <script lang="ts">
 	import '../app.css';
+	import { resolve } from '$app/paths';
+
 	interface Props {
 		children?: import('svelte').Snippet;
 	}
@@ -29,9 +31,10 @@
 	<div class="flex flex-row justify-center items-center">
 		<div class="bg-gray-700 mb-4 text-center mt-4 w-1/2">
 			<nav class="p-2 text-white">
-				<a class="text-white" href="/">Home</a> |
-				<a class="text-white" href="/about">About</a> |
-				<a class="text-white" href="/find-your-rights">Find Your Transparency Rights</a> |
+				<a class="text-white" href={resolve('/')}>Home</a> |
+				<a class="text-white" href={resolve('/about')}>About</a> |
+				<a class="text-white" href={resolve('/find-your-rights')}>Find Your Transparency Rights</a>
+				|
 				<a class="text-white" href="https://github.com/davidmreed/paytransparency.work">GitHub</a> |
 				<a class="text-white" href="https://ktema.org">by David Reed</a>
 			</nav>

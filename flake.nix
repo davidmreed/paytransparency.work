@@ -6,16 +6,16 @@
 
   outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = import nixpkgs { system = system; config.allowUnfree = true; }; in
+      let pkgs = import nixpkgs { system = system; }; in
       {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
-            nodejs_20
+            nodejs_24
             importNpmLock.hooks.linkNodeModulesHook
           ];
           npmDeps = with pkgs; importNpmLock.buildNodeModules {
             npmRoot = ./.;
-            nodejs = nodejs_20;
+            nodejs = nodejs_24;
           };
         };
       }

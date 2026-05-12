@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import type { Match } from './checking';
 	import GreenCheckIcon from './GreenCheckIcon.svelte';
 	import RedPlusIcon from './RedPlusIcon.svelte';
@@ -12,10 +13,10 @@
 </script>
 
 <div class="grid md:grid-cols-2 grid-cols-1">
-	{#each matches as match}
+	{#each matches as match (match.locale.id)}
 		<div class="p-6 justify-left text-left">
 			<p>
-				<a href={`/locations/${match.locale.id}`}>
+				<a href={resolve(`/locations/${match.locale.id}`)}>
 					<span class="float-right"><StateIcon locale={match.locale} /></span>
 					<strong>{match.locale.name}</strong></a
 				>
