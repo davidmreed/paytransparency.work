@@ -2,9 +2,8 @@
 	import { findMatchingLaws, isValidParams, Params, type MatchParameters } from '$lib/checking';
 	import CheckSituation from '$lib/CheckSituation.svelte';
 	import MatchTable from '$lib/MatchTable.svelte';
+	import { createUseZodQueryParams } from '$lib/queryParams';
 	import SiteName from '$lib/SiteName.svelte';
-	import { createUseQueryParams } from 'svelte-query-params';
-	import { sveltekit } from 'svelte-query-params/adapters/sveltekit';
 	import { page } from '$app/stores';
 	import { Situation } from '$lib/data';
 	import { onMount } from 'svelte';
@@ -26,7 +25,7 @@
 	let nonGeoMatches = $derived(matches.filter((m) => !m.isGeoMatch));
 
 	onMount(() => {
-		[params] = createUseQueryParams(Params, { adapter: sveltekit({ replace: true }) })($page.url);
+		[params] = createUseZodQueryParams(Params, { replace: true })($page.url);
 	});
 </script>
 

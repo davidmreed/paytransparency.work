@@ -3,7 +3,7 @@ import { page } from '$app/stores';
 import { z, type ZodType } from 'zod';
 import { zfd } from 'zod-form-data';
 
-const QueryParams = z.record(z.coerce.string());
+const QueryParams = z.record(z.string(), z.coerce.string());
 
 // Adapted from https://github.com/sveltejs/kit/issues/969
 

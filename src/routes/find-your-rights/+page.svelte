@@ -8,12 +8,10 @@
 		Situation
 	} from '$lib/data';
 	import { isValidParams, Params, type MatchParameters } from '$lib/checking';
+	import { createUseZodQueryParams, type QueryHelpers } from '$lib/queryParams';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import SiteName from '$lib/SiteName.svelte';
-
-	import { createUseQueryParams, type QueryHelpers } from 'svelte-query-params';
-	import { sveltekit } from 'svelte-query-params/adapters/sveltekit';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 
@@ -52,14 +50,13 @@
 		event.preventDefault();
 		params.employeeInLocation = !canSelectEmployeeInLocation || params.employeeInLocation;
 		if (helpers) {
-			goto(resolve(`/your-rights${helpers.search}`));
+			// eslint-disable-next-line svelte/no-navigation-without-resolve
+			goto(`${resolve('/your-rights')}${helpers.search}`);
 		}
 	}
 
 	onMount(() => {
-		[params, helpers] = createUseQueryParams(Params, { adapter: sveltekit({ replace: true }) })(
-			$page.url
-		);
+		[params, helpers] = createUseZodQueryParams(Params, { replace: true })($page.url);
 	});
 </script>
 
