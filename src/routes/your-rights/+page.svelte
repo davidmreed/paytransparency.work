@@ -25,7 +25,10 @@
 	let nonGeoMatches = $derived(matches.filter((m) => !m.isGeoMatch));
 
 	onMount(() => {
-		[params] = createUseZodQueryParams(Params, { replace: true })($page.url);
+		const queryParams = createUseZodQueryParams(Params, { replace: true })($page.url);
+		[params] = queryParams;
+
+		return () => queryParams[1].unsubscribe();
 	});
 </script>
 

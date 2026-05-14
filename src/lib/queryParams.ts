@@ -1,4 +1,6 @@
 import { browser } from '$app/environment';
+import { goto } from '$app/navigation';
+import { page } from '$app/state';
 import { SvelteURLSearchParams } from 'svelte/reactivity';
 import type { z, ZodType } from 'zod';
 import { zfd } from 'zod-form-data';
@@ -171,7 +173,13 @@ export function createUseZodQueryParams<TSchema extends ZodType<Record<string, u
 
 		const { pathname, hash } = window.location;
 		const next = `${pathname}${searchParams.search}${hash}`;
-		window.history[replace ? 'replaceState' : 'pushState'](window.history.state, '', next);
+		// `goto` keeps SvelteKit's router URL/history metadata aligned with the visible URL.
+		void goto(next, {
+			replaceState: replace,
+			noScroll: true,
+			keepFocus: true,
+			state: page.state
+		});
 	}
 
 	return function useQueryParams(url: URLLike) {

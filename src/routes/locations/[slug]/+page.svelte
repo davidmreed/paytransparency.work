@@ -115,10 +115,7 @@
 {/if}
 <form action={resolve('/find-your-rights')} method="GET">
 	<input type="hidden" name="userLocation" value={locale.id} />
-	<button
-		class="text-center form-input block w-full border-gray-300 focus:border-indigo-300 rounded-md shadow-sm border-gray-300 hover:bg-gray-800 hover:text-white mt-4 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:text-white"
-		type="submit"
-	>
+	<button class="action-button mt-4 w-full" type="submit">
 		Find Your Rights in {locale.name}
 	</button>
 </form>

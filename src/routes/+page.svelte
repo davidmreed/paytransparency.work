@@ -23,11 +23,10 @@
 	and Washington, which require multi-state employers to disclose in many situations &mdash; even if
 	you don't live there.
 </p>
-<p>
-	<a
-		class="text-center form-input block border-gray-300 focus:border-indigo-300 rounded-md shadow-sm border-gray-300 hover:bg-gray-800 hover:text-white mt-4 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:text-white"
-		href={resolve('/find-your-rights')}>Find Your Transparency Rights</a
-	>
+<p class="mt-4 flex justify-center">
+	<a class="action-button w-full sm:w-auto" href={resolve('/find-your-rights')}>
+		Find Your Transparency Rights
+	</a>
 </p>
 <div class="flex flex-col sm:flex-row flex-wrap justify-center">
 	{#each sortedLocales as locale (locale.id)}
