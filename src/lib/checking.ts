@@ -75,12 +75,12 @@ export interface Match {
 export function isValidParams(params?: MatchParameters): boolean {
 	return Boolean(
 		params &&
-			params.situation !== undefined &&
-			params.userLocation &&
-			(params.roleLocation.length > 0 || params.situation === Situation.Employed) &&
-			params.companyLocation &&
-			params.officeSupervisorLocation &&
-			params.totalEmployees
+		params.situation !== undefined &&
+		params.userLocation &&
+		(params.roleLocation.length > 0 || params.situation === Situation.Employed) &&
+		params.companyLocation &&
+		params.officeSupervisorLocation &&
+		params.totalEmployees
 	);
 }
 
@@ -176,10 +176,10 @@ export function findMatchingLaws(
 				// (A geographic match makes the fit easier to evaluate).
 				const geographicMatch = Boolean(
 					companyLocales.map((c) => thisLocale.isOrContains(c)).some((f) => f) ||
-						isRelevantSupervisorLocale ||
-						(userLocales.map((u) => thisLocale.isOrContains(u)).some((f) => f) &&
-							(thisLocale.who.minEmployeesInLocale || 0 <= 1) &&
-							(params.employeeInLocation || params.situation === Situation.Employed))
+					isRelevantSupervisorLocale ||
+					(userLocales.map((u) => thisLocale.isOrContains(u)).some((f) => f) &&
+						(thisLocale.who.minEmployeesInLocale || 0 <= 1) &&
+						(params.employeeInLocation || params.situation === Situation.Employed))
 				);
 
 				// Determine if we match the _local_ employee count requirement (if present).

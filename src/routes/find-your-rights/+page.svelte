@@ -8,11 +8,10 @@
 		Situation
 	} from '$lib/data';
 	import { isValidParams, Params, type MatchParameters } from '$lib/checking';
+	import { createUseZodQueryParams, type QueryHelpers } from '$lib/queryParams';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import SiteName from '$lib/SiteName.svelte';
-
-	import { createUseQueryParams, type QueryHelpers } from 'svelte-query-params';
-	import { sveltekit } from 'svelte-query-params/adapters/sveltekit';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 
@@ -51,14 +50,16 @@
 		event.preventDefault();
 		params.employeeInLocation = !canSelectEmployeeInLocation || params.employeeInLocation;
 		if (helpers) {
-			goto(`/your-rights${helpers.search}`);
+			// eslint-disable-next-line svelte/no-navigation-without-resolve
+			goto(`${resolve('/your-rights')}${helpers.search}`);
 		}
 	}
 
 	onMount(() => {
-		[params, helpers] = createUseQueryParams(Params, { adapter: sveltekit({ replace: true }) })(
-			$page.url
-		);
+		const queryParams = createUseZodQueryParams(Params, { replace: true })($page.url);
+		[params, helpers] = queryParams;
+
+		return () => queryParams[1].unsubscribe();
 	});
 </script>
 
@@ -79,11 +80,7 @@
 		<div class="grid grid-cols-1 gap-6">
 			<label class="block" for="situation"
 				>What's your situation?
-				<select
-					bind:value={params.situation}
-					id="situation"
-					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
-				>
+				<select bind:value={params.situation} id="situation" class="form-control">
 					<option value={Situation.Interested}>I'm interested in an open role</option>
 					<option value={Situation.Application}>I have applied for an open role</option>
 					<option value={Situation.Interview}>I have had an interview for an open role</option>
@@ -95,11 +92,7 @@
 
 			<label class="block" for="location"
 				>Where are you located?
-				<select
-					bind:value={params.userLocation}
-					id="location"
-					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
-				>
+				<select bind:value={params.userLocation} id="location" class="form-control">
 					{#each myLocationOptions as locale (locale[0])}
 						<option value={locale[0]}>{locale[1]}</option>
 					{/each}
@@ -112,7 +105,7 @@
 						type="checkbox"
 						bind:checked={params.employeeInLocation}
 						disabled={!canSelectEmployeeInLocation}
-						class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50 disabled:bg-gray-400 disabled:hover:bg-gray-400"
+						class="disabled:cursor-not-allowed"
 					/>
 					Does the employer already have any employees in your location?
 				</label>
@@ -121,11 +114,7 @@
 			<label class="block" for="companyLocation"
 				>Where is the employer located?
 				<aside class="italic text-xs">If you don't know, choose "Somewhere else".</aside>
-				<select
-					bind:value={params.companyLocation}
-					id="companyLocation"
-					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
-				>
+				<select bind:value={params.companyLocation} id="companyLocation" class="form-control">
 					{#each myLocationOptions as locale (locale[0])}
 						<option value={locale[0]}>{locale[1]}</option>
 					{/each}
@@ -139,7 +128,7 @@
 				<select
 					bind:value={params.officeSupervisorLocation}
 					id="officeSupervisorLocation"
-					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
+					class="form-control"
 				>
 					{#each myLocationOptions as locale (locale[0])}
 						<option value={locale[0]}>{locale[1]}</option>
@@ -152,11 +141,7 @@
 				<aside class="text-xs italic">
 					This is typically only relevant under 15 total employees.
 				</aside>
-				<input
-					class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
-					type="number"
-					bind:value={params.totalEmployees}
-				/>
+				<input class="form-control" type="number" bind:value={params.totalEmployees} />
 			</label>
 			{#if params.situation !== Situation.Employed}
 				<label class="block" for="roleLocation"
@@ -169,7 +154,7 @@
 						multiple
 						bind:value={params.roleLocation}
 						id="roleLocation"
-						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-zinc-200 focus:ring-opacity-50"
+						class="form-control form-control-multiselect"
 					>
 						{#each roleLocationOptions as locale (locale[0])}
 							<option value={locale[0]}>{locale[1]}</option>
@@ -181,7 +166,7 @@
 		<div class="container mx-auto">
 			<input
 				disabled={!validParams}
-				class="form-input block border-gray-300 focus:border-indigo-300 rounded-md shadow-sm border-gray-300 hover:bg-gray-800 hover:text-white mt-4 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:text-white"
+				class="action-button mt-4"
 				type="submit"
 				onclick={handleFind}
 				value="Find Rights"

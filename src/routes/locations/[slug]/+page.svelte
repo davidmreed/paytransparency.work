@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import type { Locale } from '$lib/data';
 	import RedPlusIcon from '$lib/RedPlusIcon.svelte';
 	import BullhornIcon from '$lib/BullhornIcon.svelte';
@@ -87,17 +88,20 @@
 <hr class="color-gray-900 p-1" />
 <p>
 	{#if (locale.referenceUrl && locale.referenceSource) || locale.legalUrl}<BookIcon />{/if}
-	{#if locale.referenceUrl && locale.referenceSource}Learn more at <a href={locale.referenceUrl}
-			>{locale.referenceSource}</a
+	{#if locale.referenceUrl && locale.referenceSource}Learn more at <a
+			rel="external"
+			href={locale.referenceUrl}>{locale.referenceSource}</a
 		>.{/if}
-	{#if locale.legalUrl}Review the <a href={locale.legalUrl}>legislation</a>.{/if}
+	{#if locale.legalUrl}Review the <a rel="external" href={locale.legalUrl}>legislation</a>.{/if}
 </p>
 {#if locale.reportViolationProcess || locale.reportViolationUrl}
 	<p>
 		<BullhornIcon />
 		Report a violation
 		{#if locale.reportViolationUrl}
-			<a href={locale.reportViolationUrl}>{locale.reportViolationProcess || 'here'}</a>.
+			<a rel="external" href={locale.reportViolationUrl}
+				>{locale.reportViolationProcess || 'here'}</a
+			>.
 		{:else if locale.reportViolationProcess}
 			{locale.reportViolationProcess}.
 		{/if}
@@ -109,12 +113,12 @@
 		The penalty for violations is {locale.penalty}.
 	</p>
 {/if}
-<p>
-	<a
-		class="text-center form-input block border-gray-300 focus:border-indigo-300 rounded-md shadow-sm border-gray-300 hover:bg-gray-800 hover:text-white mt-4 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:text-white"
-		href="/find-your-rights?userLocation={locale.id}">Find Your Rights in {locale.name}</a
-	>
-</p>
+<form action={resolve('/find-your-rights')} method="GET">
+	<input type="hidden" name="userLocation" value={locale.id} />
+	<button class="action-button mt-4 w-full" type="submit">
+		Find Your Rights in {locale.name}
+	</button>
+</form>
 
 <p class="text-xs italic text-center pt-2">
 	This summary may not capture all nuances of the legislation. Review guidance from
