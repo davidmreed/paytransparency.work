@@ -6,5 +6,10 @@ export default defineConfig({
 	plugins: [sveltekit(), tailwindcss()],
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
+	},
+	server: {
+		fs: {
+			allow: ['.', '/nix/store']
+		}
 	}
 });
