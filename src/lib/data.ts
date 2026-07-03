@@ -652,6 +652,21 @@ const locales: Record<string, Locale> = [
 			'by filing a written complaint with the Cleveland Fair Employment Wage Board',
 		penalty:
 			'opportunity to fix; if unfixed, civil penalties may be assessed by Cleveland FEWB of up to $1,000 (first offense); $2,500 (second offence); or $5,000 (further offences).'
+	}),
+	new Locale({
+		country: 'United States',
+		state: 'Virginia',
+		stateCode: 'VA',
+		strength: Strength.Moderate,
+		legalUrl: 'https://lis.virginia.gov/bill-details/20261/SB215/text/SB215',
+		who: {
+			officeInLocale: true
+		},
+		what: {
+			salary: true
+		},
+		when: [{ situation: Situation.Interested }],
+		penalty: 'private cause of action with statutory damages of between $1,000 and $10,000'
 	})
 ].reduce(
 	(map, locale) => {
