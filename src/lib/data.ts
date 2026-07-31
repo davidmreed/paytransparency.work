@@ -669,13 +669,14 @@ const locales: Record<string, Locale> = [
 		penalty: 'private cause of action with statutory damages of between $1,000 and $10,000'
 	}),
 	new Locale({
+		country: 'United States',
 		state: 'Maine',
 		stateCode: 'ME',
 		strength: Strength.Moderate,
 		legalUrl: 'https://legislature.maine.gov/legis/bills/getPDF.asp?paper=HP0018&item=7&snum=132',
 		who: {
 			minEmployees: 10
-	 },
+		},
 		what: {
 			salary: true
 		},
