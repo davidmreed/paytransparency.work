@@ -681,6 +681,26 @@ const locales: Record<string, Locale> = [
 			salary: true
 		},
 		when: [{ situation: Situation.Interested }, { situation: Situation.Employed }]
+	}),
+	new Locale({
+		country: 'Canada',
+		state: 'New Brunswick',
+		stateCode: 'NB',
+		strength: Strength.Moderate,
+		legalUrl: 'https://laws.gnb.ca/en/document/as/2026,%20c.1',
+		referenceUrl:
+			'https://www.gnb.ca/en/topic/jobs-workplaces/labour-market-workforce/pay-transparency.html',
+		penalty: 'an order to comply, followed by administrative penalty',
+		reportViolationProcess: 'by completing a form online',
+		reportViolationUrl:
+			'https://www.gnb.ca/en/topic/jobs-workplaces/labour-market-workforce/pay-transparency/online-complaint-form.html',
+		who: {
+			officeInLocale: true
+		},
+		what: {
+			salary: true
+		},
+		when: [{ situation: Situation.Interested }]
 	})
 ].reduce(
 	(map, locale) => {
